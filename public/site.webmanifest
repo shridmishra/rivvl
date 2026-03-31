@@ -1,0 +1,26 @@
+{
+  "name": "rivvl - AI-Powered Car Comparison Intelligence",
+  "short_name": "rivvl",
+  "description": "Compare cars like a pro with AI-powered analysis.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F0F1A",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/rivvl-favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

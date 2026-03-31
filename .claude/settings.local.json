@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /c/KleverPick && npx shadcn@latest init -d --base-color slate --css-variables --src-dir 2>&1)",
+      "Bash(cd /c/KleverPick && npx shadcn@latest add button sheet -y 2>&1)",
+      "Bash(cd /c/KleverPick && npm run build 2>&1)",
+      "Bash(cd /c/KleverPick && npx shadcn@latest add accordion checkbox select radio-group collapsible badge separator label card -y 2>&1)",
+      "Bash(tail:*)",
+      "Bash(cd /c/KleverPick && npm install @mendable/firecrawl-js @anthropic-ai/sdk 2>&1)",
+      "Bash(cd /c/KleverPick && npm install undici 2>&1)",
+      "Bash(cd:*)",
+      "Bash(head:*)",
+      "Bash(curl -s \"http://localhost:3000/api/test-scrape?url=https://www.carmax.com/car/26776476\" 2>&1 | python3 -m json.tool 2>/dev/null || curl -s \"http://localhost:3000/api/test-scrape?url=https://www.carmax.com/car/26776476\" 2>&1)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(TMPFILE=\"$HOME/test-scrape-result.json\" && curl -s \"http://localhost:3000/api/test-scrape?url=https://www.carvana.com/vehicle/3439805\" -o \"$TMPFILE\" 2>&1 && node -e \"const j=JSON.parse\\(require\\('fs'\\).readFileSync\\(process.env.HOME+'/test-scrape-result.json','utf8'\\)\\); j.steps.forEach\\(s => console.log\\('['+s.status+'] '+s.step+': '+s.detail\\)\\)\" 2>&1)",
+      "Bash(TMPFILE=\"$HOME/test-scrape3.json\" && curl -s \"http://localhost:3000/api/test-scrape?url=https://www.cars.com/vehicledetail/072c07f4-0408-4aca-b3a5-c0e19c685d73/&skip_ai=true\" -o \"$TMPFILE\" 2>&1 && node -e \"\nconst j=JSON.parse\\(require\\('fs'\\).readFileSync\\(process.env.HOME+'/test-scrape3.json','utf8'\\)\\);\nj.steps.forEach\\(s => console.log\\('['+s.status+'] '+s.step+': '+s.detail\\)\\);\n\" 2>&1)",
+      "Bash(TMPFILE=\"$HOME/test-scrape4.json\" && curl -s \"http://localhost:3000/api/test-scrape?url=https://www.edmunds.com/toyota/camry/2024/vin/4T1C11BK2RU825508/\" -o \"$TMPFILE\" 2>&1 && node -e \"\nconst j=JSON.parse\\(require\\('fs'\\).readFileSync\\(process.env.HOME+'/test-scrape4.json','utf8'\\)\\);\nj.steps.forEach\\(s => console.log\\('['+s.status+'] '+s.step+': '+s.detail\\)\\);\nconst parsed = j.steps.find\\(s => s.step === '4_json_parse'\\);\nif \\(parsed && parsed.data\\) console.log\\('EXTRACTED:', JSON.stringify\\(parsed.data, null, 2\\)\\);\n\" 2>&1)",
+      "Bash(pkill:*)",
+      "Bash(grep:*)",
+      "Bash(cd /c/KleverPick && npm install stripe @stripe/stripe-js 2>&1)",
+      "Bash(cd /c/rivvl && npm run build 2>&1)",
+      "Bash(wc:*)",
+      "/allowed-tools add Bash(*\\) Edit\\(*\\) Write\\(*)"
+    ]
+  }
+}
