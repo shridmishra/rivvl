@@ -10,3 +10,4 @@ Built with Next.js 14, TypeScript, Tailwind CSS, Supabase, Stripe, Firecrawl, an
 3. Run: `npm run dev`
 
 See the developer handoff document for full setup instructions, environment variables, and deployment guide.
+# rivvl
