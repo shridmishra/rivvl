@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
 
 /* ─── Pricing plans ─── */
 interface PlanDef {
@@ -412,15 +413,30 @@ export default function HomesPage() {
                     ))}
                   </ul>
                   {plan.role === null ? (
-                    <Link href="/compare/homes" className="mt-6 inline-flex w-full items-center justify-center rounded-lg border border-[#00D2FF] py-2.5 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10">{plan.cta}</Link>
+                    <Button variant="outline" asChild className="mt-6 w-full border-[#00D2FF] text-[#00D2FF] hover:bg-[#00D2FF]/10">
+                      <Link href="/compare/homes">{plan.cta}</Link>
+                    </Button>
                   ) : plan.highlighted ? (
-                    <button onClick={() => handleCheckout(plan.role!)} disabled={isLoading || loadingRole !== null} className="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] py-2.5 text-sm font-semibold text-white disabled:opacity-50">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{isLoading ? "Redirecting..." : plan.cta}
-                    </button>
+                    <Button 
+                      onClick={() => handleCheckout(plan.role!)} 
+                      loading={isLoading}
+                      loadingText="Redirecting..."
+                      disabled={loadingRole !== null && !isLoading}
+                      className="mt-6 w-full bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] text-white transition-all hover:opacity-90"
+                    >
+                      {plan.cta}
+                    </Button>
                   ) : (
-                    <button onClick={() => handleCheckout(plan.role!)} disabled={isLoading || loadingRole !== null} className="mt-6 inline-flex w-full items-center justify-center rounded-lg border border-[#00D2FF] py-2.5 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10 disabled:opacity-50">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{isLoading ? "Redirecting..." : plan.cta}
-                    </button>
+                    <Button 
+                      onClick={() => handleCheckout(plan.role!)} 
+                      loading={isLoading}
+                      loadingText="Redirecting..."
+                      disabled={loadingRole !== null && !isLoading}
+                      variant="outline"
+                      className="mt-6 w-full border-[#00D2FF] text-[#00D2FF] hover:bg-[#00D2FF]/10 transition-all"
+                    >
+                      {plan.cta}
+                    </Button>
                   )}
                 </div>
               );

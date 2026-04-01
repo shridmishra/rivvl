@@ -1219,20 +1219,15 @@ export default function ComparePage() {
 
       {/* ═══ GENERATE BUTTON ═══ */}
       <div className="mt-10">
-        <button
+        <Button
           onClick={handleGenerate}
-          disabled={submitting || redirectingToStripe || isTooManyCars}
-          className="gradient-bg-hover w-full h-14 rounded-2xl text-base font-bold text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none flex items-center justify-center gap-2"
+          loading={submitting || redirectingToStripe}
+          loadingText={redirectingToStripe ? "Redirecting to checkout..." : "Generating..."}
+          disabled={isTooManyCars}
+          className="gradient-bg-hover w-full h-14 rounded-2xl text-base font-bold text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
-          {submitting || redirectingToStripe ? (
-            <>
-              <Loader2 className="h-5 w-5 animate-spin" />
-              {redirectingToStripe ? "Redirecting to checkout..." : "Generating..."}
-            </>
-          ) : (
-            "Generate My Report"
-          )}
-        </button>
+          Generate My Report
+        </Button>
         <p className="mt-3 text-center text-xs text-slate-500 dark:text-gray-400">
           {selectedPlan === "free"
             ? "Takes about 45-90 seconds to generate your intelligent report."
@@ -1248,9 +1243,14 @@ export default function ComparePage() {
             <div>
               <h3 className="font-semibold text-red-800">Something went wrong</h3>
               <p className="mt-1 text-sm text-red-700">{apiError}</p>
-              <button onClick={handleGenerate} className="mt-3 text-sm font-medium text-red-700 underline hover:text-red-900">
+              <Button 
+                variant="ghost" 
+                onClick={handleGenerate} 
+                className="mt-3 text-sm font-medium text-red-700 underline hover:text-red-900 hover:bg-red-100 p-0 h-auto"
+                loading={submitting}
+              >
                 Try again
-              </button>
+              </Button>
             </div>
           </div>
         </div>

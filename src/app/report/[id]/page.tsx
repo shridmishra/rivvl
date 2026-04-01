@@ -51,6 +51,7 @@ import {
   Legend,
 } from "recharts";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import type { StoredReport, AIAnalysisReport } from "@/types";
 import {
   VEHICLE_COLORS,
@@ -219,12 +220,12 @@ function LockedSection({ title, icon, teaser, onUpgrade }: { title: string; icon
           <p className="mt-2 text-sm font-semibold text-indigo-950 dark:text-gray-100">
             {teaser || "Unlock with Full Report"}
           </p>
-          <button
+          <Button
             onClick={onUpgrade}
             className="mt-3 rounded-xl gradient-bg px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-200 hover:shadow-xl transition-shadow"
           >
             Unlock Full Report
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -649,7 +650,7 @@ export default function ReportPage() {
       const a = document.createElement("a");
       const defaultFilename = report.cars
         .filter(Boolean)
-        .map((c) => `${c.make}-${c.model}`)
+        .map((c) => `${c.make || ""}-${c.model || ""}`)
         .filter(Boolean)
         .join("-vs-");
       const filename = report.customName
@@ -1170,12 +1171,13 @@ export default function ReportPage() {
 
         {/* Sidebar footer */}
         <div className="border-t border-indigo-100 dark:border-gray-700 px-5 py-4">
-          <button
+          <Button
+            variant="ghost"
             onClick={() => router.push("/compare")}
-            className="flex w-full items-center gap-2 text-xs text-slate-500 dark:text-gray-400 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-300"
+            className="flex w-full items-center gap-2 text-xs text-slate-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-300"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> New Comparison
-          </button>
+          </Button>
         </div>
       </aside>
 
@@ -1204,38 +1206,35 @@ export default function ReportPage() {
             })}
           </span>
           <div className="ml-auto flex items-center gap-2">
-            <button
+            <Button
               onClick={handleDownloadPdf}
-              disabled={pdfLoading}
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-lg gradient-bg px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:shadow-md transition-shadow disabled:opacity-60"
+              loading={pdfLoading}
+              loadingText="Generating..."
+              className="hidden sm:inline-flex items-center gap-2 rounded-lg gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
             >
-              {pdfLoading ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <Download className="h-3.5 w-3.5" />
-              )}
-              {pdfLoading ? "Generating..." : "Download PDF"}
-            </button>
-            <button
+              {!pdfLoading && <Download className="h-4 w-4" />}
+              Download PDF
+            </Button>
+            <Button
               onClick={handleDownloadPdf}
-              disabled={pdfLoading}
-              className="sm:hidden rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors disabled:opacity-60"
+              loading={pdfLoading}
+              loadingText=""
+              variant="ghost"
+              className="sm:hidden rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
             >
-              {pdfLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
-              ) : (
-                <Download className="h-4 w-4" />
-              )}
-            </button>
+              {!pdfLoading && <Download className="h-4 w-4" />}
+            </Button>
             <button
               onClick={() => window.print()}
-              className="rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400"
+              title="Print report"
+              className="rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-slate-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all border border-transparent hover:border-indigo-100 dark:hover:border-indigo-700/50"
             >
               <Printer className="h-4 w-4" />
             </button>
             <button
               onClick={() => setShareOpen(true)}
-              className="rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400"
+              title="Share report"
+              className="rounded-lg p-2 text-slate-400 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all border border-transparent hover:border-indigo-100 dark:hover:border-indigo-700/50"
             >
               <Share2 className="h-4 w-4" />
             </button>

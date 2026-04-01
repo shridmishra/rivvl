@@ -178,11 +178,10 @@ function LoginForm() {
             variant="outline"
             className="w-full gap-3 py-5 text-sm font-medium dark:border-gray-600 dark:bg-[#1E1E30] dark:text-gray-200 dark:hover:bg-[#25253A]"
             onClick={handleGoogleLogin}
-            disabled={googleLoading || loading}
+            loading={googleLoading}
+            disabled={loading}
           >
-            {googleLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
+            {!googleLoading && (
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -222,19 +221,18 @@ function LoginForm() {
             <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
               <p>{error}</p>
               {emailNotConfirmed && (
-                <button
+                <Button
                   type="button"
+                  variant="link"
                   onClick={handleResendConfirmation}
-                  disabled={resending || !email}
-                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-500 disabled:opacity-50 dark:text-indigo-400"
+                  loading={resending}
+                  loadingText="Resending..."
+                  disabled={!email}
+                  className="mt-2 h-auto p-0 text-sm font-semibold text-indigo-600 hover:text-indigo-500 hover:no-underline dark:text-indigo-400"
                 >
-                  {resending ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : (
-                    <Mail className="h-3.5 w-3.5" />
-                  )}
+                  {!resending && <Mail className="h-3.5 w-3.5 mr-1.5" />}
                   Resend confirmation email
-                </button>
+                </Button>
               )}
               {resendSuccess && (
                 <p className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
@@ -306,11 +304,10 @@ function LoginForm() {
             <Button
               type="submit"
               className="w-full gradient-bg py-5 text-sm font-semibold text-white hover:opacity-90"
-              disabled={loading || googleLoading}
+              loading={loading}
+              loadingText="Signing in..."
+              disabled={googleLoading}
             >
-              {loading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               Sign In
             </Button>
           </form>

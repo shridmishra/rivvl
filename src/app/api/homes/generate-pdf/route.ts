@@ -1339,8 +1339,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
           RPage,
           { isFree },
           React.createElement(Text, { style: s.sectionTitle }, "Red Flags in This Listing"),
-          ...((report as unknown as Record<string, unknown>).redFlags as { rulesFlags: { text: string; severity: string }[]; aiRedFlags: string[]; noFlagsDetected: boolean }[]).map((rf, ri) =>
-            React.createElement(
+          ...((report as unknown as Record<string, unknown>).redFlags as { rulesFlags: { text: string; severity: string }[]; aiRedFlags: string[]; noFlagsDetected: boolean }[]).map((rf, ri) => {
+            if (!rf) return null;
+            return React.createElement(
               View,
               { key: `rf-${ri}`, style: { marginBottom: 12 } },
               React.createElement(Text, { style: s.sectionSubtitle }, properties[ri]?.address || `Property ${ri + 1}`),
@@ -1365,7 +1366,7 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                     )
                   )
             )
-          )
+          })
         )
       : null,
 
@@ -1375,8 +1376,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
           RPage,
           { isFree },
           React.createElement(Text, { style: s.sectionTitle }, "Closing Cost Estimate"),
-          ...((report as unknown as Record<string, unknown>).closingCosts as { loanOriginationFee: number; titleInsurance: number; appraisalFee: number; homeInspection: number; attorneyFee: number; prepaidPropertyTax: number; firstYearInsurance: number; escrowSetup: number; downPayment: number; totalCashToClose: number }[]).map((cc, ci) =>
-            React.createElement(
+          ...((report as unknown as Record<string, unknown>).closingCosts as { loanOriginationFee: number; titleInsurance: number; appraisalFee: number; homeInspection: number; attorneyFee: number; prepaidPropertyTax: number; firstYearInsurance: number; escrowSetup: number; downPayment: number; totalCashToClose: number }[]).map((cc, ci) => {
+            if (!cc) return null;
+            return React.createElement(
               View,
               { key: `cc-${ci}`, style: { marginBottom: 12 } },
               React.createElement(Text, { style: s.sectionSubtitle }, properties[ci]?.address || `Property ${ci + 1}`),
@@ -1408,8 +1410,8 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                   React.createElement(Text, { style: { ...s.tableCell, width: '40%', textAlign: 'right' as const, fontFamily: 'Helvetica-Bold', color: C.indigo } }, `$${cc.totalCashToClose.toLocaleString()}`)
                 )
               )
-            )
-          ),
+            );
+          }),
           React.createElement(Text, { style: s.disclaimerText }, "Closing cost estimates are approximations based on national averages. Your actual costs will vary. Consult your lender for a Loan Estimate.")
         )
       : null,
@@ -1420,8 +1422,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
           RPage,
           { isFree },
           React.createElement(Text, { style: s.sectionTitle }, "Insurance Cost Estimate"),
-          ...((report as unknown as Record<string, unknown>).insuranceEstimate as { annualRangeLow: number; annualRangeHigh: number; monthlyEstimate: number; floodInsuranceRequired: boolean; floodInsuranceEstimateLow: number | null; floodInsuranceEstimateHigh: number | null; totalAnnualInsuranceLow: number; totalAnnualInsuranceHigh: number; multipliers: string[] }[]).map((ins, ii) =>
-            React.createElement(
+          ...((report as unknown as Record<string, unknown>).insuranceEstimate as { annualRangeLow: number; annualRangeHigh: number; monthlyEstimate: number; floodInsuranceRequired: boolean; floodInsuranceEstimateLow: number | null; floodInsuranceEstimateHigh: number | null; totalAnnualInsuranceLow: number; totalAnnualInsuranceHigh: number; multipliers: string[] }[]).map((ins, ii) => {
+            if (!ins) return null;
+            return React.createElement(
               View,
               { key: `ins-${ii}`, style: { marginBottom: 12 } },
               React.createElement(Text, { style: s.sectionSubtitle }, properties[ii]?.address || `Property ${ii + 1}`),
@@ -1433,8 +1436,8 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                 ? React.createElement(Text, { style: { ...s.bodyText, color: C.amber, fontFamily: 'Helvetica-Bold' } }, `Flood insurance required: $${ins.floodInsuranceEstimateLow.toLocaleString()} to $${ins.floodInsuranceEstimateHigh.toLocaleString()}/year`)
                 : null,
               React.createElement(Text, { style: { ...s.bodyText, fontFamily: 'Helvetica-Bold' } }, `Total estimated annual insurance: $${ins.totalAnnualInsuranceLow.toLocaleString()} to $${ins.totalAnnualInsuranceHigh.toLocaleString()}`)
-            )
-          ),
+            );
+          }),
           React.createElement(Text, { style: s.disclaimerText }, "Insurance estimates are approximations. Actual premiums depend on your coverage choices, insurer, and property inspection. Get quotes from at least 3 insurers.")
         )
       : null,
@@ -1445,8 +1448,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
           RPage,
           { isFree },
           React.createElement(Text, { style: s.sectionTitle }, "First-Time Buyer Loan Programs"),
-          ...((report as unknown as Record<string, unknown>).loanPrograms as { programs: { name: string; minDownPayment: string; estimatedMonthlyPayment: string; keyRequirement: string }[]; stateProgram: string; state: string }[]).map((lp, li) =>
-            React.createElement(
+          ...((report as unknown as Record<string, unknown>).loanPrograms as { programs: { name: string; minDownPayment: string; estimatedMonthlyPayment: string; keyRequirement: string }[]; stateProgram: string; state: string }[]).map((lp, li) => {
+            if (!lp) return null;
+            return React.createElement(
               View,
               { key: `lp-${li}`, style: { marginBottom: 12 } },
               React.createElement(Text, { style: s.sectionSubtitle }, properties[li]?.address || `Property ${li + 1}`),
@@ -1478,8 +1482,8 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                 React.createElement(Text, { style: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: C.indigo, marginBottom: 2 } }, `State Program (${lp.state})`),
                 React.createElement(Text, { style: { fontSize: 8, color: C.slate600 } }, lp.stateProgram)
               )
-            )
-          ),
+            );
+          }),
           React.createElement(Text, { style: s.disclaimerText }, "Loan program eligibility is estimated based on purchase price and location. Consult a HUD-approved housing counselor or licensed mortgage broker.")
         )
       : null,
@@ -1490,8 +1494,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
           RPage,
           { isFree },
           React.createElement(Text, { style: s.sectionTitle }, "Property Tax Reassessment Risk"),
-          ...((report as unknown as Record<string, unknown>).taxReassessment as { assessedValue: number | null; listingPrice: number; gapPercentage: number | null; isReassessmentRisk: boolean; estimatedCurrentAnnualTax: number | null; estimatedPostPurchaseAnnualTax: number; estimatedAnnualTaxIncrease: number | null }[]).map((tr, ti) =>
-            React.createElement(
+          ...((report as unknown as Record<string, unknown>).taxReassessment as { assessedValue: number | null; listingPrice: number; gapPercentage: number | null; isReassessmentRisk: boolean; estimatedCurrentAnnualTax: number | null; estimatedPostPurchaseAnnualTax: number; estimatedAnnualTaxIncrease: number | null }[]).map((tr, ti) => {
+            if (!tr) return null;
+            return React.createElement(
               View,
               { key: `tr-${ti}`, style: { marginBottom: 12 } },
               React.createElement(Text, { style: s.sectionSubtitle }, properties[ti]?.address || `Property ${ti + 1}`),
@@ -1515,8 +1520,8 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                       "Virginia property taxes are reassessed periodically. After purchase, your assessed value will likely adjust toward the sale price over the next 1 to 3 years. Request the actual tax bill from the seller or agent to confirm."
                     )
                   )
-            )
-          )
+            );
+          })
         )
       : null,
 
@@ -1638,8 +1643,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
           RPage,
           { isFree },
           React.createElement(Text, { style: s.sectionTitle }, "Negotiation Intelligence"),
-          ...((report as unknown as Record<string, unknown>).negotiationIntelligence as { marketPosition: string; daysOnMarketAnalysis: string; suggestedOfferRange: string; concessionOpportunities: string; redFlags: string; negotiationStrength: string }[]).map((neg, idx) =>
-            React.createElement(
+          ...((report as unknown as Record<string, unknown>).negotiationIntelligence as { marketPosition: string; daysOnMarketAnalysis: string; suggestedOfferRange: string; concessionOpportunities: string; redFlags: string; negotiationStrength: string }[]).map((neg, idx) => {
+            if (!neg) return null;
+            return React.createElement(
               View,
               { key: `neg-${idx}`, style: { marginBottom: 16 } },
               React.createElement(Text, { style: s.sectionSubtitle }, properties[idx]?.address ?? `Property ${idx + 1}`),
@@ -1691,8 +1697,8 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                     )
                   : null
               )
-            )
-          )
+            );
+          })
         )
       : null,
 
@@ -1790,8 +1796,9 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
               )
             ),
             // Table rows
-            ...((report as unknown as Record<string, unknown>).detailedComparison as { label: string; values: string[] }[]).map((row, ri) =>
-              React.createElement(
+            ...((report as unknown as Record<string, unknown>).detailedComparison as { label: string; values: string[] }[]).map((row, ri) => {
+              if (!row) return null;
+              return React.createElement(
                 View,
                 { key: `comp-${ri}`, style: ri % 2 === 0 ? s.tableRow : s.tableRowAlt },
                 React.createElement(Text, { style: { ...s.tableCell, width: `${100 / (1 + properties.length)}%`, fontFamily: 'Helvetica-Bold' } }, row.label),
@@ -1799,7 +1806,7 @@ function HomeComparisonPDF({ data }: { data: HomeReportData }) {
                   React.createElement(Text, { key: `comp-${ri}-${vi}`, style: { ...s.tableCell, width: `${100 / (1 + properties.length)}%` } }, val)
                 )
               )
-            )
+            })
           )
         )
       : null,

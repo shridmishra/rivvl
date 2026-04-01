@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Check, Loader2, AlertCircle, X } from "lucide-react";
+import { Check, AlertCircle, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 import type { User } from "@supabase/supabase-js";
 import { Suspense } from "react";
 
@@ -348,30 +349,34 @@ function PricingContent() {
               </ul>
 
               {plan.role === null ? (
-                <Link
-                  href={compareHref}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-lg border border-indigo-200 dark:border-gray-600 py-2.5 text-sm font-semibold text-indigo-600 transition-all hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300"
+                <Button
+                  asChild
+                  variant="outline"
+                  className="mt-6 w-full border-indigo-200 dark:border-gray-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300 transition-all font-semibold"
+                >
+                  <Link href={compareHref}>{plan.cta}</Link>
+                </Button>
+              ) : plan.highlighted ? (
+                <Button
+                  onClick={() => handleCheckout(plan.role!)}
+                  loading={isLoading}
+                  loadingText="Redirecting..."
+                  disabled={loadingRole !== null && !isLoading}
+                  className="gradient-bg-hover mt-6 w-full text-white font-semibold transition-all hover:opacity-90"
                 >
                   {plan.cta}
-                </Link>
-              ) : plan.highlighted ? (
-                <button
-                  onClick={() => handleCheckout(plan.role!)}
-                  disabled={isLoading || loadingRole !== null}
-                  className="gradient-bg-hover mt-6 inline-flex w-full items-center justify-center rounded-lg py-2.5 text-sm font-semibold text-white disabled:opacity-50"
-                >
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  {isLoading ? "Redirecting..." : plan.cta}
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   onClick={() => handleCheckout(plan.role!)}
-                  disabled={isLoading || loadingRole !== null}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-lg border border-indigo-200 dark:border-gray-600 py-2.5 text-sm font-semibold text-indigo-600 transition-all hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300 disabled:opacity-50"
+                  loading={isLoading}
+                  loadingText="Redirecting..."
+                  disabled={loadingRole !== null && !isLoading}
+                  variant="outline"
+                  className="mt-6 w-full border-indigo-200 dark:border-gray-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300 transition-all font-semibold"
                 >
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  {isLoading ? "Redirecting..." : plan.cta}
-                </button>
+                  {plan.cta}
+                </Button>
               )}
             </div>
           );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, CheckCircle2, Send } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -212,18 +213,15 @@ export default function ContactPage() {
         )}
 
         {/* Submit */}
-        <button
+        <Button
           type="submit"
-          disabled={submitting}
-          className="gradient-bg-hover inline-flex w-full items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-50"
+          loading={submitting}
+          loadingText="Sending..."
+          className="gradient-bg-hover w-full h-12 rounded-lg text-sm font-semibold text-white transition-all"
         >
-          {submitting ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-          {submitting ? "Sending..." : "Send Message"}
-        </button>
+          {!submitting && <Send className="mr-2 h-4 w-4" />}
+          Send Message
+        </Button>
       </form>
     </div>
   );

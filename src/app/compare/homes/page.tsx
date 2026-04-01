@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
 
 const MAX_PROPERTIES_PREMIUM = 3;
 const MAX_PROPERTIES_FREE = 2;
@@ -783,28 +784,18 @@ export default function CompareHomesPage() {
 
       {/* Compare button */}
       <div className="mt-8">
-        <button
+        <Button
           onClick={handleCompare}
-          disabled={!hasAtLeastTwoInputs || isLoading || redirectingToStripe}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-[#00D2FF] px-8 py-4 text-base font-semibold text-[#0F0F1A] shadow-lg transition-all hover:bg-[#00B8E0] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#00D2FF] disabled:hover:shadow-lg"
+          disabled={!hasAtLeastTwoInputs}
+          loading={isLoading || redirectingToStripe}
+          loadingText={redirectingToStripe ? "Redirecting..." : "Preparing..."}
+          className="w-full py-7 text-base font-bold shadow-lg transition-all hover:shadow-xl rounded-xl"
         >
-          {redirectingToStripe ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Redirecting to checkout...
-            </>
-          ) : isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Preparing...
-            </>
-          ) : (
-            <>
-              <Home className="mr-2 h-5 w-5" />
-              {selectedPlan === "free" ? "Compare Now" : `Compare Now: ${selectedPlan === "home_standard" ? "$9.99" : selectedPlan === "home_premium" ? "$19.99" : selectedPlan === "home_pro10" ? "$99.99" : "$0"}`}
-            </>
-          )}
-        </button>
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5" />
+            {selectedPlan === "free" ? "Compare Now" : `Compare Now: ${selectedPlan === "home_standard" ? "$9.99" : selectedPlan === "home_premium" ? "$19.99" : selectedPlan === "home_pro10" ? "$99.99" : "$0"}`}
+          </div>
+        </Button>
       </div>
 
     </div>

@@ -32,6 +32,7 @@ import {
   ExternalLink,
   History,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { InfoTooltip } from "@/components/ui/Tooltip";
 import {
   ResponsiveContainer,
@@ -767,14 +768,16 @@ function ReportContent() {
           New Comparison
         </Link>
         {reportId && (
-          <button
+          <Button
             onClick={handleDownloadPdf}
-            disabled={pdfLoading}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#00D2FF]/30 bg-white dark:bg-[#1A1A2E] px-4 py-2 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10 disabled:opacity-50"
+            loading={pdfLoading}
+            loadingText="Generating..."
+            variant="outline"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#00D2FF]/30 bg-white dark:bg-[#1A1A2E] px-4 py-2 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10"
           >
-            {pdfLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            {pdfLoading ? "Generating..." : "Download PDF"}
-          </button>
+            {!pdfLoading && <Download className="h-4 w-4" />}
+            Download PDF
+          </Button>
         )}
       </div>
 

@@ -9,6 +9,7 @@ import {
   AlertCircle,
   ArrowLeft,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const GENERATION_STEPS = [
   { label: "Gathering property listings...", done: "Property listings gathered" },
@@ -177,12 +178,12 @@ export default function HomesProgressPage() {
               Something went wrong
             </h2>
             <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>
-            <button
+            <Button
               onClick={() => router.push("/compare/homes")}
-              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#00D2FF] px-6 py-2.5 text-sm font-semibold text-[#0F0F1A]"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#00D2FF] px-6 py-2.5 text-sm font-semibold text-[#0F0F1A] hover:bg-[#00B8E0] transition-all"
             >
               <ArrowLeft className="h-4 w-4" /> Try Again
-            </button>
+            </Button>
           </div>
         </div>
       </div>

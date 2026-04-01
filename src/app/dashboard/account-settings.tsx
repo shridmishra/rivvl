@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Check, X, Loader2, Mail, Eye, EyeOff } from "lucide-react";
+import { Pencil, Check, X, Mail, Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AccountSettingsProps {
   email: string;
@@ -196,17 +197,14 @@ export function AccountSettings({
                     }
                   }}
                 />
-                <button
+                <Button
                   onClick={saveName}
-                  disabled={nameSaving}
-                  className="rounded-lg bg-indigo-600 p-1.5 text-white hover:bg-indigo-700 disabled:opacity-50"
+                  loading={nameSaving}
+                  size="icon"
+                  className="h-8 w-8 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
                 >
-                  {nameSaving ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Check className="h-4 w-4" />
-                  )}
-                </button>
+                  <Check className="h-4 w-4" />
+                </Button>
                 <button
                   onClick={() => {
                     setEditingName(false);
@@ -258,17 +256,16 @@ export function AccountSettings({
                       }
                     }}
                   />
-                  <button
+                  <Button
                     onClick={saveEmail}
-                    disabled={emailSaving || !emailValue}
-                    className="rounded-lg bg-indigo-600 p-1.5 text-white hover:bg-indigo-700 disabled:opacity-50"
+                    loading={emailSaving}
+                    loadingText="Saving..."
+                    disabled={!emailValue}
+                    size="icon"
+                    className="h-8 w-8 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
                   >
-                    {emailSaving ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Check className="h-4 w-4" />
-                    )}
-                  </button>
+                    <Check className="h-4 w-4" />
+                  </Button>
                   <button
                     onClick={() => {
                       setEditingEmail(false);
@@ -415,17 +412,15 @@ export function AccountSettings({
                     </button>
                   </div>
                 </div>
-                <button
+                <Button
                   onClick={savePassword}
-                  disabled={passwordSaving || !currentPassword || !newPassword || !confirmPassword}
-                  className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+                  loading={passwordSaving}
+                  loadingText="Updating..."
+                  disabled={!currentPassword || !newPassword || !confirmPassword}
+                  className="w-full rounded-lg bg-indigo-600 py-2 font-semibold text-white hover:bg-indigo-700 transition-all"
                 >
-                  {passwordSaving ? (
-                    <Loader2 className="mx-auto h-4 w-4 animate-spin" />
-                  ) : (
-                    "Update Password"
-                  )}
-                </button>
+                  Update Password
+                </Button>
               </div>
             )}
           </div>

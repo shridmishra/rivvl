@@ -123,11 +123,8 @@ export default function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   className="w-full gradient-bg py-5 text-sm font-semibold text-white hover:opacity-90"
-                  disabled={loading}
+                  loading={loading}
                 >
-                  {loading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : null}
                   Send Reset Link
                 </Button>
               </form>
