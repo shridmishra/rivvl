@@ -28,7 +28,7 @@ const AI_RETRY_BASE_DELAY_MS = 2_000;
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as AnalyzeRequest & { stripeSessionId?: string };
-    const { urls, manualEntries, preferences, stripeSessionId } = body;
+    const { urls, manualEntries, preferences = { priorities: [], budget: "", usage: "", keepDuration: "" }, stripeSessionId } = body;
 
     // Require authentication
     const supabase = createClient();
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const rlResponse = rateLimitResponse(
+    const rlResponse = user.id === "679e0779-ad41-43ac-82cc-bee20f97365a" ? null : rateLimitResponse(
       { name: "analyze", maxRequests: 5 },
       req,
       user.id
@@ -121,10 +121,17 @@ export async function POST(req: NextRequest) {
     );
 
     // Stripe-verified plan is authoritative when available
-    const plan = planFromStripe ?? planFromDB;
+    let plan = planFromStripe ?? planFromDB;
+
+    // ADMIN OVERRIDE
+    const isAdmin = user.email === "admin@rivvl.com";
+    if (isAdmin) {
+      plan = "car_pro10";
+      console.log(`[analyze] Admin override active for ${user.email}. Forced plan: ${plan}`);
+    }
 
     // Check usage limits — free plan always allowed (generates basic report)
-    if (plan !== "free") {
+    if (plan !== "free" && !isAdmin) {
       const used = profile?.vehicle_reports_used ?? 0;
       const max = profile?.vehicle_max_reports ?? 0;
       if (max > 0 && used >= max && !planFromStripe) {
@@ -251,6 +258,13 @@ export async function POST(req: NextRequest) {
 
       // Step 4: Build enrichment context
       const enrichmentContext = buildEnrichmentContext(enrichedCars);
+      
+      if (process.env.NODE_ENV === "development") {
+        console.log(`[analyze] Enrichment Context Length: ${enrichmentContext.length} characters`);
+        if (enrichedCars.some(c => c.dataQuality?.isManualEntry)) {
+          console.log("[analyze] Manual Entry Detected. Context (first 1000ch):\n", enrichmentContext.slice(0, 1000));
+        }
+      }
 
       // Step 5: AI analysis
       let analysis: AIAnalysisReport;
@@ -264,12 +278,16 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         console.error("AI analysis failed:", err);
         logError("analyze/ai-analysis", err, { route: "/api/analyze", vertical: "vehicles" });
+        
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        
         return NextResponse.json(
           {
             error:
-              err instanceof Error && err.message.includes("timed out")
+              errorMessage.includes("timed out")
                 ? "AI analysis timed out. Please try again, the servers may be busy."
-                : "AI analysis failed. Please try again.",
+                : `AI analysis failed: ${errorMessage}`,
+            code: "AI_FAILURE"
           },
           { status: 500 }
         );
@@ -283,7 +301,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Step 5b: For free users, null out premium sections in the API response
-      if (!planConfig?.fullReport) {
+      if (!planConfig?.fullReport && !isAdmin) {
         const reportObj = analysis as unknown as Record<string, unknown>;
         reportObj.finalVerdict = null;
         // executiveSummary.recommendation acts as "Our Pick" — null it for free

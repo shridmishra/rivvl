@@ -50,6 +50,12 @@ export async function GET(
     customName: reportRow.custom_name ?? null,
   };
 
+  // ADMIN OVERRIDE
+  const isAdmin = user.email === "admin@rivvl.com";
+  if (isAdmin && report.analysis) {
+    report.analysis.reportType = "pro";
+  }
+
   // Server-side section gating: strip locked section content for free reports
   if (report.analysis?.reportType === "free") {
     const a = report.analysis;

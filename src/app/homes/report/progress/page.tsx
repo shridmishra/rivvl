@@ -139,7 +139,7 @@ export default function HomesProgressPage() {
 
         // Navigate to report page after a brief pause
         setTimeout(() => {
-          router.push("/homes/report");
+          router.push(`/homes/report/${data.reportId}`);
         }, 1200);
       } catch (err) {
         timers.forEach(clearTimeout);

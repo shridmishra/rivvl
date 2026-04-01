@@ -28,9 +28,9 @@ export async function updateSession(request: NextRequest) {
   // Refresh session — important for Server Components
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (user) {
-    const pathname = request.nextUrl.pathname;
+  const pathname = request.nextUrl.pathname;
 
+  if (user) {
     // Redirect authenticated users away from login/signup pages
     if (pathname === "/login" || pathname === "/signup") {
       const url = request.nextUrl.clone();
@@ -42,7 +42,8 @@ export async function updateSession(request: NextRequest) {
     // Self-healing: ensure a profile row exists for authenticated users.
     // The trigger may have failed during signup, so create a default profile
     // on the first authenticated request if missing.
-    if (pathname.startsWith("/dashboard") || pathname.startsWith("/compare") || pathname.startsWith("/report")) {
+    const protectedPrefixes = ["/dashboard", "/compare", "/report", "/homes/report", "/admin"];
+    if (protectedPrefixes.some(prefix => pathname.startsWith(prefix))) {
       try {
         const { data: profile } = await supabase
           .from("profiles")
@@ -67,6 +68,15 @@ export async function updateSession(request: NextRequest) {
       } catch {
         // Don't block the request if profile check fails
       }
+    }
+  } else {
+    // Redirect unauthenticated users from protected pages
+    const protectedPrefixes = ["/dashboard", "/compare", "/report", "/homes/report", "/admin"];
+    if (protectedPrefixes.some(prefix => pathname.startsWith(prefix))) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(url);
     }
   }
 

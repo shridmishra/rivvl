@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Home,
@@ -493,6 +493,7 @@ const getBrokerageName = (val: unknown): string => {
 };
 
 function ReportContent() {
+  const params = useParams();
   const router = useRouter();
   const [report, setReport] = useState<ComparisonReport | null>(null);
   const [listings, setListings] = useState<ListingData[]>([]);
@@ -527,13 +528,97 @@ function ReportContent() {
 
   useEffect(() => {
     // Check URL params for direct report loading (after upgrade from Stripe)
-    const params = new URLSearchParams(window.location.search);
-    const urlReportId = params.get("id");
-    const upgraded = params.get("upgraded") === "true";
-    const sessionId = params.get("session_id");
+    const urlReportId = params.id as string;
+    const searchParams = new URLSearchParams(window.location.search);
+    const upgraded = searchParams.get("upgraded") === "true";
+    const sessionId = searchParams.get("session_id");
 
     if (urlReportId) {
-      router.replace(`/homes/report/${urlReportId}${window.location.search}`);
+      // Load report from DB
+      (async () => {
+        try {
+          // If returning from upgrade payment, unlock FIRST before fetching
+          if (upgraded && sessionId) {
+            setVerifyingPayment(true);
+
+            // Step 1: Call verify-session and the report POST unlock — await BOTH before proceeding
+            const [verifyResult, postResult] = await Promise.allSettled([
+              fetch("/api/stripe/verify-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId }),
+              }).then(r => r.json()),
+              fetch(`/api/homes/report/${urlReportId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId }),
+              }).then(r => r.json()),
+            ]);
+
+            // Check if either unlock succeeded
+            const verifyOk = verifyResult.status === "fulfilled" && verifyResult.value?.verified;
+            const postOk = postResult.status === "fulfilled" && postResult.value?.unlocked;
+
+            if (!verifyOk && !postOk) {
+              console.error('[UNLOCK] Both unlock strategies failed:', { verifyResult, postResult });
+              setError("Payment was confirmed but we couldn't unlock your report. Please refresh the page or contact support.");
+              setVerifyingPayment(false);
+              setLoading(false);
+              return;
+            }
+          }
+
+           // Clean URL only AFTER unlock is confirmed (removing Stripe params but KEEPING the id in the path)
+          if (upgraded || sessionId) {
+            window.history.replaceState({}, "", `/homes/report/${urlReportId}`);
+          }
+
+          // Step 2: Fetch the unlocked report
+          const res = await fetch(`/api/homes/report/${urlReportId}`);
+          if (!res.ok) {
+            throw new Error("Failed to load report");
+          }
+          const data = await res.json();
+          setReport(data.report);
+          setListings(data.listings || []);
+          setPaidData(data.paidData || data.report?.paidData);
+          setReportId(data.reportId || urlReportId);
+          setIsPaid(data.plan !== "free");
+
+          // If upgraded but still showing as free, retry a few times
+          if (upgraded && data.plan === "free") {
+            const delays = [300, 500, 1000, 2000];
+            for (const delay of delays) {
+              await new Promise((r) => setTimeout(r, delay));
+              if (sessionId) {
+                try {
+                  await fetch(`/api/homes/report/${urlReportId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sessionId }),
+                  });
+                } catch { /* ignore */ }
+              }
+              const retryRes = await fetch(`/api/homes/report/${urlReportId}`);
+              if (retryRes.ok) {
+                const retryData = await retryRes.json();
+                if (retryData.plan !== "free") {
+                  setReport(retryData.report);
+                  setListings(retryData.listings || []);
+                  setPaidData(retryData.paidData || retryData.report?.paidData);
+                  setIsPaid(true);
+                  break;
+                }
+              }
+            }
+          }
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Failed to load report");
+        } finally {
+          setVerifyingPayment(false);
+          setLoading(false);
+        }
+      })();
       return;
     }
 
@@ -542,11 +627,6 @@ function ReportContent() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        if (parsed.reportId) {
-          router.replace(`/homes/report/${parsed.reportId}`);
-          return;
-        }
-        // ... rest of fallback logic if somehow reportId is missing but data is there
         setReport(parsed.report);
         setListings(parsed.listings || []);
         setPaidData(parsed.paidData || parsed.report?.paidData);

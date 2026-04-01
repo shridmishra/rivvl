@@ -42,8 +42,15 @@ export async function GET(
   }
 
   let rd = reportRow.report_data as Record<string, unknown>;
-  const plan = reportRow.plan_tier_at_generation || "free";
-  console.log('[REPORT-GET] id:', id, 'report.plan:', plan, 'report.isFullReport:', !!(rd as Record<string,unknown>).isFullReport);
+  let plan = reportRow.plan_tier_at_generation || "free";
+  
+  // ADMIN OVERRIDE
+  const isAdmin = user.email === "admin@rivvl.com";
+  if (isAdmin) {
+    plan = "home_pro10";
+  }
+
+  console.log('[REPORT-GET] id:', id, 'report.plan:', plan, 'report.isFullReport:', !!(rd as Record<string,unknown>).isFullReport, 'isAdmin:', isAdmin);
   const isFree = plan === "free";
 
   // Auto-recalculate Sprint 1 features if a paid report is missing them (legacy reports only).

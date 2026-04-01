@@ -732,8 +732,17 @@ export function buildEnrichmentContext(cars: EnrichedCar[]): string {
     // Basic info
     lines.push(`URL: ${car.url}`);
     if (car.vin) lines.push(`VIN: ${car.vin}`);
-    if (car.price) lines.push(`Listing Price: $${car.price.toLocaleString()}`);
-    if (car.mileage) lines.push(`Mileage: ${car.mileage.toLocaleString()} miles`);
+    
+    // Ensure numeric formatting for Price and Mileage
+    const numPrice = typeof car.price === 'number' ? car.price : parseFloat(String(car.price || '').replace(/[^0-9.]/g, ''));
+    if (!isNaN(numPrice) && numPrice > 0) {
+      lines.push(`Listing Price: $${numPrice.toLocaleString()}`);
+    }
+    
+    const numMileage = typeof car.mileage === 'number' ? car.mileage : parseInt(String(car.mileage || '').replace(/[^0-9]/g, ''), 10);
+    if (!isNaN(numMileage) && numMileage > 0) {
+      lines.push(`Mileage: ${numMileage.toLocaleString()} miles`);
+    }
     if (car.exteriorColor) lines.push(`Exterior Color: ${car.exteriorColor}`);
     if (car.interiorColor) lines.push(`Interior Color: ${car.interiorColor}`);
     if (car.dealerName) lines.push(`Dealer: ${car.dealerName}`);
