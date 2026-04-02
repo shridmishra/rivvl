@@ -141,27 +141,21 @@ export default function VehiclesPage() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-background">
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-white px-4 py-24 sm:py-32 lg:py-40">
-        {/* gradient orbs — subtle for light theme */}
-        <div className="pointer-events-none absolute -left-32 top-16 h-[420px] w-[420px] rounded-full bg-purple-200/30 blur-[120px]" />
-        <div className="pointer-events-none absolute right-[-80px] top-48 h-[360px] w-[360px] rounded-full bg-cyan-200/20 blur-[100px]" />
-
+      <section className="relative overflow-hidden px-4 py-24 sm:py-32 lg:py-40">
         <div className="relative mx-auto max-w-4xl text-center">
-          <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-[56px]">
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              The Smarter Way to Compare Cars.
-            </span>
+          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
+            The Smarter Way to Compare Cars.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#4A4A6A]">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground font-medium">
             NHTSA safety ratings, recall history, EPA fuel economy, and 5-year
             ownership projections, all in one report.
           </p>
           <div className="mt-10">
             <Link
               href="/compare"
-              className="inline-flex items-center rounded-xl bg-purple-600 px-8 py-4 text-base font-semibold text-white shadow-lg transition-all hover:bg-purple-500 hover:shadow-xl hover:-translate-y-0.5"
+              className="inline-flex items-center rounded-xl bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:-translate-y-0.5 active:scale-[0.98]"
             >
               Compare Vehicles Free&nbsp;&rarr;
             </Link>
@@ -170,18 +164,18 @@ export default function VehiclesPage() {
       </section>
 
       {/* ── FEATURE BENTO GRID ── */}
-      <section className="bg-[#F4F4F8] px-4 py-20 sm:py-28">
+      <section className="bg-secondary/10 px-4 py-20 sm:py-28 border-y border-border">
         <div className="mx-auto max-w-5xl">
           <div className="grid gap-5 md:grid-cols-2">
             {/* Card 1 — col-span-2: AI Head-to-Head Comparison */}
-            <div className="md:col-span-2 rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-purple-400">
+            <div className="md:col-span-2 rounded-2xl border border-border bg-card shadow-sm p-8 transition-all hover:border-primary/40">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <Scale className="h-4 w-4" /> Head-to-Head Comparison
               </div>
-              <p className="mt-2 text-sm text-[#4A4A6A]">
+              <p className="mt-2 text-sm text-muted-foreground font-medium">
                 Side-by-side scoring across 6 categories. See exactly where each vehicle wins.
               </p>
-              <div className="mt-5 space-y-3">
+              <div className="mt-6 space-y-4">
                 {[
                   { label: "Safety", v1: 92, v2: 85 },
                   { label: "Reliability", v1: 78, v2: 88 },
@@ -191,13 +185,13 @@ export default function VehiclesPage() {
                   { label: "Ownership Cost", v1: 72, v2: 80 },
                 ].map((cat) => (
                   <div key={cat.label}>
-                    <div className="flex justify-between text-xs text-[#4A4A6A]/70 mb-1">
+                    <div className="flex justify-between text-xs font-bold text-foreground/80 mb-1.5">
                       <span>{cat.label}</span>
                       <span>{cat.v1} vs {cat.v2}</span>
                     </div>
                     <div className="flex gap-2">
-                      <div className="h-3 rounded-full bg-purple-500" style={{ width: `${cat.v1}%` }} />
-                      <div className="h-3 rounded-full bg-cyan-400" style={{ width: `${cat.v2}%` }} />
+                      <div className="h-2 rounded-full bg-primary" style={{ width: `${cat.v1}%` }} />
+                      <div className="h-2 rounded-full bg-primary/30" style={{ width: `${cat.v2}%` }} />
                     </div>
                   </div>
                 ))}
@@ -205,49 +199,49 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 2 — Our Pick Recommendation */}
-            <div className="rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-yellow-500">
+            <div className="rounded-2xl border border-border bg-card shadow-sm p-8 transition-all hover:border-primary/40">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <Trophy className="h-4 w-4" /> Our Pick Recommendation
               </div>
-              <p className="mt-2 text-sm text-[#4A4A6A]">
+              <p className="mt-2 text-sm text-muted-foreground font-medium">
                 Intelligent recommendation based on YOUR priorities: budget, reliability, fuel economy, and safety.
               </p>
-              <div className="mt-5 rounded-xl bg-[#F8F9FA] p-5">
+              <div className="mt-6 rounded-xl bg-secondary/20 p-5 border border-border">
                 <div className="flex items-center gap-3">
-                  <Trophy className="h-8 w-8 text-yellow-500" />
+                  <Trophy className="h-8 w-8 text-primary" />
                   <div>
-                    <p className="text-sm font-semibold text-[#0F0F1A]">Vehicle 2 is the stronger choice</p>
-                    <p className="mt-1 text-xs text-[#4A4A6A]/70">Based on your priorities: reliability and fuel economy ranked highest.</p>
+                    <p className="text-sm font-bold text-foreground">Vehicle 2 is the stronger choice</p>
+                    <p className="mt-1 text-xs text-muted-foreground font-medium">Based on your priorities: reliability and fuel economy ranked highest.</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Card 3 — AI Pros and Cons */}
-            <div className="rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-500">
+            <div className="rounded-2xl border border-border bg-card shadow-sm p-8 transition-all hover:border-primary/40">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <Zap className="h-4 w-4" /> Pros and Cons
               </div>
-              <p className="mt-2 text-sm text-[#4A4A6A]">
+              <p className="mt-2 text-sm text-muted-foreground font-medium">
                 Intelligently generated strengths and weaknesses for each vehicle, so you know exactly what you are getting.
               </p>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-xl bg-[#F8F9FA] p-4">
-                  <p className="text-xs font-semibold text-emerald-600 mb-2">Pros</p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl bg-secondary/10 p-4 border border-border">
+                  <p className="text-xs font-bold text-success mb-2 uppercase tracking-wide">Pros</p>
                   <ul className="space-y-1.5">
                     {["Top-tier safety ratings", "Lower 5-year ownership cost", "Better fuel economy"].map((item) => (
-                      <li key={item} className="flex items-start gap-1.5 text-xs text-[#4A4A6A]">
-                        <Check className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500" />{item}
+                      <li key={item} className="flex items-start gap-1.5 text-xs text-foreground/80 font-medium">
+                        <Check className="mt-0.5 h-3 w-3 shrink-0 text-success" />{item}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-xl bg-[#F8F9FA] p-4">
-                  <p className="text-xs font-semibold text-red-500 mb-2">Cons</p>
+                <div className="rounded-xl bg-secondary/10 p-4 border border-border">
+                  <p className="text-xs font-bold text-error mb-2 uppercase tracking-wide">Cons</p>
                   <ul className="space-y-1.5">
                     {["Higher base price", "Fewer tech features", "Smaller cargo space"].map((item) => (
-                      <li key={item} className="flex items-start gap-1.5 text-xs text-[#4A4A6A]">
-                        <X className="mt-0.5 h-3 w-3 shrink-0 text-red-400" />{item}
+                      <li key={item} className="flex items-start gap-1.5 text-xs text-foreground/80 font-medium">
+                        <X className="mt-0.5 h-3 w-3 shrink-0 text-error" />{item}
                       </li>
                     ))}
                   </ul>
@@ -256,28 +250,28 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 4 — col-span-2: True Cost of Ownership */}
-            <div className="md:col-span-2 rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-cyan-500">
+            <div className="md:col-span-2 rounded-2xl border border-border bg-card shadow-sm p-8 transition-all hover:border-primary/40">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <DollarSign className="h-4 w-4" /> True Cost of Ownership
               </div>
-              <p className="mt-2 text-sm text-[#4A4A6A]">
+              <p className="mt-2 text-sm text-muted-foreground font-medium">
                 5-year projection including depreciation, insurance estimate, fuel costs, and maintenance. What Carfax won&apos;t tell you.
               </p>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-xl bg-[#F8F9FA] p-5">
-                  <p className="text-sm font-semibold text-[#0F0F1A]">Vehicle 1</p>
-                  <p className="mt-1 text-2xl font-bold text-purple-500">$42,300</p>
-                  <div className="mt-3 space-y-1.5 text-xs text-[#4A4A6A]/70">
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl bg-secondary/20 p-5 border border-border">
+                  <p className="text-sm font-bold text-foreground">Vehicle 1</p>
+                  <p className="mt-1 text-2xl font-extrabold text-primary">$42,300</p>
+                  <div className="mt-3 space-y-1.5 text-xs text-muted-foreground font-medium">
                     <div className="flex justify-between"><span>Depreciation</span><span>$18,200</span></div>
                     <div className="flex justify-between"><span>Insurance</span><span>$9,600</span></div>
                     <div className="flex justify-between"><span>Fuel</span><span>$8,500</span></div>
                     <div className="flex justify-between"><span>Maintenance</span><span>$6,000</span></div>
                   </div>
                 </div>
-                <div className="rounded-xl bg-[#F8F9FA] p-5">
-                  <p className="text-sm font-semibold text-[#0F0F1A]">Vehicle 2</p>
-                  <p className="mt-1 text-2xl font-bold text-cyan-500">$38,700</p>
-                  <div className="mt-3 space-y-1.5 text-xs text-[#4A4A6A]/70">
+                <div className="rounded-xl bg-secondary/20 p-5 border border-border">
+                  <p className="text-sm font-bold text-foreground">Vehicle 2</p>
+                  <p className="mt-1 text-2xl font-extrabold text-primary/70">$38,700</p>
+                  <div className="mt-3 space-y-1.5 text-xs text-muted-foreground font-medium">
                     <div className="flex justify-between"><span>Depreciation</span><span>$15,800</span></div>
                     <div className="flex justify-between"><span>Insurance</span><span>$9,200</span></div>
                     <div className="flex justify-between"><span>Fuel</span><span>$7,200</span></div>
@@ -285,40 +279,30 @@ export default function VehiclesPage() {
                   </div>
                 </div>
               </div>
-              <div className="mt-5 space-y-3">
-                <div>
-                  <p className="mb-1 text-xs text-[#4A4A6A]/70">Vehicle 1</p>
-                  <div className="h-4 rounded-full bg-purple-500/80" style={{ width: "88%" }} />
-                </div>
-                <div>
-                  <p className="mb-1 text-xs text-[#4A4A6A]/70">Vehicle 2</p>
-                  <div className="h-4 rounded-full bg-cyan-400/80" style={{ width: "76%" }} />
-                </div>
-              </div>
             </div>
 
             {/* Card 5 — Government Safety Data */}
-            <div className="rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-400">
+            <div className="rounded-2xl border border-border bg-card shadow-sm p-8 transition-all hover:border-primary/40">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-warning">
                 <AlertTriangle className="h-4 w-4" /> Government Safety Data
               </div>
-              <p className="mt-2 text-sm text-[#4A4A6A]">
+              <p className="mt-2 text-sm text-muted-foreground font-medium">
                 NHTSA safety ratings, recall history, and real owner complaints in one place.
               </p>
-              <div className="mt-5 rounded-xl bg-[#F8F9FA] p-5">
+              <div className="mt-6 rounded-xl bg-secondary/10 p-5 border border-border">
                 <div className="flex items-center gap-1 mb-3">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="h-5 w-5 fill-warning text-warning" />
                   ))}
-                  <span className="ml-2 text-xs text-[#4A4A6A]/70">5 / 5 Overall</span>
+                  <span className="ml-2 text-xs font-bold text-foreground/70">5 / 5 Overall</span>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-start gap-2 text-xs text-[#4A4A6A]">
-                    <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0 text-red-400" />
+                  <div className="flex items-start gap-2 text-xs text-error font-bold">
+                    <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
                     <span>3 active recalls flagged</span>
                   </div>
-                  <div className="flex items-start gap-2 text-xs text-[#4A4A6A]">
-                    <MessageSquareWarning className="mt-0.5 h-3 w-3 shrink-0 text-orange-400" />
+                  <div className="flex items-start gap-2 text-xs text-warning font-bold">
+                    <MessageSquareWarning className="mt-0.5 h-3 w-3 shrink-0" />
                     <span>47 NHTSA complaints filed</span>
                   </div>
                 </div>
@@ -326,18 +310,18 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 6 — Final Verdict */}
-            <div className="rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-purple-500">
+            <div className="rounded-2xl border border-border bg-card shadow-sm p-8 transition-all hover:border-primary/40">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <Star className="h-4 w-4" /> Final Verdict
               </div>
-              <p className="mt-2 text-sm text-[#4A4A6A]">
+              <p className="mt-2 text-sm text-muted-foreground font-medium">
                 rivvl tells you which car to buy. A clear winner with reasoning you can trust.
               </p>
-              <div className="mt-5 rounded-xl bg-[#F8F9FA] p-5">
-                <p className="text-sm font-semibold text-[#0F0F1A]">
+              <div className="mt-6 rounded-xl bg-secondary/20 p-5 border border-border">
+                <p className="text-sm font-bold text-foreground">
                   Winner: Vehicle 2
                 </p>
-                <p className="mt-2 text-xs leading-relaxed text-[#4A4A6A]">
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground font-medium">
                   Vehicle 2 edges ahead with better reliability scores, lower projected ownership costs, and superior fuel economy. While Vehicle 1 has a slight safety advantage, Vehicle 2 offers the best overall value for most buyers.
                 </p>
               </div>
@@ -350,19 +334,19 @@ export default function VehiclesPage() {
       <section className="px-4 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-[#0F0F1A] sm:text-4xl">
-              <span className="gradient-text">Vehicle Comparison Pricing</span>
+            <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+              Vehicle Comparison Pricing
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-[#4A4A6A]">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground font-medium">
               Start free. Upgrade when you need the full picture.
             </p>
           </div>
 
           {error && (
-            <div className="mx-auto mt-8 flex max-w-xl items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-              <AlertCircle className="h-5 w-5 shrink-0 text-red-500" />
-              <p className="text-sm text-red-700">{error}</p>
-              <button onClick={() => setError(null)} className="ml-auto"><X className="h-4 w-4 text-red-500" /></button>
+            <div className="mx-auto mt-8 flex max-w-xl items-center gap-3 rounded-xl border border-error/20 bg-error/10 px-4 py-3">
+              <AlertCircle className="h-5 w-5 shrink-0 text-error" />
+              <p className="text-sm text-error font-medium">{error}</p>
+              <button onClick={() => setError(null)} className="ml-auto"><X className="h-4 w-4 text-error" /></button>
             </div>
           )}
 
@@ -370,30 +354,30 @@ export default function VehiclesPage() {
             {plans.map((plan) => {
               const isLoading = loadingRole === plan.role;
               return (
-                <div key={plan.name} className={`card-hover relative flex flex-col rounded-xl border p-8 ${plan.highlighted ? "gradient-border scale-105 bg-white shadow-xl z-10" : "border-gray-300 bg-white shadow-sm"}`}>
+                <div key={plan.name} className={`card-hover relative flex flex-col rounded-xl border p-8 bg-card shadow-sm ${plan.highlighted ? "border-primary ring-1 ring-primary/20 scale-105 z-10" : "border-border"}`}>
                   {plan.badge && (
-                    <span className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-[10px] font-bold tracking-wide text-white shadow-md ${plan.badge === "BEST VALUE" ? "bg-[#F59E0B]" : "bg-[#6C5CE7]"}`}>{plan.badge}</span>
+                    <span className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-[10px] font-bold tracking-wide text-white shadow-sm ${plan.badge === "BEST VALUE" ? "bg-amber-500" : "bg-primary"}`}>{plan.badge}</span>
                   )}
                   <div className={`flex items-center gap-1.5 ${plan.badge ? "mt-2" : ""}`}>
-                    <h3 className="text-base font-bold text-[#0F0F1A]">{plan.name}</h3>
+                    <h3 className="text-base font-bold text-foreground">{plan.name}</h3>
                     {plan.savingsBadge && (
-                      <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">{plan.savingsBadge}</span>
+                      <span className="rounded-full bg-success px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">{plan.savingsBadge}</span>
                     )}
                   </div>
                   <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-[#0F0F1A]">{plan.price}</span>
-                    <span className="text-sm text-[#4A4A6A]/70">{plan.period}</span>
+                    <span className="text-3xl font-extrabold text-foreground">{plan.price}</span>
+                    <span className="text-sm text-muted-foreground font-bold">{plan.period}</span>
                   </div>
-                  <p className="mt-2 text-xs text-[#4A4A6A]/70">{plan.vehicles} &middot; {plan.sections}</p>
+                  <p className="mt-2 text-xs text-muted-foreground font-medium">{plan.vehicles} &middot; {plan.sections}</p>
                   <ul className="mt-6 flex-1 space-y-2.5">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-[#4A4A6A]">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />{f}
+                      <li key={f} className="flex items-start gap-2 text-sm text-foreground/80 font-medium">
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />{f}
                       </li>
                     ))}
                   </ul>
                   {plan.role === null ? (
-                    <Button variant="outline" asChild className="mt-6 w-full border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300">
+                    <Button variant="outline" asChild className="mt-6 w-full border-primary/20 text-primary hover:bg-primary/5 font-bold">
                       <Link href="/compare">{plan.cta}</Link>
                     </Button>
                   ) : plan.highlighted ? (
@@ -402,7 +386,7 @@ export default function VehiclesPage() {
                       loading={isLoading}
                       loadingText="Redirecting..."
                       disabled={loadingRole !== null && !isLoading}
-                      className="gradient-bg-hover mt-6 w-full text-white"
+                      className="mt-6 w-full bg-primary text-primary-foreground font-bold hover:bg-primary/90"
                     >
                       {plan.cta}
                     </Button>
@@ -413,7 +397,7 @@ export default function VehiclesPage() {
                       loadingText="Redirecting..."
                       disabled={loadingRole !== null && !isLoading}
                       variant="outline"
-                      className="mt-6 w-full border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300"
+                      className="mt-6 w-full border-primary/20 text-primary hover:bg-primary/5 font-bold"
                     >
                       {plan.cta}
                     </Button>
@@ -424,7 +408,7 @@ export default function VehiclesPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <Link href="/compare" className="gradient-bg-hover inline-flex items-center rounded-xl px-10 py-4 text-base font-semibold text-white shadow-lg">
+            <Link href="/compare" className="inline-flex items-center justify-center rounded-xl bg-primary px-10 py-4 text-base font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 active:scale-[0.98]">
               Start Comparing Vehicles
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
@@ -433,23 +417,23 @@ export default function VehiclesPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#F4F4F8] px-4 py-14">
+      <footer className="bg-background px-4 py-14 border-t border-border">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-between gap-8 sm:flex-row sm:items-start">
-            <div>
-              <Image src="/images/rivvl-logo-black.png" alt="rivvl" width={100} height={33} className="h-7 w-auto" />
-              <p className="mt-2 text-sm text-[#4A4A6A]">Intelligent Comparison Reports</p>
+            <div className="text-center sm:text-left">
+              <Image src="/images/rivvl-logo-black.png" alt="rivvl" width={100} height={33} className="h-7 w-auto mx-auto sm:mx-0" />
+              <p className="mt-2 text-sm text-muted-foreground font-medium">Intelligent Comparison Reports</p>
             </div>
-            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-[#4A4A6A]">
-              <Link href="/" className="transition-colors hover:text-[#0F0F1A]">Home</Link>
-              <Link href="/vehicles" className="transition-colors hover:text-[#0F0F1A]">Vehicles</Link>
-              <Link href="/homes" className="transition-colors hover:text-[#0F0F1A]">Real Estate</Link>
-              <Link href="/contact" className="transition-colors hover:text-[#0F0F1A]">Contact</Link>
-              <Link href="/privacy" className="transition-colors hover:text-[#0F0F1A]">Privacy Policy</Link>
-              <Link href="/terms" className="transition-colors hover:text-[#0F0F1A]">Terms of Service</Link>
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground font-medium">
+              <Link href="/" className="transition-colors hover:text-primary">Home</Link>
+              <Link href="/vehicles" className="transition-colors hover:text-primary">Vehicles</Link>
+              <Link href="/homes" className="transition-colors hover:text-primary">Real Estate</Link>
+              <Link href="/contact" className="transition-colors hover:text-primary">Contact</Link>
+              <Link href="/privacy" className="transition-colors hover:text-primary">Privacy</Link>
+              <Link href="/terms" className="transition-colors hover:text-primary">Terms</Link>
             </nav>
           </div>
-          <div className="mt-10 border-t border-[#E5E5F0] pt-6 text-center text-sm text-[#4A4A6A]/60">&copy; 2026 rivvl. All rights reserved.</div>
+          <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground font-medium">&copy; {new Date().getFullYear()} rivvl. All rights reserved.</div>
         </div>
       </footer>
     </div>

@@ -695,15 +695,15 @@ export default function ComparePage() {
   // Show loading state while processing payment return from Stripe
   if (processingPayment) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center px-4">
+      <div className="flex min-h-[60vh] items-center justify-center px-4 bg-background">
         <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl gradient-bg shadow-lg shadow-indigo-200">
-            <Loader2 className="h-8 w-8 animate-spin text-white" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-sm">
+            <Loader2 className="h-8 w-8 animate-spin text-primary-foreground" />
           </div>
-          <h2 className="mt-6 text-xl font-bold text-indigo-950 dark:text-gray-100">
+          <h2 className="mt-6 text-xl font-extrabold text-foreground">
             Processing your payment...
           </h2>
-          <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">
+          <p className="mt-2 text-sm text-muted-foreground font-medium">
             Hang tight! We&apos;re preparing your report.
           </p>
         </div>
@@ -712,20 +712,20 @@ export default function ComparePage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 bg-background">
       {/* Page Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-indigo-950 dark:text-gray-100 sm:text-4xl">
-          <span className="gradient-text">Compare Cars</span>
+        <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+          Compare Cars
         </h1>
-        <p className="mt-3 text-slate-600 dark:text-gray-400">
+        <p className="mt-3 text-muted-foreground font-medium">
           Paste your car listing URLs and let our intelligent engine do the heavy lifting.
         </p>
 
         {/* Feature strip */}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {["Safety Ratings", "Recalls", "Fuel Economy", "Cost Projection", "Our Pick"].map((f) => (
-            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-[#6C5CE7]/30 bg-[#6C5CE7]/5 px-3 py-1 text-[11px] font-medium text-[#6C5CE7] dark:text-[#a99cf5]">
+            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] font-bold text-primary">
               {f}
             </span>
           ))}
@@ -733,9 +733,9 @@ export default function ComparePage() {
       </div>
 
       {/* ═══ SECTION 1: PLAN SELECTION (now FIRST) ═══ */}
-      <section className="mt-10 rounded-2xl border border-indigo-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-indigo-950 dark:text-gray-100">Choose Your Plan</h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+      <section className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-foreground">Choose Your Plan</h2>
+        <p className="mt-1 text-sm text-muted-foreground font-medium">
           Select the depth of analysis you need.
         </p>
 
@@ -746,26 +746,26 @@ export default function ComparePage() {
             onClick={() => setSelectedPlan("free")}
             className={`relative flex flex-col rounded-xl border p-5 text-left transition-all duration-200 ${
               selectedPlan === "free"
-                ? "border-[#6C5CE7] ring-2 ring-indigo-200 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                ? "border-primary bg-primary/5 ring-1 ring-primary/20 shadow-sm"
+                : "border-border bg-background hover:border-primary/30 hover:shadow-sm"
             }`}
           >
             {selectedPlan === "free" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#6C5CE7] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary shadow-sm">
+                  <Check className="h-3 w-3 text-primary-foreground" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Free</p>
+            <p className="text-sm font-bold text-foreground">Free</p>
             <div className="mt-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$0</span>
-              <span className="ml-1 text-xs text-slate-500 dark:text-gray-400">/forever</span>
+              <span className="text-2xl font-extrabold text-foreground">$0</span>
+              <span className="ml-1 text-xs text-muted-foreground font-bold">/forever</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Compare 2 cars</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Specs, safety & fuel economy</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> 3 of 11 sections</p>
+            <div className="mt-4 flex-1 space-y-1.5 text-[11px] text-muted-foreground font-medium">
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Compare 2 cars</p>
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Specs & safety</p>
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> 3 of 11 sections</p>
             </div>
           </button>
 
@@ -775,27 +775,27 @@ export default function ComparePage() {
             onClick={() => setSelectedPlan("car_single")}
             className={`relative flex flex-col rounded-xl border p-5 text-left transition-all duration-200 ${
               selectedPlan === "car_single"
-                ? "border-[#6C5CE7] ring-2 ring-indigo-200 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                ? "border-primary bg-primary/5 ring-1 ring-primary/20 shadow-sm"
+                : "border-border bg-background hover:border-primary/30 hover:shadow-sm"
             }`}
           >
             {selectedPlan === "car_single" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#6C5CE7] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary shadow-sm">
+                  <Check className="h-3 w-3 text-primary-foreground" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Full Report</p>
+            <p className="text-sm font-bold text-foreground">Full Report</p>
             <div className="mt-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$4.99</span>
-              <span className="ml-1 text-xs text-slate-500 dark:text-gray-400">/one-time</span>
+              <span className="text-2xl font-extrabold text-foreground">$4.99</span>
+              <span className="ml-1 text-xs text-muted-foreground font-bold">/one-time</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Compare 2 cars</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> All 11 sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Charts & intelligent recommendation</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Downloadable PDF</p>
+            <div className="mt-4 flex-1 space-y-1.5 text-[11px] text-muted-foreground font-medium">
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Compare 2 cars</p>
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> All 11 sections</p>
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Charts & Picks</p>
+              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> PDF Download</p>
             </div>
           </button>
 

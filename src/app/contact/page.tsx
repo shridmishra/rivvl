@@ -59,13 +59,13 @@ export default function ContactPage() {
   if (submitted) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
-          <CheckCircle2 className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
+          <CheckCircle2 className="h-8 w-8 text-success" />
         </div>
-        <h1 className="mt-6 text-3xl font-bold tracking-tight text-indigo-950 dark:text-gray-100">
+        <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-foreground">
           Thank you!
         </h1>
-        <p className="mt-3 text-lg text-slate-600 dark:text-gray-400">
+        <p className="mt-3 text-lg text-muted-foreground font-medium">
           We&apos;ll be in touch within 24 hours.
         </p>
       </div>
@@ -73,15 +73,15 @@ export default function ContactPage() {
   }
 
   const inputClass =
-    "mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none dark:border-gray-600 dark:bg-[#1E1E30] dark:text-gray-100 dark:placeholder:text-gray-500";
+    "mt-1 block w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium shadow-sm transition-all focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none placeholder:text-muted-foreground/50";
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-20 sm:px-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          <span className="gradient-text">Contact Us</span>
+        <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
+          Contact Us
         </h1>
-        <p className="mx-auto mt-4 max-w-lg text-lg text-slate-600 dark:text-gray-400">
+        <p className="mx-auto mt-4 max-w-lg text-lg text-muted-foreground font-medium">
           Interested in rivvl Enterprise? Let&apos;s talk about a plan that fits
           your business.
         </p>
@@ -92,9 +92,9 @@ export default function ContactPage() {
         <div>
           <label
             htmlFor="full_name"
-            className="block text-sm font-medium text-slate-700 dark:text-gray-300"
+            className="block text-sm font-bold text-foreground/80 mb-1"
           >
-            Full Name <span className="text-red-500">*</span>
+            Full Name <span className="text-error">*</span>
           </label>
           <input
             id="full_name"
@@ -111,9 +111,9 @@ export default function ContactPage() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-slate-700 dark:text-gray-300"
+            className="block text-sm font-bold text-foreground/80 mb-1"
           >
-            Email <span className="text-red-500">*</span>
+            Email <span className="text-error">*</span>
           </label>
           <input
             id="email"
@@ -130,9 +130,9 @@ export default function ContactPage() {
         <div>
           <label
             htmlFor="company_name"
-            className="block text-sm font-medium text-slate-700 dark:text-gray-300"
+            className="block text-sm font-bold text-foreground/80 mb-1"
           >
-            Company / Dealership Name <span className="text-red-500">*</span>
+            Company / Dealership Name <span className="text-error">*</span>
           </label>
           <input
             id="company_name"
@@ -149,10 +149,10 @@ export default function ContactPage() {
         <div>
           <label
             htmlFor="phone"
-            className="block text-sm font-medium text-slate-700 dark:text-gray-300"
+            className="block text-sm font-bold text-foreground/80 mb-1"
           >
             Phone Number{" "}
-            <span className="text-slate-400 font-normal dark:text-gray-500">(optional)</span>
+            <span className="text-muted-foreground font-normal">(optional)</span>
           </label>
           <input
             id="phone"
@@ -168,7 +168,7 @@ export default function ContactPage() {
         <div>
           <label
             htmlFor="num_locations"
-            className="block text-sm font-medium text-slate-700 dark:text-gray-300"
+            className="block text-sm font-bold text-foreground/80 mb-1"
           >
             Number of Locations / Users
           </label>
@@ -191,9 +191,9 @@ export default function ContactPage() {
         <div>
           <label
             htmlFor="message"
-            className="block text-sm font-medium text-slate-700 dark:text-gray-300"
+            className="block text-sm font-bold text-foreground/80 mb-1"
           >
-            Message <span className="text-red-500">*</span>
+            Message <span className="text-error">*</span>
           </label>
           <textarea
             id="message"
@@ -209,7 +209,7 @@ export default function ContactPage() {
 
         {/* Error */}
         {error && (
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <p className="text-sm font-bold text-error">{error}</p>
         )}
 
         {/* Submit */}
@@ -217,7 +217,7 @@ export default function ContactPage() {
           type="submit"
           loading={submitting}
           loadingText="Sending..."
-          className="gradient-bg-hover w-full h-12 rounded-lg text-sm font-semibold text-white transition-all"
+          className="w-full h-12 rounded-xl text-base font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
         >
           {!submitting && <Send className="mr-2 h-4 w-4" />}
           Send Message

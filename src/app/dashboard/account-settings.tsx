@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Check, X, Mail, Eye, EyeOff } from "lucide-react";
+import { Pencil, Check, X, Mail, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AccountSettingsProps {
   email: string;
   fullName: string;
   planLabel: string;
-  planBadge: string;
   authProvider: string;
 }
 
@@ -16,7 +15,6 @@ export function AccountSettings({
   email,
   fullName,
   planLabel,
-  planBadge,
   authProvider,
 }: AccountSettingsProps) {
   const isOAuth = authProvider !== "email";
@@ -141,44 +139,47 @@ export function AccountSettings({
       : authProvider.charAt(0).toUpperCase() + authProvider.slice(1);
 
   return (
-    <div className="mt-4 rounded-xl border border-gray-300 bg-white p-6 dark:border-gray-600 dark:bg-[#1A1A2E]">
+    <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-sm">
       {error && (
-        <div className="mb-4 rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
-          {error}
-          <button
-            onClick={() => setError(null)}
-            className="ml-2 text-red-500 hover:text-red-700"
-          >
-            <X className="inline h-3.5 w-3.5" />
-          </button>
+        <div className="mb-6 rounded-xl border border-error/20 bg-error/10 px-4 py-3 text-sm text-error">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" />
+            <p className="font-bold">{error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="ml-auto text-error/60 hover:text-error"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       )}
 
       {nameSuccess && (
-        <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
+        <div className="mb-6 rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success font-bold">
           Name updated successfully.
         </div>
       )}
 
       {passwordSuccess && (
-        <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2 text-sm text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
+        <div className="mb-6 rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success font-bold">
           Password updated successfully.
         </div>
       )}
 
       {emailMessage && (
-        <div className="mb-4 rounded-lg border border-indigo-300 bg-indigo-50 px-4 py-3 text-sm text-indigo-700 dark:border-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400">
+        <div className="mb-6 rounded-xl border border-primary/20 bg-primary/10 px-4 py-4 text-sm text-primary">
           <div className="flex items-start gap-2">
             <Mail className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>{emailMessage}</p>
+            <p className="font-bold">{emailMessage}</p>
           </div>
         </div>
       )}
 
-      <dl className="space-y-5">
+      <dl className="space-y-8">
         {/* Name — editable for everyone */}
-        <div className="flex items-center justify-between">
-          <dt className="text-sm text-muted-foreground">Name</dt>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <dt className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Name</dt>
           <dd className="flex items-center gap-2">
             {editingName ? (
               <div className="flex items-center gap-2">
@@ -187,7 +188,7 @@ export function AccountSettings({
                   maxLength={100}
                   value={nameValue}
                   onChange={(e) => setNameValue(e.target.value)}
-                  className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-[#1E1E30] dark:text-gray-100"
+                  className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
                   autoFocus
                   onKeyDown={(e) => {
                     if (e.key === "Enter") saveName();
@@ -201,44 +202,44 @@ export function AccountSettings({
                   onClick={saveName}
                   loading={nameSaving}
                   size="icon"
-                  className="h-8 w-8 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                  className="h-10 w-10 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
                 >
-                  <Check className="h-4 w-4" />
+                  <Check className="h-5 w-5" />
                 </Button>
                 <button
                   onClick={() => {
                     setEditingName(false);
                     setNameValue(currentName);
                   }}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:text-gray-500 dark:hover:bg-gray-700"
+                  className="rounded-xl p-2.5 text-muted-foreground hover:bg-secondary/20 transition-all"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
             ) : (
-              <>
-                <span className="text-sm font-medium">
+              <div className="flex items-center gap-3">
+                <span className="text-base font-bold text-foreground">
                   {currentName || "\u2014"}
                 </span>
                 <button
                   onClick={() => setEditingName(true)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 dark:text-gray-500 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400"
+                  className="rounded-xl p-2 text-muted-foreground/50 hover:bg-primary/10 hover:text-primary transition-all"
                   title="Edit name"
                 >
-                  <Pencil className="h-3.5 w-3.5" />
+                  <Pencil className="h-4 w-4" />
                 </button>
-              </>
+              </div>
             )}
           </dd>
         </div>
 
         {/* Email — read-only for OAuth, editable for email/password */}
-        <div>
-          <div className="flex items-center justify-between">
-            <dt className="text-sm text-muted-foreground">Email</dt>
+        <div className="border-t border-border pt-8">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <dt className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Email</dt>
             <dd className="flex items-center gap-2">
               {isOAuth ? (
-                <span className="text-sm font-medium">{email}</span>
+                <span className="text-base font-bold text-foreground">{email}</span>
               ) : editingEmail ? (
                 <div className="flex items-center gap-2">
                   <input
@@ -246,7 +247,7 @@ export function AccountSettings({
                     value={emailValue}
                     onChange={(e) => setEmailValue(e.target.value)}
                     placeholder="New email address"
-                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-[#1E1E30] dark:text-gray-100"
+                    className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
                     autoFocus
                     onKeyDown={(e) => {
                       if (e.key === "Enter") saveEmail();
@@ -262,51 +263,51 @@ export function AccountSettings({
                     loadingText="Saving..."
                     disabled={!emailValue}
                     size="icon"
-                    className="h-8 w-8 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                    className="h-10 w-10 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
                   >
-                    <Check className="h-4 w-4" />
+                    <Check className="h-5 w-5" />
                   </Button>
                   <button
                     onClick={() => {
                       setEditingEmail(false);
                       setEmailValue("");
                     }}
-                    className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:text-gray-500 dark:hover:bg-gray-700"
+                    className="rounded-xl p-2.5 text-muted-foreground hover:bg-secondary/20 transition-all"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-5 w-5" />
                   </button>
                 </div>
               ) : (
-                <>
-                  <span className="text-sm font-medium">{email}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-base font-bold text-foreground">{email}</span>
                   <button
                     onClick={() => setEditingEmail(true)}
-                    className="rounded-lg p-1.5 text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 dark:text-gray-500 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400"
+                    className="rounded-xl p-2 text-muted-foreground/50 hover:bg-primary/10 hover:text-primary transition-all"
                     title="Change email"
                   >
-                    <Pencil className="h-3.5 w-3.5" />
+                    <Pencil className="h-4 w-4" />
                   </button>
-                </>
+                </div>
               )}
             </dd>
           </div>
           {isOAuth && (
-            <p className="mt-1 text-xs text-slate-400 dark:text-gray-500 text-right">
-              Email is managed by your {providerLabel} account
+            <p className="mt-2 text-xs font-bold text-muted-foreground/60 text-right">
+              Managed by {providerLabel} account
             </p>
           )}
         </div>
 
         {/* Password — only for email/password users */}
         {!isOAuth && (
-          <div>
-            <div className="flex items-center justify-between">
-              <dt className="text-sm text-muted-foreground">Password</dt>
+          <div className="border-t border-border pt-8">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <dt className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Password</dt>
               <dd>
                 {!showPasswordSection ? (
                   <button
                     onClick={() => setShowPasswordSection(true)}
-                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                    className="text-sm font-bold text-primary hover:underline transition-all"
                   >
                     Change Password
                   </button>
@@ -319,7 +320,7 @@ export function AccountSettings({
                       setConfirmPassword("");
                       setPasswordError(null);
                     }}
-                    className="text-sm text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300"
+                    className="text-sm font-bold text-muted-foreground hover:text-foreground transition-all"
                   >
                     Cancel
                   </button>
@@ -328,88 +329,90 @@ export function AccountSettings({
             </div>
 
             {showPasswordSection && (
-              <div className="mt-3 space-y-3 rounded-lg border border-gray-200 dark:border-gray-600 bg-slate-50 dark:bg-[#1E1E30] p-4">
+              <div className="mt-6 space-y-5 rounded-2xl border border-border bg-secondary/5 p-6 transition-all">
                 {passwordError && (
-                  <p className="text-sm text-red-600 dark:text-red-400">
+                  <p className="text-sm font-bold text-error">
                     {passwordError}
                   </p>
                 )}
-                <div>
-                  <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">
-                    Current Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showCurrentPw ? "text" : "password"}
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Enter your current password"
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-[#1A1A2E] dark:text-gray-100"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowCurrentPw(!showCurrentPw)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                      {showCurrentPw ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
+                      Current Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showCurrentPw ? "text" : "password"}
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        placeholder="Enter your current password"
+                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCurrentPw(!showCurrentPw)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground transition-colors"
+                      >
+                        {showCurrentPw ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">
-                    New Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showNewPw ? "text" : "password"}
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Minimum 8 characters"
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-[#1A1A2E] dark:text-gray-100"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowNewPw(!showNewPw)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                      {showNewPw ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
+                  <div>
+                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
+                      New Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showNewPw ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Minimum 8 chars"
+                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPw(!showNewPw)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground transition-colors"
+                      >
+                        {showNewPw ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-600 dark:text-gray-400 mb-1">
-                    Confirm New Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showConfirmPw ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Re-enter new password"
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-[#1A1A2E] dark:text-gray-100"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") savePassword();
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPw(!showConfirmPw)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                      {showConfirmPw ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
+                  <div>
+                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
+                      Confirm New
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPw ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Re-enter new"
+                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") savePassword();
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPw(!showConfirmPw)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground transition-colors"
+                      >
+                        {showConfirmPw ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <Button
@@ -417,7 +420,7 @@ export function AccountSettings({
                   loading={passwordSaving}
                   loadingText="Updating..."
                   disabled={!currentPassword || !newPassword || !confirmPassword}
-                  className="w-full rounded-lg bg-indigo-600 py-2 font-semibold text-white hover:bg-indigo-700 transition-all"
+                  className="w-full h-12 rounded-xl bg-primary font-bold text-white hover:bg-primary/90 transition-all active:scale-[0.98]"
                 >
                   Update Password
                 </Button>
@@ -426,16 +429,18 @@ export function AccountSettings({
           </div>
         )}
 
-        {/* Plan */}
-        <div className="flex items-center justify-between">
-          <dt className="text-sm text-muted-foreground">Plan</dt>
-          <dd>
-            <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${planBadge}`}
-            >
-              {planLabel}
-            </span>
-          </dd>
+        {/* Plan — strictly read-only badge */}
+        <div className="border-t border-border pt-8">
+          <div className="flex items-center justify-between">
+            <dt className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plan</dt>
+            <dd>
+              <span
+                className={`inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary uppercase tracking-widest`}
+              >
+                {planLabel}
+              </span>
+            </dd>
+          </div>
         </div>
       </dl>
     </div>

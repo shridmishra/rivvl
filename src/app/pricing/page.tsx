@@ -266,33 +266,33 @@ function PricingContent() {
 
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-indigo-950 dark:text-gray-100 sm:text-4xl lg:text-5xl">
-          <span className="gradient-text">Simple, Transparent Pricing</span>
+        <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          Simple, Transparent Pricing
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-700 dark:text-gray-300">
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground font-medium">
           One-time purchases, no subscriptions. Pick the report that fits your needs.
         </p>
       </div>
 
       {/* Tab Toggle */}
       <div className="mt-10 flex justify-center">
-        <div className="inline-flex rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-[#1A1A2E] p-1">
+        <div className="inline-flex rounded-xl border border-border bg-secondary/20 p-1">
           <button
             onClick={() => setTab("vehicles")}
-            className={`rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
+            className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${
               tab === "vehicles"
-                ? "bg-white dark:bg-[#2A2A40] text-indigo-600 shadow-sm"
-                : "text-slate-500 dark:text-gray-400 hover:text-slate-700"
+                ? "bg-background text-primary shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Vehicles
           </button>
           <button
             onClick={() => setTab("homes")}
-            className={`rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
+            className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${
               tab === "homes"
-                ? "bg-white dark:bg-[#2A2A40] text-indigo-600 shadow-sm"
-                : "text-slate-500 dark:text-gray-400 hover:text-slate-700"
+                ? "bg-background text-primary shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Real Estate
@@ -309,39 +309,37 @@ function PricingContent() {
           return (
             <div
               key={plan.name + tab}
-              className={`card-hover relative flex flex-col rounded-xl border p-6 ${
-                plan.highlighted
-                  ? "gradient-border scale-105 bg-white dark:bg-[#1A1A2E] shadow-xl z-10"
-                  : "border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1A1A2E] shadow-sm"
+              className={`card-hover relative flex flex-col rounded-xl border p-6 bg-card shadow-sm ${
+                plan.highlighted ? "border-primary/50 ring-1 ring-primary/20 scale-105 z-10" : "border-border"
               }`}
             >
               {plan.badge && (
-                <span className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-[10px] font-bold tracking-wide text-white shadow-md ${
-                  plan.badge === "BEST VALUE" ? "bg-[#F59E0B]" : "bg-[#6C5CE7]"
+                <span className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-[10px] font-bold tracking-wide text-white shadow-sm ${
+                  plan.badge === "BEST VALUE" ? "bg-amber-500" : "bg-primary"
                 }`}>
                   {plan.badge}
                 </span>
               )}
               <div className={`flex items-center gap-1.5 ${plan.badge ? "mt-2" : ""}`}>
-                <h3 className="text-base font-bold text-indigo-950 dark:text-gray-100">{plan.name}</h3>
+                <h3 className="text-base font-bold text-foreground">{plan.name}</h3>
                 {plan.savingsBadge && (
                   <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">
                     {plan.savingsBadge}
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">{plan.description}</p>
+              <p className="mt-1 text-xs text-muted-foreground font-medium">{plan.description}</p>
               <div className="mt-5 flex items-baseline gap-2">
                 {pricesLoading && plan.role ? (
-                  <div className="h-9 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-9 w-20 animate-pulse rounded bg-secondary/20" />
                 ) : (
-                  <span className="text-3xl font-bold text-indigo-950 dark:text-gray-100">{price}</span>
+                  <span className="text-3xl font-extrabold text-foreground">{price}</span>
                 )}
-                <span className="text-sm text-slate-500 dark:text-gray-400">/{plan.period}</span>
+                <span className="text-sm text-muted-foreground font-bold">/{plan.period}</span>
               </div>
               <ul className="mt-6 flex-1 space-y-2.5">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-sm text-slate-600 dark:text-gray-400">
+                  <li key={feature} className="flex items-start gap-2 text-sm text-foreground/70 font-medium">
                     <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />
                     {feature}
                   </li>
@@ -352,7 +350,7 @@ function PricingContent() {
                 <Button
                   asChild
                   variant="outline"
-                  className="mt-6 w-full border-indigo-200 dark:border-gray-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300 transition-all font-semibold"
+                  className="mt-6 w-full border-primary/20 text-primary hover:bg-primary/5 transition-all font-bold"
                 >
                   <Link href={compareHref}>{plan.cta}</Link>
                 </Button>
@@ -362,7 +360,7 @@ function PricingContent() {
                   loading={isLoading}
                   loadingText="Redirecting..."
                   disabled={loadingRole !== null && !isLoading}
-                  className="gradient-bg-hover mt-6 w-full text-white font-semibold transition-all hover:opacity-90"
+                  className="mt-6 w-full bg-primary text-primary-foreground font-bold transition-all hover:bg-primary/90"
                 >
                   {plan.cta}
                 </Button>
@@ -373,7 +371,7 @@ function PricingContent() {
                   loadingText="Redirecting..."
                   disabled={loadingRole !== null && !isLoading}
                   variant="outline"
-                  className="mt-6 w-full border-indigo-200 dark:border-gray-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300 transition-all font-semibold"
+                  className="mt-6 w-full border-primary/20 text-primary hover:bg-primary/5 transition-all font-bold"
                 >
                   {plan.cta}
                 </Button>
@@ -384,23 +382,23 @@ function PricingContent() {
       </div>
 
       {/* Bottom CTA */}
-      <section className="mt-24 rounded-2xl gradient-bg px-8 py-16 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+      <section className="mt-24 rounded-2xl bg-primary px-8 py-16 text-center">
+        <h2 className="text-2xl font-extrabold tracking-tight text-primary-foreground sm:text-3xl">
           Ready to compare?
         </h2>
-        <p className="mt-3 text-indigo-100">
+        <p className="mt-3 text-primary-foreground/80 font-medium">
           Start with a free comparison, no credit card required.
         </p>
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Link
             href="/compare"
-            className="inline-flex items-center rounded-xl bg-white px-10 py-4 text-base font-bold text-indigo-600 shadow-lg transition-all hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center rounded-xl bg-background px-10 py-4 text-base font-bold text-primary shadow-sm transition-all hover:bg-background/90"
           >
             Compare Vehicles
           </Link>
           <Link
             href="/compare/homes"
-            className="inline-flex items-center rounded-xl bg-white px-10 py-4 text-base font-bold text-indigo-600 shadow-lg transition-all hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center rounded-xl bg-background px-10 py-4 text-base font-bold text-primary shadow-sm transition-all hover:bg-background/90"
           >
             Compare Real Estate
           </Link>

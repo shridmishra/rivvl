@@ -69,30 +69,30 @@ export function DashboardClient({
   return (
     <>
       {showSuccess && (
-        <div className="mb-6 flex items-center justify-between rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 dark:border-emerald-700 dark:bg-emerald-900/20">
+        <div className="mb-8 flex items-center justify-between rounded-xl border border-success/20 bg-success/10 px-5 py-4">
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-            <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
+            <CheckCircle2 className="h-6 w-6 text-success" />
+            <p className="text-sm font-bold text-success">
               {successMessage}
             </p>
           </div>
-          <button onClick={() => setShowSuccess(false)}>
-            <X className="h-4 w-4 text-emerald-600" />
+          <button onClick={() => setShowSuccess(false)} className="rounded-lg p-1.5 hover:bg-success/10 transition-colors">
+            <X className="h-5 w-5 text-success/60 hover:text-success" />
           </button>
         </div>
       )}
 
       {hasSubscription && hasStripeCustomer && (
-        <div className="mt-6">
+        <div className="mt-8">
           <Button
             onClick={openPortal}
             loading={portalLoading}
             loadingText="Opening..."
             variant="outline"
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-indigo-600 transition-all hover:bg-indigo-50 hover:border-indigo-300 dark:border-gray-600 dark:text-indigo-400 dark:hover:bg-indigo-900/30"
+            className="h-12 rounded-xl border border-border bg-background px-6 text-sm font-bold text-primary hover:bg-primary/10 hover:border-primary/20 transition-all active:scale-[0.98]"
           >
             {!portalLoading && <CreditCard className="h-4 w-4" />}
-            Manage Subscription
+            Manage Billing
           </Button>
         </div>
       )}

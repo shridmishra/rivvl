@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['Satoshi', 'sans-serif'],
+  			mono: ['Satoshi', 'sans-serif'],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -22,7 +26,18 @@ const config: Config = {
   			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				foreground: 'hsl(var(--primary-foreground))',
+  				50: 'hsl(var(--primary-50))',
+  				100: 'hsl(var(--primary-100))',
+  				200: 'hsl(var(--primary-200))',
+  				300: 'hsl(var(--primary-300))',
+  				400: 'hsl(var(--primary-400))',
+  				500: 'hsl(var(--primary-500))',
+  				600: 'hsl(var(--primary-600))',
+  				700: 'hsl(var(--primary-700))',
+  				800: 'hsl(var(--primary-800))',
+  				900: 'hsl(var(--primary-900))',
+  				950: 'hsl(var(--primary-950))',
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
@@ -50,18 +65,14 @@ const config: Config = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-  			indigo: {
-  				400: '#818CF8',
-  				600: '#4F46E5',
-  				950: '#1E1B4B',
+  			success: {
+  				DEFAULT: 'hsl(var(--success-500))',
   			},
-  			violet: {
-  				50: '#F5F3FF',
-  				600: '#7C3AED',
+  			warning: {
+  				DEFAULT: 'hsl(var(--warning-500))',
   			},
-  			slate: {
-  				700: '#334155',
-  				900: '#0F172A',
+  			error: {
+  				DEFAULT: 'hsl(var(--error-500))',
   			},
   		},
   		borderRadius: {

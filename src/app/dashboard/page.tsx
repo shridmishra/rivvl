@@ -71,7 +71,7 @@ export default async function DashboardPage() {
     (user.app_metadata?.provider as string) || "email";
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 bg-background">
       {/* Client component for payment success toast + manage subscription */}
       <DashboardClient
         hasSubscription={hasSubscription}
@@ -80,14 +80,14 @@ export default async function DashboardPage() {
 
       {/* Payment failed banner */}
       {paymentFailed && (
-        <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20 px-4 py-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-error/20 bg-error/10 px-4 py-3">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-error" />
           <div>
-            <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
+            <p className="text-sm font-bold text-error">
               Your last payment didn&apos;t go through.
             </p>
-            <p className="mt-0.5 text-xs text-amber-700 dark:text-amber-400">
-              Please try again or <a href="mailto:support@rivvl.io" className="font-semibold underline">contact support</a>.
+            <p className="mt-0.5 text-xs text-error/80 font-medium">
+              Please try again or <a href="mailto:support@rivvl.io" className="font-bold underline hover:text-error/60">contact support</a>.
             </p>
           </div>
         </div>
@@ -96,15 +96,15 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight dark:text-gray-100">Dashboard</h1>
-          <p className="mt-1 text-muted-foreground">
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Dashboard</h1>
+          <p className="mt-2 text-base text-muted-foreground font-medium">
             Welcome back, {profile?.full_name || user.email}
           </p>
         </div>
         {planTier === "free" && (
           <Link
             href="/pricing"
-            className="gradient-bg-hover inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all active:scale-[0.98]"
           >
             <Crown className="h-4 w-4" />
             Upgrade Plan
@@ -113,27 +113,27 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {isPro10 ? (
           <StatCard
-            icon={<BarChart3 className="h-5 w-5 text-amber-500" />}
+            icon={<BarChart3 className="h-5 w-5 text-warning" />}
             label="Pro 10 Reports Remaining"
             value={`${pro10Credits} of 10`}
           />
         ) : (
           <StatCard
-            icon={<BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />}
+            icon={<BarChart3 className="h-5 w-5 text-primary" />}
             label="Total Reports Generated"
             value={String(totalReportsGenerated)}
           />
         )}
         <StatCard
-          icon={<FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />}
+          icon={<FileText className="h-5 w-5 text-primary" />}
           label="Saved Reports"
           value={String(reports.length + homeReports.length)}
         />
         <StatCard
-          icon={<Clock className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />}
+          icon={<Clock className="h-5 w-5 text-primary" />}
           label="Member Since"
           value={
             profile?.created_at
@@ -149,33 +149,16 @@ export default async function DashboardPage() {
 
       {/* Pro 10 credits exhausted alert */}
       {isPro10 && pro10Credits <= 0 && (
-        <div className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-amber-900/20">
+        <div className="mt-8 rounded-xl border border-warning/20 bg-warning/10 p-5">
           <div className="flex items-start gap-3">
-            <Crown className="mt-0.5 h-5 w-5 text-amber-600 dark:text-amber-400" />
+            <Crown className="mt-0.5 h-6 w-6 text-warning" />
             <div>
-              <p className="font-semibold text-amber-800 dark:text-amber-300">
+              <p className="text-base font-bold text-foreground">
                 You&apos;ve used all 10 Pro reports
               </p>
-              <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">
+              <p className="mt-1 text-sm text-muted-foreground font-medium">
                 Purchase another plan to continue generating reports.{" "}
-                <a href="/pricing" className="font-semibold underline">View plans</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Usage Alert (legacy — subscriptions removed) */}
-      {false && (
-        <div className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 dark:border-amber-700 dark:bg-amber-900/20">
-          <div className="flex items-start gap-3">
-            <Crown className="mt-0.5 h-5 w-5 text-amber-600 dark:text-amber-400" />
-            <div>
-              <p className="font-semibold text-amber-800 dark:text-amber-300">
-                You&apos;ve used all your reports
-              </p>
-              <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">
-                Your reports will reset at the next billing cycle.
+                <a href="/pricing" className="font-bold text-primary underline hover:text-primary/70">View plans</a>
               </p>
             </div>
           </div>
@@ -186,13 +169,12 @@ export default async function DashboardPage() {
       <ReportsList initialReports={reports} initialHomeReports={homeReports} />
 
       {/* Account Settings */}
-      <div className="mt-10" id="settings">
-        <h2 className="text-xl font-semibold dark:text-gray-100">Account Settings</h2>
+      <div className="mt-16" id="settings">
+        <h2 className="text-2xl font-extrabold text-foreground tracking-tight">Account Settings</h2>
         <AccountSettings
           email={user.email || ""}
           fullName={profile?.full_name || ""}
           planLabel={isPro10 ? `Pro 10 (${pro10Credits} reports remaining)` : planInfo.label}
-          planBadge={planInfo.badge}
           authProvider={authProvider}
         />
       </div>
@@ -210,12 +192,12 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="rounded-xl border border-gray-300 bg-white p-6 dark:border-gray-600 dark:bg-[#1A1A2E]">
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/20">
       <div className="flex items-center gap-3">
         {icon}
-        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
       </div>
-      <p className="mt-3 text-2xl font-bold dark:text-gray-100">{value}</p>
+      <p className="mt-4 text-3xl font-extrabold text-foreground">{value}</p>
     </div>
   );
 }
