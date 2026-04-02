@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   Home,
@@ -494,8 +494,10 @@ const getBrokerageName = (val: unknown): string => {
 };
 
 function ReportContent() {
-  const params = useParams();
-  const router = useRouter();
+const params = useParams();
+  const searchParams = useSearchParams();
+  const upgraded = searchParams.get("upgraded") === "true";
+  const sessionId = searchParams.get("session_id");
   const [report, setReport] = useState<ComparisonReport | null>(null);
   const [listings, setListings] = useState<ListingData[]>([]);
   const [isPaid, setIsPaid] = useState(false);
@@ -530,9 +532,6 @@ function ReportContent() {
   useEffect(() => {
     // Check URL params for direct report loading (after upgrade from Stripe)
     const urlReportId = params.id as string;
-    const searchParams = new URLSearchParams(window.location.search);
-    const upgraded = searchParams.get("upgraded") === "true";
-    const sessionId = searchParams.get("session_id");
 
     if (urlReportId) {
       // Load report from DB
@@ -641,7 +640,7 @@ function ReportContent() {
       } catch { /* invalid */ }
     }
     setLoading(false);
-  }, []);
+  }, [params.id, upgraded, sessionId]);
 
   const numProperties = report?.properties?.length ?? 2;
   const upgradeRole = numProperties <= 2 ? "home_standard" : "home_premium";

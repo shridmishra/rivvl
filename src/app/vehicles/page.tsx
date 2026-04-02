@@ -7,7 +7,6 @@ import Image from "next/image";
 import {
   ArrowRight,
   Check,
-  Loader2,
   AlertCircle,
   X,
   Star,

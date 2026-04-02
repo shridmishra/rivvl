@@ -502,8 +502,8 @@ function ReportContent() {
   const [upgradeLoading, setUpgradeLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [verifyingPayment, setVerifyingPayment] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [verifyingPayment] = useState(false);
+  const [error] = useState<string | null>(null);
   const [showFinancialMethodology, setShowFinancialMethodology] = useState(false);
   const [paidData, setPaidData] = useState<ComparisonReport['paidData']>(undefined);
   const [activeSection, setActiveSection] = useState<string>("executive-summary");
@@ -530,8 +530,6 @@ function ReportContent() {
     // Check URL params for direct report loading (after upgrade from Stripe)
     const params = new URLSearchParams(window.location.search);
     const urlReportId = params.get("id");
-    const upgraded = params.get("upgraded") === "true";
-    const sessionId = params.get("session_id");
 
     if (urlReportId) {
       router.replace(`/homes/report/${urlReportId}${window.location.search}`);
@@ -561,7 +559,7 @@ function ReportContent() {
       } catch { /* invalid */ }
     }
     setLoading(false);
-  }, []);
+  }, [router]);
 
   const numProperties = report?.properties?.length ?? 2;
   const upgradeRole = numProperties <= 2 ? "home_standard" : "home_premium";
