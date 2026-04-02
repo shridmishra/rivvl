@@ -333,7 +333,8 @@ Source: ${crime.dataNote}`;
   "ourPickAddress": "the full address of the winning property",
   "ourPickBullets": ["3 specific data comparison bullet strings, each referencing a concrete number, e.g. '$150/month lower total estimated cost'"],
   "ourPickNarrative": "2-3 concise sentence paragraph explaining the recommendation with specific data references",
-  "ourPickCaveat": "one sentence honest caveat about the recommended property"`;
+  "ourPickCaveat": "one sentence honest caveat about the recommended property",
+  "finalVerdict": "one sentence definitive final state/verdict"`;
 
   const paidSchema = isPaidReport ? `,
   "scoreAnalysis": {"property1_price": "2-3 sentences", "property1_location": "...", "property1_value": "...", "property1_risk": "...", "property2_price": "...", "property2_location": "...", "property2_value": "...", "property2_risk": "..."},
