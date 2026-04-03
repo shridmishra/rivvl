@@ -168,9 +168,9 @@ export function AccountSettings({
       )}
 
       {emailMessage && (
-        <div className="mb-6 rounded-xl border border-primary/20 bg-primary/10 px-4 py-4 text-sm text-primary">
-          <div className="flex items-start gap-2">
-            <Mail className="mt-0.5 h-4 w-4 shrink-0" />
+        <div className="mb-6 rounded-2xl border border-black/10 bg-neutral-100 dark:bg-neutral-800 px-6 py-5 text-sm text-black dark:text-white">
+          <div className="flex items-start gap-3">
+            <Mail className="mt-0.5 h-5 w-5 shrink-0 text-neutral-400" />
             <p className="font-bold">{emailMessage}</p>
           </div>
         </div>
@@ -202,7 +202,7 @@ export function AccountSettings({
                   onClick={saveName}
                   loading={nameSaving}
                   size="icon"
-                  className="h-10 w-10 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
+                  className="h-10 w-10 rounded-full bg-black text-white dark:bg-white dark:text-black hover:bg-neutral-800 transition-all active:scale-[0.98]"
                 >
                   <Check className="h-5 w-5" />
                 </Button>
@@ -223,7 +223,7 @@ export function AccountSettings({
                 </span>
                 <button
                   onClick={() => setEditingName(true)}
-                  className="rounded-xl p-2 text-muted-foreground/50 hover:bg-primary/10 hover:text-primary transition-all"
+                  className="rounded-full p-2 text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white transition-all"
                   title="Edit name"
                 >
                   <Pencil className="h-4 w-4" />
@@ -263,7 +263,7 @@ export function AccountSettings({
                     loadingText="Saving..."
                     disabled={!emailValue}
                     size="icon"
-                    className="h-10 w-10 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
+                    className="h-10 w-10 rounded-full bg-black text-white dark:bg-white dark:text-black hover:bg-neutral-800 transition-all active:scale-[0.98]"
                   >
                     <Check className="h-5 w-5" />
                   </Button>
@@ -282,7 +282,7 @@ export function AccountSettings({
                   <span className="text-base font-bold text-foreground">{email}</span>
                   <button
                     onClick={() => setEditingEmail(true)}
-                    className="rounded-xl p-2 text-muted-foreground/50 hover:bg-primary/10 hover:text-primary transition-all"
+                    className="rounded-full p-2 text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white transition-all"
                     title="Change email"
                   >
                     <Pencil className="h-4 w-4" />
@@ -307,7 +307,7 @@ export function AccountSettings({
                 {!showPasswordSection ? (
                   <button
                     onClick={() => setShowPasswordSection(true)}
-                    className="text-sm font-bold text-primary hover:underline transition-all"
+                    className="text-sm font-bold text-black dark:text-white underline hover:opacity-70 transition-all"
                   >
                     Change Password
                   </button>
@@ -435,7 +435,7 @@ export function AccountSettings({
             <dt className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plan</dt>
             <dd>
               <span
-                className={`inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary uppercase tracking-widest`}
+                className={`inline-flex items-center rounded-full bg-neutral-100 dark:bg-neutral-800 px-4 py-1.5 text-[10px] font-bold text-black dark:text-white uppercase tracking-widest border border-black/5 dark:border-white/5 shadow-sm`}
               >
                 {planLabel}
               </span>

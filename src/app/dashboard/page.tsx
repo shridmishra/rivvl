@@ -104,7 +104,7 @@ export default async function DashboardPage() {
         {planTier === "free" && (
           <Link
             href="/pricing"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-8 py-3 text-sm font-bold text-white shadow-xl hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-100 transition-all active:scale-[0.98]"
           >
             <Crown className="h-4 w-4" />
             Upgrade Plan
@@ -116,24 +116,24 @@ export default async function DashboardPage() {
       <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {isPro10 ? (
           <StatCard
-            icon={<BarChart3 className="h-5 w-5 text-warning" />}
+            icon={<BarChart3 className="h-5 w-5 text-amber-500" />}
             label="Pro 10 Reports Remaining"
             value={`${pro10Credits} of 10`}
           />
         ) : (
           <StatCard
-            icon={<BarChart3 className="h-5 w-5 text-primary" />}
+            icon={<BarChart3 className="h-5 w-5 text-neutral-400" />}
             label="Total Reports Generated"
             value={String(totalReportsGenerated)}
           />
         )}
         <StatCard
-          icon={<FileText className="h-5 w-5 text-primary" />}
+          icon={<FileText className="h-5 w-5 text-neutral-400" />}
           label="Saved Reports"
           value={String(reports.length + homeReports.length)}
         />
         <StatCard
-          icon={<Clock className="h-5 w-5 text-primary" />}
+          icon={<Clock className="h-5 w-5 text-neutral-400" />}
           label="Member Since"
           value={
             profile?.created_at
@@ -158,7 +158,7 @@ export default async function DashboardPage() {
               </p>
               <p className="mt-1 text-sm text-muted-foreground font-medium">
                 Purchase another plan to continue generating reports.{" "}
-                <a href="/pricing" className="font-bold text-primary underline hover:text-primary/70">View plans</a>
+                <a href="/pricing" className="font-bold text-black dark:text-white underline hover:opacity-70">View plans</a>
               </p>
             </div>
           </div>
@@ -192,7 +192,7 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/20">
+    <div className="rounded-3xl border border-border bg-card p-8 shadow-sm transition-all hover:border-black/10 dark:hover:border-white/10">
       <div className="flex items-center gap-3">
         {icon}
         <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{label}</span>

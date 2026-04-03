@@ -369,25 +369,25 @@ export default function CompareHomesPage() {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
         <div className="mx-auto max-w-md text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00D2FF] to-[#6C5CE7]">
-            <Lock className="h-8 w-8 text-white" />
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] bg-black dark:bg-white shadow-2xl">
+            <Lock className="h-10 w-10 text-white dark:text-black" />
           </div>
-          <h1 className="mt-6 text-2xl font-bold text-indigo-950 dark:text-gray-100">
-            Sign in to Compare Real Estate
+          <h1 className="mt-8 text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
+            Sign in to <br/> <span className="text-black/40 dark:text-white/40">Compare Real Estate</span>
           </h1>
           <p className="mt-3 text-slate-600 dark:text-gray-400">
             Create a free account to start comparing properties.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Link
               href="/login?redirect=/compare/homes"
-              className="inline-flex items-center justify-center rounded-xl bg-[#00D2FF] px-8 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]"
+              className="inline-flex h-14 items-center justify-center rounded-full bg-black px-10 py-3 text-base font-bold text-white shadow-xl transition-all hover:bg-neutral-800 dark:bg-white dark:text-black"
             >
               Log in
             </Link>
             <Link
               href="/signup?redirect=/compare/homes"
-              className="inline-flex items-center justify-center rounded-xl border border-[#00D2FF] px-8 py-3 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10"
+              className="inline-flex h-14 items-center justify-center rounded-full border border-black/10 bg-neutral-50 px-10 py-3 text-base font-bold text-black transition-all hover:bg-black hover:text-white dark:border-white/10 dark:bg-neutral-900 dark:text-white"
             >
               Sign up free
             </Link>
@@ -419,22 +419,21 @@ export default function CompareHomesPage() {
 
       {/* Header */}
       <div className="text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00D2FF] to-[#6C5CE7]">
-          <Home className="h-7 w-7 text-white" />
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] bg-black dark:bg-white shadow-2xl">
+          <Home className="h-10 w-10 text-white dark:text-black" />
         </div>
-        <h1 className="mt-5 text-3xl font-bold tracking-tight text-indigo-950 dark:text-gray-100 sm:text-4xl">
-          <span className="bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] bg-clip-text text-transparent">
-            Compare Any Two Properties, Side by Side
-          </span>
+        <h1 className="mt-8 text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
+          Compare Any Two <br/>
+          <span className="text-black/40 dark:text-white/40">Properties, Side by Side</span>
         </h1>
-        <p className="mt-3 text-slate-600 dark:text-gray-400">
+        <p className="mt-4 text-base text-muted-foreground font-medium">
           Paste listings from Zillow, Redfin, or Realtor.com
         </p>
 
         {/* Feature strip */}
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           {["Risk Report", "Financial Analysis", "Schools", "Crime Data", "Price History", "Smart Questions"].map((f) => (
-            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-[#00D2FF]/30 bg-[#00D2FF]/5 px-3 py-1 text-[11px] font-medium text-[#00D2FF]">
+            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-black/5 bg-neutral-100 dark:bg-neutral-800 px-4 py-1.5 text-[10px] font-extrabold text-black dark:text-white uppercase tracking-widest">
               {f}
             </span>
           ))}
@@ -442,46 +441,44 @@ export default function CompareHomesPage() {
       </div>
 
       {/* ═══ PLAN SELECTOR ═══ */}
-      <section className="mt-10 rounded-2xl border border-[#00D2FF]/30 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-indigo-950 dark:text-gray-100">Choose Your Plan</h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+      <section className="mt-12 rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <h2 className="text-xl font-extrabold text-foreground tracking-tight">Choose Your Plan</h2>
+        <p className="mt-1 text-sm text-muted-foreground font-medium">
           Select the depth of analysis you need.
         </p>
 
         {homePlanTier !== "free" && (
-          <div className="mt-3 rounded-lg border border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-2 text-xs text-emerald-700 dark:text-emerald-300">
-            <Check className="mr-1.5 inline h-3.5 w-3.5" />
-            Your current plan: <span className="font-bold">{homePlanTier === "home_standard" ? "Standard" : homePlanTier === "home_premium" ? "Premium" : homePlanTier === "home_pro10" ? "Pro 10" : "Free"}</span>
+          <div className="mt-4 rounded-2xl border border-black/10 bg-neutral-100 dark:bg-neutral-800 px-5 py-4 text-[10px] font-black text-foreground uppercase tracking-widest flex items-center gap-3">
+            <Check className="h-4 w-4" />
+            Your current plan: {homePlanTier === "home_standard" ? "Standard" : homePlanTier === "home_premium" ? "Premium" : homePlanTier === "home_pro10" ? "Pro 10" : "Free"}
           </div>
         )}
 
-        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* Free */}
           <button
             type="button"
             onClick={() => setSelectedPlan("free")}
-            className={`relative flex flex-col rounded-xl border p-5 text-left transition-all duration-200 ${
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
               selectedPlan === "free"
-                ? "border-[#00D2FF] ring-2 ring-[#00D2FF]/30 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
             }`}
           >
             {selectedPlan === "free" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#00D2FF] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Free</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">Free</p>
             <div className="mt-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$0</span>
-              <span className="ml-1 text-xs text-slate-500 dark:text-gray-400">/forever</span>
+              <span className="text-3xl font-black text-foreground">$0</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Compare 2 properties</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Scores, Key Facts, Risk Report</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Basic report (no Our Pick)</p>
+            <div className="mt-6 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 2 properties</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Basic report</p>
             </div>
           </button>
 
@@ -489,29 +486,27 @@ export default function CompareHomesPage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("home_standard")}
-            className={`relative flex flex-col rounded-xl border p-5 text-left transition-all duration-200 ${
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
               selectedPlan === "home_standard"
-                ? "border-[#00D2FF] ring-2 ring-[#00D2FF]/30 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
             }`}
           >
             {selectedPlan === "home_standard" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#00D2FF] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Standard</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">Standard</p>
             <div className="mt-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$9.99</span>
-              <span className="ml-1 text-xs text-slate-500 dark:text-gray-400">/one-time</span>
+              <span className="text-3xl font-black text-foreground">$9.99</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Compare 2 properties</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> All report sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Our Pick & Final Verdict</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Downloadable PDF</p>
+            <div className="mt-6 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 2 properties</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> All sections</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> PDF Export</p>
             </div>
           </button>
 
@@ -519,32 +514,30 @@ export default function CompareHomesPage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("home_premium")}
-            className={`relative flex flex-col rounded-xl border pt-8 p-5 text-left transition-all duration-200 ${
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
               selectedPlan === "home_premium"
-                ? "border-[#00D2FF] ring-2 ring-[#00D2FF]/30 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-black text-white dark:bg-white dark:text-black shadow-2xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10 hover:shadow-md"
             }`}
           >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#00D2FF] px-4 py-1 text-[11px] font-bold text-[#0F0F1A] shadow-md">
-              Most Popular
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
+              MOST POPULAR
             </span>
             {selectedPlan === "home_premium" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#00D2FF] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black dark:bg-black dark:text-white shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Premium</p>
-            <div className="mt-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$19.99</span>
-              <span className="ml-1 text-xs text-slate-500 dark:text-gray-400">/one-time</span>
+            <p className={`text-[10px] font-extrabold uppercase tracking-[0.2em] ${selectedPlan === "home_premium" ? "text-primary-foreground/60" : "text-muted-foreground"}`}>Premium</p>
+            <div className={`mt-2 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`}>
+              <span className="text-3xl font-black">$19.99</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Up to 3 properties</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> All report sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Our Pick & Final Verdict</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Downloadable PDF</p>
+            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "home_premium" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`} /> 3 properties</p>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`} /> All sections</p>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`} /> PDF Export</p>
             </div>
           </button>
 
@@ -552,44 +545,41 @@ export default function CompareHomesPage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("home_pro10")}
-            className={`relative flex flex-col rounded-xl border pt-8 p-5 text-left transition-all duration-200 ${
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
               selectedPlan === "home_pro10"
-                ? "border-[#00D2FF] ring-2 ring-[#00D2FF]/30 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
             }`}
           >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#F59E0B] px-4 py-1 text-[11px] font-bold text-white shadow-md">
-              Best Value
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-500 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-xl">
+              BEST VALUE
             </span>
             {selectedPlan === "home_pro10" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#00D2FF] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-1.5">
-              <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Pro 10</p>
-              <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">50% Off</span>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">Pro 10</p>
+            <div className="mt-2">
+              <span className="text-3xl font-black text-foreground">$99.99</span>
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$99.99</span>
-              <span className="text-xs text-slate-500 dark:text-gray-400">/one-time</span>
+            <div className="mt-1">
+              <span className="rounded-full bg-foreground px-2 py-0.5 text-[8px] font-black text-background leading-tight uppercase tracking-widest">50% OFF</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> 10 Premium reports</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Up to 3 properties each</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> All report sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Credits never expire</p>
+            <div className="mt-4 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 10 Reports</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Extended comparisons</p>
             </div>
           </button>
         </div>
       </section>
 
       {/* Supported sites note */}
-      <div className="mt-8 flex items-start gap-2 rounded-xl border border-[#00D2FF]/20 bg-[#00D2FF]/5 px-4 py-3 dark:border-[#00D2FF]/10 dark:bg-[#00D2FF]/5">
-        <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#00D2FF]" />
-        <p className="text-sm text-slate-600 dark:text-gray-400">
+      <div className="mt-12 flex items-start gap-3 rounded-2xl border border-black/5 bg-neutral-100 dark:bg-neutral-800/50 px-6 py-4">
+        <Info className="mt-0.5 h-5 w-5 shrink-0 text-black dark:text-white" />
+        <p className="text-sm text-muted-foreground font-medium">
           We support listings from Zillow, Redfin, Realtor.com, and most major
           real estate sites.
         </p>
@@ -616,35 +606,34 @@ export default function CompareHomesPage() {
               )}
             </div>
 
-            <div className="mt-3">
               {property.inputMode === 'url' ? (
-                <div className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#14142A] px-3 py-2.5 focus-within:border-[#00D2FF] focus-within:ring-1 focus-within:ring-[#00D2FF]/30">
-                  <Link2 className="h-4 w-4 shrink-0 text-slate-400" />
+                <div className="flex items-center gap-3 rounded-full border border-border bg-neutral-50 dark:bg-neutral-900 px-5 py-3.5 focus-within:border-black dark:focus-within:border-white focus-within:ring-4 focus-within:ring-black/5 dark:focus-within:ring-white/5 transition-all">
+                  <Link2 className="h-5 w-5 shrink-0 text-neutral-400" />
                   <input
                     type="url"
-                    placeholder="Paste Zillow, Redfin, or Realtor.com link here"
+                    placeholder="Paste listing URL here"
                     value={property.url}
                     onChange={(e) => updateProperty(property.id, e.target.value)}
                     disabled={isLoading}
-                    className="w-full bg-transparent text-sm text-indigo-950 dark:text-gray-100 placeholder:text-slate-400 focus:outline-none disabled:opacity-50"
+                    className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground/50 focus:outline-none disabled:opacity-50"
                   />
                 </div>
               ) : (
                 <div>
-                  <div className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#14142A] px-3 py-2.5 focus-within:border-[#00D2FF] focus-within:ring-1 focus-within:ring-[#00D2FF]/30">
-                    <Home className="h-4 w-4 shrink-0 text-slate-400" />
+                  <div className="flex items-center gap-3 rounded-full border border-border bg-neutral-50 dark:bg-neutral-900 px-5 py-3.5 focus-within:border-black dark:focus-within:border-white focus-within:ring-4 focus-within:ring-black/5 dark:focus-within:ring-white/5 transition-all">
+                    <Home className="h-5 w-5 shrink-0 text-neutral-400" />
                     <input
                       type="text"
                       placeholder="e.g. VAFX2123456"
                       value={property.mlsNumber}
                       onChange={(e) => updateMlsNumber(property.id, e.target.value)}
                       disabled={isLoading}
-                      className="w-full bg-transparent text-sm text-indigo-950 dark:text-gray-100 placeholder:text-slate-400 focus:outline-none disabled:opacity-50"
+                      className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground/50 focus:outline-none disabled:opacity-50"
                     />
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-400 dark:text-gray-500">
+                  <p className="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-5">
                     <Info className="h-3 w-3" />
-                    Enter the MLS number from your listing sheet or agent
+                    Enter the MLS number from your listing sheet
                   </p>
                 </div>
               )}
@@ -652,11 +641,10 @@ export default function CompareHomesPage() {
                 type="button"
                 onClick={() => toggleInputMode(property.id)}
                 disabled={isLoading}
-                className="mt-2 text-xs font-medium text-[#00D2FF] hover:text-[#00B8E0] transition-colors disabled:opacity-50"
+                className="mt-3 px-5 text-[10px] font-extrabold text-black dark:text-white uppercase tracking-widest hover:underline transition-all disabled:opacity-50"
               >
-                {property.inputMode === 'url' ? 'Use MLS number instead' : 'Use listing URL instead'}
+                {property.inputMode === 'url' ? 'Use MLS number' : 'Use listing URL'}
               </button>
-            </div>
           </div>
         ))}
       </div>
@@ -667,25 +655,25 @@ export default function CompareHomesPage() {
           properties.length < maxProperties && (
             <button
               onClick={addProperty}
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 py-4 text-sm font-medium text-slate-500 transition-colors hover:border-[#00D2FF] hover:text-[#00D2FF] dark:text-gray-400"
+              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-dashed border-border py-4 text-xs font-extrabold uppercase tracking-widest text-muted-foreground transition-all hover:border-black hover:text-black dark:hover:border-white dark:hover:text-white"
             >
               <Plus className="h-4 w-4" />
-              + Add Third Property
+              Add Third Property
             </button>
           )
         ) : (
-          <div className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 py-4 text-sm font-medium text-slate-400 dark:text-gray-500 cursor-not-allowed" title="Select Premium or Pro 10 plan to compare up to 3 properties">
+          <div className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-dashed border-border py-4 text-xs font-extrabold uppercase tracking-widest text-muted-foreground/30 cursor-not-allowed">
             <Lock className="h-4 w-4" />
-            Select Premium plan to compare 3 properties
+            Selection Premium plan for 3 properties
           </div>
         )
       )}
 
       {/* ═══ BUYER PREFERENCES ═══ */}
-      <section className="mt-8 rounded-2xl border border-[#00D2FF]/30 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-indigo-950 dark:text-gray-100">Your Preferences</h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
-          Help us tailor the analysis to what matters most to you. (Optional but recommended)
+      <section className="mt-12 rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <h2 className="text-xl font-extrabold text-foreground tracking-tight">Your Preferences</h2>
+        <p className="mt-1 text-sm text-muted-foreground font-medium">
+          Help us tailor the analysis to what matters most to you.
         </p>
 
         {/* Priorities */}
@@ -783,17 +771,17 @@ export default function CompareHomesPage() {
       )}
 
       {/* Compare button */}
-      <div className="mt-8">
+      <div className="mt-12">
         <Button
           onClick={handleCompare}
           disabled={!hasAtLeastTwoInputs}
           loading={isLoading || redirectingToStripe}
           loadingText={redirectingToStripe ? "Redirecting..." : "Preparing..."}
-          className="w-full py-7 text-base font-bold shadow-lg transition-all hover:shadow-xl rounded-xl"
+          className="w-full py-8 text-lg font-black uppercase tracking-widest shadow-2xl transition-all hover:scale-[1.01] active:scale-[0.99] rounded-full bg-black text-white dark:bg-white dark:text-black"
         >
-          <div className="flex items-center gap-2">
-            <Home className="h-5 w-5" />
-            {selectedPlan === "free" ? "Compare Now" : `Compare Now: ${selectedPlan === "home_standard" ? "$9.99" : selectedPlan === "home_premium" ? "$19.99" : selectedPlan === "home_pro10" ? "$99.99" : "$0"}`}
+          <div className="flex items-center gap-3">
+            <Home className="h-6 w-6" />
+            {selectedPlan === "free" ? "Start Free Comparison" : `Purchase & Compare: ${selectedPlan === "home_standard" ? "$9.99" : selectedPlan === "home_premium" ? "$19.99" : selectedPlan === "home_pro10" ? "$99.99" : "$0"}`}
           </div>
         </Button>
       </div>

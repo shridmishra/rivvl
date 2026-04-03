@@ -146,7 +146,7 @@ export function Navbar() {
         <Link
           href="/login"
           onClick={onClick}
-          className={`inline-flex items-center justify-center rounded-none hover:rounded-full transition-all duration-500 ease-in-out ${isTransparent ? "bg-black/80 text-white px-8 h-12" : "bg-primary text-primary-foreground px-5 py-2.5"} text-base font-medium hover:opacity-90 active:scale-[0.98] uppercase tracking-widest`}
+          className={`inline-flex items-center justify-center rounded-none hover:rounded-full transition-all duration-100 ${isTransparent ? "bg-black/80 text-white px-6 h-10" : "bg-primary text-primary-foreground px-5 py-2.5"} text-base font-medium hover:opacity-90 active:scale-[0.98] uppercase tracking-widest`}
         >
           Login
         </Link>
@@ -158,7 +158,7 @@ export function Navbar() {
     return (
       <>
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-[10px] font-bold text-background uppercase tracking-wider">
             {initials}
           </div>
           <div className="min-w-0 flex-1">
@@ -225,39 +225,42 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav links */}
-        <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`group relative text-lg font-medium transition-colors hover:opacity-100 ${
-                isTransparent 
-                  ? "text-white" 
-                  : (pathname === link.href || pathname.startsWith(link.href + "/"))
-                    ? "text-primary"
-                    : "text-foreground/70"
-              }`}
-            >
-              <div className="relative h-[1.5em] overflow-hidden">
-                <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full">
-                  <span>{link.label}</span>
-                  <span className="absolute top-full">{link.label}</span>
+        <nav className="hidden items-center gap-2 md:flex">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href + "/"));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`group relative px-6 py-2 text-base font-medium transition-all duration-300 rounded-full ${
+                  isTransparent 
+                    ? isActive ? "bg-white/15 text-white shadow-sm backdrop-blur-md" : "text-white/80 hover:text-white"
+                    : isActive 
+                      ? "bg-black text-white shadow-md dark:bg-white dark:text-black" 
+                      : "text-foreground/70 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                }`}
+              >
+                <div className="relative h-[1.5em] overflow-hidden">
+                  <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full">
+                    <span>{link.label}</span>
+                    <span className="absolute top-full">{link.label}</span>
+                  </div>
                 </div>
-              </div>
-              <span className={`absolute -bottom-1 left-0 h-[1.25px] w-full origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-x-100 ${isTransparent ? "bg-white" : "bg-primary"}`} />
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Desktop right buttons */}
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           {authReady && user ? (
             <div className="relative">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
                 className={`flex items-center gap-2 rounded-full border ${isTransparent ? "border-white/30 text-white" : "border-border text-foreground/80"} px-3 py-1.5 text-sm font-bold transition-all hover:bg-white/10 active:scale-[0.98]`}
               >
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground text-[10px] font-bold text-background uppercase tracking-wider shadow-sm transition-colors duration-300">
                   {initials}
                 </div>
                 <span className="max-w-[120px] truncate leading-none">
@@ -310,20 +313,23 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-72 bg-card">
               <div className="mt-8 flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`rounded-lg px-3 py-2 text-sm font-bold transition-colors hover:text-primary ${
-                      pathname === link.href
-                        ? "text-primary"
-                        : "text-foreground/70"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href + "/"));
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`rounded-full px-4 py-2.5 text-sm font-bold transition-all ${
+                        isActive
+                          ? "bg-black text-white dark:bg-white dark:text-black shadow-md"
+                          : "text-foreground/70 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
                 <hr className="my-2 border-border" />
 
                 {authReady && user ? (

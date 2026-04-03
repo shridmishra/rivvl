@@ -145,55 +145,55 @@ export default function HomesPage() {
   return (
     <div className="flex flex-col">
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-white px-4 py-24 sm:py-32 lg:py-40">
-        {/* gradient orbs */}
-        <div className="pointer-events-none absolute -left-32 top-16 h-[420px] w-[420px] rounded-full bg-cyan-500/5 blur-[120px]" />
-        <div className="pointer-events-none absolute right-[-80px] top-48 h-[360px] w-[360px] rounded-full bg-purple-600/5 blur-[100px]" />
-
+      <section className="relative overflow-hidden bg-background px-4 py-24 sm:py-32 lg:py-40">
         <div className="relative mx-auto max-w-4xl text-center">
-          <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-[56px]">
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              The Smarter Way to Compare Real Estate.
-            </span>
+          <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tighter text-foreground sm:text-6xl lg:text-7xl">
+            The Smarter Way to <br/>
+            <span className="text-black dark:text-white">Compare Real Estate.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#4A4A6A]">
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground font-medium">
             Risk reports, financial projections, school data, crime context,
-            price history, and negotiation intelligence, all before you
-            make an offer.
+            price history, and negotiation intelligence—all delivered with
+            algorithmic certainty before you make an offer.
           </p>
-          <div className="mt-10">
+          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
             <Link
               href="/compare/homes"
-              className="inline-flex items-center rounded-xl bg-cyan-500 px-8 py-4 text-base font-semibold text-[#0F0F1A] shadow-lg transition-all hover:bg-cyan-400 hover:shadow-xl hover:-translate-y-0.5"
+              className="inline-flex items-center rounded-3xl bg-foreground px-10 py-5 text-base font-bold text-background shadow-2xl transition-all hover:scale-105 active:scale-[0.98]"
             >
-              Compare Real Estate Free&nbsp;&rarr;
+              Compare Real Estate Free
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+            <Link
+              href="#pricing"
+              className="inline-flex items-center rounded-full border border-border bg-background px-10 py-5 text-base font-bold text-foreground shadow-md transition-all hover:bg-neutral-50 dark:hover:bg-neutral-900 active:scale-[0.98]"
+            >
+              View Pricing
             </Link>
           </div>
         </div>
       </section>
 
       {/* ── FEATURE BENTO GRID ── */}
-      <section className="bg-[#F4F4F8] px-4 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid w-full items-stretch gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6">
+      <section className="bg-secondary/30 dark:bg-background px-4 py-20 sm:py-32">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid w-full items-stretch gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6">
             {/* Card 1: Property Risk Report */}
-            <div className="sm:col-span-1 lg:col-span-2 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-400">
+            <div className="sm:col-span-1 lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+              <div className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground">
                 <ShieldAlert className="h-4 w-4" /> Property Risk Report
               </div>
-              <div className="mt-4 flex-1 space-y-2.5">
+              <div className="mt-8 flex-1 space-y-3">
                 {[
-                  { label: "Flood Zone", level: "Moderate", color: "bg-yellow-400" },
-                  { label: "Wildfire Risk", level: "Low", color: "bg-emerald-400" },
-                  { label: "Earthquake", level: "High", color: "bg-red-400" },
-                  { label: "Environmental Hazards", level: "Low", color: "bg-emerald-400" },
-                  { label: "Foundation Risk", level: "Moderate", color: "bg-yellow-400" },
-                  { label: "Radon Levels", level: "Low", color: "bg-emerald-400" },
+                  { label: "Flood Zone", level: "Moderate", color: "bg-neutral-400" },
+                  { label: "Wildfire Risk", level: "Low", color: "bg-neutral-200" },
+                  { label: "Earthquake", level: "High", color: "bg-neutral-600" },
+                  { label: "Environmental Hazards", level: "Low", color: "bg-neutral-200" },
                 ].map((row) => (
-                  <div key={row.label} className="flex items-center justify-between rounded-lg bg-[#F8F9FA] px-4 py-2">
-                    <span className="text-sm text-[#4A4A6A]">{row.label}</span>
-                    <span className="flex items-center gap-2 text-xs font-semibold text-[#0F0F1A]">
-                      <span className={`h-2 w-2 rounded-full ${row.color}`} />
+                  <div key={row.label} className="flex items-center justify-between rounded-2xl bg-secondary dark:bg-muted/50 px-5 py-3">
+                    <span className="text-sm font-bold text-foreground">{row.label}</span>
+                    <span className="flex items-center gap-2 text-xs font-extrabold text-foreground">
+                      <span className={`h-2.5 w-2.5 rounded-full ${row.color} shadow-sm`} />
                       {row.level}
                     </span>
                   </div>
@@ -202,48 +202,41 @@ export default function HomesPage() {
             </div>
 
             {/* Card 2: Negotiation Intelligence */}
-            <div className="lg:col-span-2 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-400">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl">
+              <div className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground">
                 <TrendingUp className="h-4 w-4" /> Negotiation Intelligence
               </div>
-              <div className="flex-1">
-                <p className="mt-6 text-center text-3xl font-bold text-emerald-400">STRONG</p>
-                <p className="mt-1 text-center text-sm text-[#4A4A6A]/70">Buyer Position</p>
-                <p className="mt-4 text-xs leading-relaxed text-[#4A4A6A]/70">
-                  Based on days on market, price history, and local comps.
-                </p>
+              <div className="flex-1 flex flex-col items-center justify-center">
+                <p className="mt-6 text-center text-5xl font-black text-foreground tracking-tighter">STRONG</p>
+                <p className="mt-2 text-center text-xs font-bold text-muted-foreground uppercase tracking-widest">Buyer Position</p>
               </div>
             </div>
 
             {/* Card 3: Price & Transaction History */}
-            <div className="lg:col-span-2 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-purple-400">
-                <History className="h-4 w-4" /> Price & Transaction History
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl">
+              <div className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground">
+                <History className="h-4 w-4" /> Transaction History
               </div>
-              <div className="mt-4 flex-1 overflow-hidden rounded-lg border border-[#E5E5F0]">
-                <table className="w-full text-left text-xs">
+              <div className="mt-6 flex-1 overflow-hidden rounded-2xl border border-border">
+                <table className="w-full text-left text-[11px] font-bold">
                   <thead>
-                    <tr className="border-b border-[#E5E5F0] bg-[#F8F9FA] text-[#4A4A6A]/70">
-                      <th className="px-3 py-2 font-medium">Date</th>
-                      <th className="px-3 py-2 font-medium">Event</th>
-                      <th className="px-3 py-2 font-medium text-right">Price</th>
+                    <tr className="border-b border-border bg-secondary dark:bg-muted/50 shadow-sm">
+                      <th className="px-4 py-3 text-muted-foreground uppercase tracking-widest">Date</th>
+                      <th className="px-4 py-3 text-foreground uppercase tracking-widest text-right">Price</th>
                     </tr>
                   </thead>
-                  <tbody className="text-[#4A4A6A]">
-                    <tr className="border-b border-[#E5E5F0]">
-                      <td className="px-3 py-2">2024</td>
-                      <td className="px-3 py-2">Listed</td>
-                      <td className="px-3 py-2 text-right">$485,000</td>
+                  <tbody className="text-foreground">
+                    <tr className="border-b border-border hover:bg-secondary dark:hover:bg-muted transition-colors">
+                      <td className="px-4 py-3">2024</td>
+                      <td className="px-4 py-3 text-right">$485,000</td>
                     </tr>
-                    <tr className="border-b border-[#E5E5F0]">
-                      <td className="px-3 py-2">2021</td>
-                      <td className="px-3 py-2">Sold</td>
-                      <td className="px-3 py-2 text-right">$390,000</td>
+                    <tr className="border-b border-border hover:bg-secondary dark:hover:bg-muted transition-colors">
+                      <td className="px-4 py-3">2021</td>
+                      <td className="px-4 py-3 text-right">$390,000</td>
                     </tr>
-                    <tr>
-                      <td className="px-3 py-2">2017</td>
-                      <td className="px-3 py-2">Sold</td>
-                      <td className="px-3 py-2 text-right">$310,000</td>
+                    <tr className="hover:bg-secondary dark:hover:bg-muted transition-colors">
+                      <td className="px-4 py-3">2017</td>
+                      <td className="px-4 py-3 text-right">$310,000</td>
                     </tr>
                   </tbody>
                 </table>
@@ -251,31 +244,31 @@ export default function HomesPage() {
             </div>
 
             {/* Card 4: 5-Year Financial Projection */}
-            <div className="sm:col-span-1 lg:col-span-2 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-cyan-400">
+            <div className="sm:col-span-1 lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <DollarSign className="h-4 w-4" /> 5-Year Financial Projection
               </div>
               <div className="flex-1">
-                <p className="mt-4 text-lg font-semibold text-[#0F0F1A]">
-                  5-Year Total Cost: <span className="text-purple-400">$312,000</span> vs{" "}
-                  <span className="text-cyan-400">$287,000</span>
+                <p className="mt-4 text-lg font-semibold text-foreground">
+                  5-Year Total Cost: <span className="text-muted-foreground">$312,000</span> vs{" "}
+                  <span className="text-foreground">$287,000</span>
                 </p>
                 <div className="mt-5 space-y-3">
                   <div>
-                    <p className="mb-1 text-xs text-[#4A4A6A]/70">Property A</p>
-                    <div className="h-4 rounded-full bg-purple-500/80" style={{ width: "90%" }} />
+                    <p className="mb-1 text-xs text-muted-foreground">Property A</p>
+                    <div className="h-4 rounded-full bg-neutral-600" style={{ width: "90%" }} />
                   </div>
                   <div>
-                    <p className="mb-1 text-xs text-[#4A4A6A]/70">Property B</p>
-                    <div className="h-4 rounded-full bg-cyan-400/80" style={{ width: "78%" }} />
+                    <p className="mb-1 text-xs text-muted-foreground">Property B</p>
+                    <div className="h-4 rounded-full bg-neutral-300" style={{ width: "78%" }} />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Card 5: Nearby Schools */}
-            <div className="lg:col-span-2 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <GraduationCap className="h-4 w-4" /> Nearby Schools
               </div>
               <div className="mt-4 flex-1 space-y-3">
@@ -284,47 +277,47 @@ export default function HomesPage() {
                   { name: "Washington Middle", rating: "7/10", dist: "0.8 mi" },
                   { name: "Jefferson High", rating: "8/10", dist: "1.2 mi" },
                 ].map((school) => (
-                  <div key={school.name} className="flex items-center justify-between rounded-lg bg-[#F8F9FA] px-3 py-2">
+                  <div key={school.name} className="flex items-center justify-between rounded-2xl bg-secondary dark:bg-muted/50 px-3 py-2">
                     <div>
-                      <p className="text-sm font-medium text-[#0F0F1A]">{school.name}</p>
-                      <p className="text-[10px] text-[#4A4A6A]/70">{school.dist}</p>
+                      <p className="text-sm font-medium text-foreground">{school.name}</p>
+                    <p className="text-[10px] text-muted-foreground">{school.dist}</p>
                     </div>
-                    <span className="text-sm font-bold text-blue-400">{school.rating}</span>
+                    <span className="text-sm font-bold text-foreground">{school.rating}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Card 6: Crime Context */}
-            <div className="lg:col-span-2 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-orange-400">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <Shield className="h-4 w-4" /> Crime Context
               </div>
               <div className="mt-5 flex-1 space-y-4">
                 <div>
-                  <div className="flex justify-between text-sm text-[#4A4A6A]">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>Property Crime</span>
-                    <span className="text-yellow-400">Moderate</span>
+                    <span className="text-foreground">Moderate</span>
                   </div>
-                  <div className="mt-1.5 h-3 w-full rounded-full bg-[#F8F9FA]">
-                    <div className="h-3 rounded-full bg-yellow-400/70" style={{ width: "55%" }} />
+                  <div className="mt-1.5 h-3 w-full rounded-full bg-secondary dark:bg-black/20">
+                    <div className="h-3 rounded-full bg-neutral-400" style={{ width: "55%" }} />
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between text-sm text-[#4A4A6A]">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>Violent Crime</span>
-                    <span className="text-emerald-400">Low</span>
+                    <span className="text-foreground">Low</span>
                   </div>
-                  <div className="mt-1.5 h-3 w-full rounded-full bg-[#F8F9FA]">
-                    <div className="h-3 rounded-full bg-emerald-400/70" style={{ width: "25%" }} />
+                  <div className="mt-1.5 h-3 w-full rounded-full bg-secondary dark:bg-black/20">
+                    <div className="h-3 rounded-full bg-neutral-200" style={{ width: "25%" }} />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Card 7: Smart Questions to Ask Agent */}
-            <div className="lg:col-span-3 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-violet-400">
+            <div className="lg:col-span-3 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <MessageSquare className="h-4 w-4" /> Smart Questions to Ask Agent
               </div>
               <div className="mt-4 flex-1 space-y-3">
@@ -334,16 +327,16 @@ export default function HomesPage() {
                   "What are the HOA fees and what do they cover?",
                   "Have there been any insurance claims or permits pulled in the last 5 years?",
                 ].map((q, i) => (
-                  <div key={i} className="rounded-lg bg-[#F8F9FA] px-4 py-3">
-                    <p className="text-sm leading-relaxed text-[#4A4A6A]">{q}</p>
+                  <div key={i} className="rounded-2xl bg-secondary dark:bg-muted/50 px-4 py-3">
+                    <p className="text-sm leading-relaxed text-muted-foreground">{q}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Card 8: Buyer Protection Checklist */}
-            <div className="lg:col-span-3 flex flex-col rounded-2xl border border-[#E5E5F0] bg-white shadow-md p-8">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-400">
+            <div className="lg:col-span-3 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <CheckSquare className="h-4 w-4" /> Buyer Protection Checklist
               </div>
               <div className="mt-4 flex-1 space-y-2.5">
@@ -354,9 +347,9 @@ export default function HomesPage() {
                   "Confirm flood zone classification",
                   "Verify property tax history",
                 ].map((item, i) => (
-                  <label key={i} className="flex items-start gap-2.5 text-sm text-[#4A4A6A]">
-                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border border-gray-300">
-                      <Check className="h-3 w-3 text-emerald-400" />
+                  <label key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border border-border">
+                      <Check className="h-3 w-3 text-foreground" />
                     </span>
                     {item}
                   </label>
@@ -368,13 +361,16 @@ export default function HomesPage() {
       </section>
 
       {/* ── PRICING ── */}
-      <section id="pricing" className="px-4 py-20 sm:py-28">
+      <section id="pricing" className="bg-background px-4 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-[#0F0F1A] sm:text-4xl">
-              <span className="bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] bg-clip-text text-transparent">Real Estate Comparison Pricing</span>
+            <h2 className="text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
+              Investment Protection <br/>
+              <span className="text-black/40 dark:text-white/40">Pricing & Plans</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-[#4A4A6A]">Start free. Upgrade when you need the full picture.</p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground font-medium">
+              Start free. Upgrade when you need the full picture of your potential home.
+            </p>
           </div>
 
           {error && (
@@ -385,45 +381,58 @@ export default function HomesPage() {
             </div>
           )}
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {plans.map((plan) => {
               const isLoading = loadingRole === plan.role;
               return (
-                <div key={plan.name} className={`card-hover relative flex flex-col rounded-xl border p-8 ${plan.highlighted ? "border-[#00D2FF] scale-105 bg-white shadow-xl z-10" : "border-gray-300 bg-white shadow-sm"}`}>
+                <div 
+                  key={plan.name} 
+                  className={`card-hover relative flex flex-col rounded-[2.5rem] border p-10 transition-all duration-500 shadow-sm ${
+                    plan.highlighted 
+                      ? "border-foreground/10 ring-1 ring-foreground/10 bg-foreground text-background scale-105 z-10 shadow-2xl" 
+                      : "border-border bg-card hover:border-foreground/10"
+                  }`}
+                >
                   {plan.badge && (
-                    <span className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-[10px] font-bold tracking-wide text-white shadow-md ${plan.badge === "BEST VALUE" ? "bg-[#F59E0B]" : "bg-[#00D2FF] text-[#0F0F1A]"}`}>{plan.badge}</span>
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
+                      {plan.badge}
+                    </span>
                   )}
-                  <div className={`flex items-center gap-1.5 ${plan.badge ? "mt-2" : ""}`}>
-                    <h3 className="text-base font-bold text-[#0F0F1A]">{plan.name}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className={`text-xl font-black uppercase tracking-tighter ${plan.highlighted ? "text-background" : "text-foreground"}`}>{plan.name}</h3>
                     {plan.savingsBadge && (
-                      <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">{plan.savingsBadge}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[8px] font-black leading-tight uppercase tracking-widest shadow-sm ${plan.highlighted ? "bg-background text-foreground" : "bg-foreground text-background"}`}>
+                        {plan.savingsBadge}
+                      </span>
                     )}
                   </div>
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-[#0F0F1A]">{plan.price}</span>
-                    <span className="text-sm text-slate-500">{plan.period}</span>
+                  <div className="mt-6 flex items-baseline gap-2">
+                    <span className={`text-4xl font-black ${plan.highlighted ? "text-background" : "text-foreground"}`}>{plan.price}</span>
+                    <span className={`text-xs font-bold uppercase tracking-widest ${plan.highlighted ? "text-white/60 dark:text-black/60" : "text-muted-foreground"}`}>
+                      {plan.period}
+                    </span>
                   </div>
-                  <p className="mt-2 text-xs text-slate-500">{plan.properties} &middot; {plan.sections}</p>
-                  <ul className="mt-6 flex-1 space-y-2.5">
+                  
+                  <ul className="mt-10 flex-1 space-y-4">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />{f}
+                      <li key={f} className="flex items-start gap-3 text-sm font-bold">
+                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${plan.highlighted ? "text-background" : "text-foreground"}`} />
+                        <span className={plan.highlighted ? "text-background/80" : "text-foreground"}>{f}</span>
                       </li>
                     ))}
                   </ul>
+
                   {plan.role === null ? (
-                    <Button variant="outline" asChild className="mt-6 w-full border-[#00D2FF] text-[#00D2FF] hover:bg-[#00D2FF]/10">
-                      <Link href="/compare/homes">{plan.cta}</Link>
-                    </Button>
-                  ) : plan.highlighted ? (
                     <Button 
-                      onClick={() => handleCheckout(plan.role!)} 
-                      loading={isLoading}
-                      loadingText="Redirecting..."
-                      disabled={loadingRole !== null && !isLoading}
-                      className="mt-6 w-full bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] text-white transition-all hover:opacity-90"
+                      variant="outline" 
+                      asChild 
+                      className={`mt-10 w-full h-14 rounded-full font-black uppercase tracking-widest transition-all ${
+                        plan.highlighted 
+                          ? "bg-background text-foreground hover:bg-secondary" 
+                          : "border-border bg-secondary/50 text-foreground hover:bg-foreground hover:text-background"
+                      }`}
                     >
-                      {plan.cta}
+                      <Link href="/compare/homes">{plan.cta}</Link>
                     </Button>
                   ) : (
                     <Button 
@@ -431,8 +440,11 @@ export default function HomesPage() {
                       loading={isLoading}
                       loadingText="Redirecting..."
                       disabled={loadingRole !== null && !isLoading}
-                      variant="outline"
-                      className="mt-6 w-full border-[#00D2FF] text-[#00D2FF] hover:bg-[#00D2FF]/10 transition-all"
+                      className={`mt-10 w-full h-14 rounded-full font-black uppercase tracking-widest shadow-xl transition-all ${
+                        plan.highlighted 
+                          ? "bg-background text-foreground hover:bg-secondary" 
+                          : "bg-foreground text-background hover:opacity-90"
+                      }`}
                     >
                       {plan.cta}
                     </Button>
@@ -443,7 +455,7 @@ export default function HomesPage() {
           </div>
 
           <div className="mt-16 text-center">
-            <Link href="/compare/homes" className="inline-flex items-center rounded-xl bg-[#00D2FF] px-10 py-4 text-base font-semibold text-[#0F0F1A] shadow-lg transition-all hover:bg-[#00B8E0] hover:shadow-xl hover:-translate-y-0.5">
+            <Link href="/compare/homes" className="inline-flex items-center rounded-3xl bg-foreground px-10 py-4 text-base font-bold text-background shadow-lg transition-all hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5">
               Start Comparing Real Estate Free
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
@@ -452,23 +464,38 @@ export default function HomesPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#F4F4F8] px-4 py-14">
+      <footer className="bg-secondary/50 dark:bg-card px-4 py-14">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col items-center justify-between gap-8 sm:flex-row sm:items-start">
-            <div>
-              <Image src="/images/rivvl-logo-black.png" alt="rivvl" width={100} height={33} className="h-7 w-auto" />
-              <p className="mt-2 text-sm text-[#4A4A6A]">Intelligent Comparison Reports</p>
+            <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+              <Link href="/" className="inline-block">
+                <Image
+                  src="/images/rivvl-logo-black.png"
+                  alt="rivvl"
+                  width={100}
+                  height={33}
+                  className="h-7 w-auto dark:hidden"
+                />
+                <Image
+                  src="/images/rivvl-logo-white.png"
+                  alt="rivvl"
+                  width={100}
+                  height={33}
+                  className="hidden h-7 w-auto dark:block"
+                />
+              </Link>
+              <p className="mt-2 text-sm text-muted-foreground font-medium">Intelligent Comparison Reports</p>
             </div>
-            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-[#4A4A6A]">
-              <Link href="/" className="transition-colors hover:text-[#0F0F1A]">Home</Link>
-              <Link href="/vehicles" className="transition-colors hover:text-[#0F0F1A]">Vehicles</Link>
-              <Link href="/homes" className="transition-colors hover:text-[#0F0F1A]">Real Estate</Link>
-              <Link href="/contact" className="transition-colors hover:text-[#0F0F1A]">Contact</Link>
-              <Link href="/privacy" className="transition-colors hover:text-[#0F0F1A]">Privacy Policy</Link>
-              <Link href="/terms" className="transition-colors hover:text-[#0F0F1A]">Terms of Service</Link>
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+              <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
+              <Link href="/vehicles" className="transition-colors hover:text-foreground">Vehicles</Link>
+              <Link href="/homes" className="transition-colors hover:text-foreground">Real Estate</Link>
+              <Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link>
+              <Link href="/privacy" className="transition-colors hover:text-foreground">Privacy Policy</Link>
+              <Link href="/terms" className="transition-colors hover:text-foreground">Terms of Service</Link>
             </nav>
           </div>
-          <div className="mt-10 border-t border-[#E5E5F0] pt-6 text-center text-sm text-[#4A4A6A]/60">&copy; 2026 rivvl. All rights reserved.</div>
+          <div className="mt-10 border-t border-border pt-6 text-center text-sm text-muted-foreground/60">&copy; 2026 rivvl. All rights reserved.</div>
         </div>
       </footer>
     </div>

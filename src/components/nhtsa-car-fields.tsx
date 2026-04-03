@@ -114,14 +114,14 @@ function SelectDropdown({
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           placeholder={placeholder.replace("Select", "Enter").replace(" *", "") + " *"}
-          className={`w-full rounded-lg border bg-white dark:bg-[#1E1E30] px-3 py-2 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 ${
-            error ? "border-red-400" : "border-slate-300 dark:border-gray-600"
+          className={`w-full rounded-lg border bg-white dark:bg-neutral-900 px-3 py-2 text-sm dark:text-gray-100 placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white disabled:cursor-not-allowed disabled:opacity-50 ${
+            error ? "border-red-500" : "border-border"
           }`}
         />
         <button
           type="button"
           onClick={() => onOtherToggle?.(false)}
-          className="mt-0.5 text-[10px] text-indigo-500 hover:text-indigo-700 hover:underline"
+          className="mt-1 text-[10px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground hover:underline"
         >
           Back to list
         </button>
@@ -139,10 +139,10 @@ function SelectDropdown({
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           placeholder={placeholder.replace("Select", "Enter")}
-          className="w-full rounded-lg border border-amber-300 dark:border-amber-700 bg-white dark:bg-[#1E1E30] px-3 py-2 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg border border-border bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm dark:text-gray-100 placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white disabled:cursor-not-allowed disabled:opacity-50"
         />
-        <p className="mt-0.5 text-[10px] text-amber-600">
-          Couldn&apos;t load options — enter manually.
+        <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+          Manual Entry required
         </p>
       </div>
     );
@@ -163,13 +163,13 @@ function SelectDropdown({
         value={value}
         onChange={(e) => handleChange(e.target.value)}
         disabled={disabled || loading}
-        className={`w-full appearance-none rounded-lg border bg-white dark:bg-[#1E1E30] px-3 py-2 pr-8 text-sm dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+        className={`w-full appearance-none rounded-lg border bg-white dark:bg-neutral-900 px-3 py-2 pr-8 text-sm dark:text-gray-100 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white ${
           disabled
-            ? "cursor-not-allowed border-slate-200 dark:border-gray-700 text-slate-400 dark:text-gray-600"
+            ? "cursor-not-allowed border-border text-muted-foreground/30"
             : error
-              ? "border-red-400"
-              : "border-slate-300 dark:border-gray-600"
-        } ${!value ? "text-slate-400 dark:text-gray-500" : ""}`}
+              ? "border-red-500"
+              : "border-border"
+        } ${!value ? "text-muted-foreground/40" : ""}`}
       >
         <option value="">{loading ? "Loading..." : placeholder}</option>
         {options.map((opt) => (
@@ -183,9 +183,9 @@ function SelectDropdown({
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
         {loading ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-500" />
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-foreground" />
         ) : (
-          <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
         )}
       </div>
     </div>
@@ -335,7 +335,7 @@ export function NHTSACarFields({
           error={!!errors?.year}
         />
         {errors?.year && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.year}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.year}</p>
         )}
       </div>
 
@@ -355,7 +355,7 @@ export function NHTSACarFields({
           onOtherToggle={handleMakeOtherToggle}
         />
         {errors?.make && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.make}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.make}</p>
         )}
       </div>
 
@@ -375,7 +375,7 @@ export function NHTSACarFields({
           onOtherToggle={handleModelOtherToggle}
         />
         {errors?.model && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.model}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.model}</p>
         )}
       </div>
 
@@ -388,12 +388,12 @@ export function NHTSACarFields({
           onBlur={() => onBlur?.("trim")}
           disabled={disabled}
           maxLength={30}
-          className={`w-full rounded-lg border bg-white dark:bg-[#1E1E30] px-3 py-2 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 ${
-            errors?.trim ? "border-red-400" : "border-slate-300 dark:border-gray-600"
+          className={`w-full rounded-lg border bg-white dark:bg-neutral-900 px-3 py-2 text-sm dark:text-gray-100 placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors?.trim ? "border-red-500" : "border-border"
           }`}
         />
         {errors?.trim && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.trim}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.trim}</p>
         )}
       </div>
 
@@ -406,12 +406,12 @@ export function NHTSACarFields({
           onBlur={() => onBlur?.("mileage")}
           disabled={disabled}
           inputMode="numeric"
-          className={`w-full rounded-lg border bg-white dark:bg-[#1E1E30] px-3 py-2 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 ${
-            errors?.mileage ? "border-red-400" : "border-slate-300 dark:border-gray-600"
+          className={`w-full rounded-lg border bg-white dark:bg-neutral-900 px-3 py-2 text-sm dark:text-gray-100 placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors?.mileage ? "border-red-500" : "border-border"
           }`}
         />
         {errors?.mileage && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.mileage}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.mileage}</p>
         )}
       </div>
 
@@ -424,12 +424,12 @@ export function NHTSACarFields({
           onBlur={() => onBlur?.("price")}
           disabled={disabled}
           inputMode="numeric"
-          className={`w-full rounded-lg border bg-white dark:bg-[#1E1E30] px-3 py-2 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 ${
-            errors?.price ? "border-red-400" : "border-slate-300 dark:border-gray-600"
+          className={`w-full rounded-lg border bg-white dark:bg-neutral-900 px-3 py-2 text-sm dark:text-gray-100 placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors?.price ? "border-red-500" : "border-border"
           }`}
         />
         {errors?.price && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.price}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.price}</p>
         )}
       </div>
 
@@ -442,12 +442,12 @@ export function NHTSACarFields({
           onBlur={() => onBlur?.("vin")}
           disabled={disabled}
           maxLength={17}
-          className={`w-full rounded-lg border bg-white dark:bg-[#1E1E30] px-3 py-2 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 ${
-            errors?.vin ? "border-red-400" : "border-slate-300 dark:border-gray-600"
+          className={`w-full rounded-lg border bg-white dark:bg-neutral-900 px-3 py-2 text-sm dark:text-gray-100 placeholder:text-muted-foreground/40 focus:outline-none focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white disabled:cursor-not-allowed disabled:opacity-50 ${
+            errors?.vin ? "border-red-500" : "border-border"
           }`}
         />
         {errors?.vin && (
-          <p className="mt-0.5 text-[11px] text-red-500">{errors.vin}</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-red-500">{errors.vin}</p>
         )}
       </div>
     </div>

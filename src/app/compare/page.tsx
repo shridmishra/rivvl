@@ -319,7 +319,7 @@ export default function ComparePage() {
         sessionStorage.removeItem("rivvl_checkout_form");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function restoreFormState(data: Record<string, unknown>) {
@@ -712,7 +712,7 @@ export default function ComparePage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 bg-background">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 bg-background">
       {/* Page Header */}
       <div className="text-center">
         <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
@@ -723,9 +723,9 @@ export default function ComparePage() {
         </p>
 
         {/* Feature strip */}
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
           {["Safety Ratings", "Recalls", "Fuel Economy", "Cost Projection", "Our Pick"].map((f) => (
-            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] font-bold text-primary">
+            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-black/5 bg-neutral-100 dark:bg-neutral-800 px-4 py-1.5 text-[10px] font-black text-foreground uppercase tracking-widest">
               {f}
             </span>
           ))}
@@ -744,28 +744,27 @@ export default function ComparePage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("free")}
-            className={`relative flex flex-col rounded-xl border p-5 text-left transition-all duration-200 ${
-              selectedPlan === "free"
-                ? "border-primary bg-primary/5 ring-1 ring-primary/20 shadow-sm"
-                : "border-border bg-background hover:border-primary/30 hover:shadow-sm"
-            }`}
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "free"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+              }`}
           >
             {selectedPlan === "free" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary shadow-sm">
-                  <Check className="h-3 w-3 text-primary-foreground" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-foreground">Free</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Free</p>
             <div className="mt-2">
-              <span className="text-2xl font-extrabold text-foreground">$0</span>
-              <span className="ml-1 text-xs text-muted-foreground font-bold">/forever</span>
+              <span className="text-3xl font-black text-foreground">$0</span>
+              <span className="ml-1 text-[10px] text-muted-foreground font-black uppercase tracking-widest">/forever</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-[11px] text-muted-foreground font-medium">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Compare 2 cars</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Specs & safety</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> 3 of 11 sections</p>
+            <div className="mt-6 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 2 properties</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Basic report</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 3 of 11 sections</p>
             </div>
           </button>
 
@@ -773,29 +772,28 @@ export default function ComparePage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("car_single")}
-            className={`relative flex flex-col rounded-xl border p-5 text-left transition-all duration-200 ${
-              selectedPlan === "car_single"
-                ? "border-primary bg-primary/5 ring-1 ring-primary/20 shadow-sm"
-                : "border-border bg-background hover:border-primary/30 hover:shadow-sm"
-            }`}
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "car_single"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+              }`}
           >
             {selectedPlan === "car_single" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary shadow-sm">
-                  <Check className="h-3 w-3 text-primary-foreground" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-foreground">Full Report</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Standard</p>
             <div className="mt-2">
-              <span className="text-2xl font-extrabold text-foreground">$4.99</span>
-              <span className="ml-1 text-xs text-muted-foreground font-bold">/one-time</span>
+              <span className="text-3xl font-black text-foreground">$4.99</span>
+              <span className="ml-1 text-[10px] text-muted-foreground font-black uppercase tracking-widest">/one-time</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-[11px] text-muted-foreground font-medium">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Compare 2 cars</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> All 11 sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> Charts & Picks</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-success" /> PDF Download</p>
+            <div className="mt-6 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 2 properties</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> All 11 sections</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Charts & Picks</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> PDF Download</p>
             </div>
           </button>
 
@@ -803,32 +801,31 @@ export default function ComparePage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("car_pro_report")}
-            className={`relative flex flex-col rounded-xl border pt-8 p-5 text-left transition-all duration-200 ${
-              selectedPlan === "car_pro_report"
-                ? "border-[#6C5CE7] ring-2 ring-indigo-200 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
-            }`}
+            className={`relative flex flex-col rounded-2xl border pt-10 p-6 text-left transition-all duration-300 ${selectedPlan === "car_pro_report"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-black text-white dark:bg-white dark:text-black shadow-2xl scale-105 z-10"
+                : "border-border bg-card hover:border-black/10 dark:hover:border-white/10 hover:shadow-md"
+              }`}
           >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#6C5CE7] px-4 py-1 text-[11px] font-bold text-white shadow-md">
-              Most Popular
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
+              MOST POPULAR
             </span>
             {selectedPlan === "car_pro_report" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#6C5CE7] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black dark:bg-black dark:text-white shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Pro Report</p>
-            <div className="mt-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$9.99</span>
-              <span className="ml-1 text-xs text-slate-500 dark:text-gray-400">/one-time</span>
+            <p className={`text-[10px] font-extrabold uppercase tracking-[0.2em] ${selectedPlan === "car_pro_report" ? "text-background/60" : "text-muted-foreground"}`}>Pro Report</p>
+            <div className={`mt-2 ${selectedPlan === "car_pro_report" ? "text-background" : "text-foreground"}`}>
+              <span className="text-3xl font-black">$9.99</span>
+              <span className="ml-1 text-[10px] font-black uppercase tracking-widest opacity-60">/one-time</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Up to 4 cars</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> All 11 sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Charts & intelligent recommendation</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Downloadable PDF</p>
+            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "car_pro_report" ? "text-background/80" : "text-muted-foreground"}`}>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> Up to 4 cars</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> All 11 sections</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> Charts & Picks</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> PDF Download</p>
             </div>
           </button>
 
@@ -836,115 +833,115 @@ export default function ComparePage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("car_pro10")}
-            className={`relative flex flex-col rounded-xl border pt-8 p-5 text-left transition-all duration-200 ${
-              selectedPlan === "car_pro10"
-                ? "border-[#6C5CE7] ring-2 ring-indigo-200 shadow-lg"
-                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm"
-            }`}
+            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "car_pro10"
+                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
+                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+              }`}
           >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#F59E0B] px-4 py-1 text-[11px] font-bold text-white shadow-md">
-              Best Value
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-500 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-xl">
+              BEST VALUE
             </span>
             {selectedPlan === "car_pro10" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#6C5CE7] shadow">
-                  <Check className="h-3 w-3 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                  <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-1.5">
-              <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">Pro 10</p>
-              <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">40% Off</span>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Pro 10</p>
+            <div className="mt-2">
+              <span className="text-3xl font-black text-foreground">$54.99</span>
+              <span className="ml-1 text-[10px] text-muted-foreground font-black uppercase tracking-widest">/bundle</span>
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">$59.99</span>
-              <span className="text-xs text-slate-500 dark:text-gray-400">/one-time</span>
+            <div className="mt-1">
+              <span className="rounded-full bg-foreground px-2 py-0.5 text-[8px] font-black text-background leading-tight uppercase tracking-widest">40% OFF</span>
             </div>
-            <div className="mt-4 flex-1 space-y-1.5 text-xs text-slate-500 dark:text-gray-400">
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> 10 Pro reports</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Up to 4 cars each</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> All 11 sections</p>
-              <p className="flex items-center gap-1.5"><Check className="h-3 w-3 shrink-0 text-emerald-500" /> Credits never expire</p>
+            <div className="mt-4 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 10 Pro reports</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Up to 4 cars each</p>
+              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Credits never expire</p>
             </div>
           </button>
         </div>
 
         {/* Plan downgrade warning */}
         {planDowngradeWarning && (
-          <div className="mt-4 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
-            <AlertCircle className="mr-2 inline h-4 w-4" />
+          <div className="mt-6 rounded-2xl border border-black dark:border-white bg-black/5 dark:bg-white/5 px-5 py-4 text-[10px] font-black text-foreground uppercase tracking-widest flex items-center gap-3">
+            <AlertCircle className="h-5 w-5" />
             {planDowngradeWarning}
           </div>
         )}
       </section>
 
       {/* ═══ SECTION 2: URL INPUT ═══ */}
-      <section className="mt-8 rounded-2xl border border-indigo-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-indigo-950 dark:text-gray-100">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg">
-            <Link2 className="h-4 w-4 text-white" />
+      <section className="mt-8 rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <h2 className="flex items-center gap-3 text-xl font-extrabold text-foreground tracking-tight">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-black dark:bg-white text-white dark:text-black shadow-lg">
+            <Link2 className="h-5 w-5" />
           </div>
           Car Listing URLs
         </h2>
 
-        <div className="mt-5 space-y-4">
+        <div className="mt-8 space-y-6">
           {urls.map((url, i) => (
-            <div key={i}>
-              <div className="flex items-center gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white gradient-bg">
+            <div key={i} className="group transition-all">
+              <div className="flex items-center gap-4">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-black bg-black text-white dark:bg-white dark:text-black shadow-md transition-transform group-focus-within:scale-110">
                   {i + 1}
                 </span>
                 <div className="relative flex-1">
-                  <input
-                    id={`url-${i}`}
-                    type="url"
-                    value={url}
-                    onChange={(e) => updateUrl(i, e.target.value)}
-                    placeholder="Paste any car listing URL"
-                    className={`w-full rounded-xl border bg-white dark:bg-[#1E1E30] px-4 py-3 text-sm dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                      urlErrors[i] || urlScrapeErrors[i]
-                        ? "border-red-400"
-                        : "border-slate-300 dark:border-gray-600"
-                    }`}
-                  />
+                  <div className={`flex items-center rounded-2xl border bg-neutral-50 dark:bg-neutral-900 px-5 py-4 focus-within:border-black dark:focus-within:border-white focus-within:ring-4 focus-within:ring-black/5 dark:focus-within:ring-white/5 transition-all ${urlErrors[i] || urlScrapeErrors[i] ? "border-red-500" : "border-border"
+                    }`}>
+                    <input
+                      id={`url-${i}`}
+                      type="url"
+                      value={url}
+                      onChange={(e) => updateUrl(i, e.target.value)}
+                      placeholder="Paste any car listing URL"
+                      className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
+                    />
+                  </div>
                 </div>
                 {i >= 2 && (
                   <button
                     type="button"
                     onClick={() => removeUrl(i)}
-                    className="rounded-lg p-2 text-slate-400 dark:text-gray-500 transition-colors hover:bg-red-50 hover:text-red-500"
+                    className="rounded-full p-2.5 text-muted-foreground transition-all hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-5 w-5" />
                   </button>
                 )}
               </div>
 
               {urlErrors[i] && (
-                <p className="ml-10 mt-1 text-xs text-red-500">{urlErrors[i]}</p>
+                <p className="ml-12 mt-2 text-[11px] font-bold text-red-500 flex items-center gap-1.5 uppercase tracking-wider">
+                  <AlertCircle className="h-3.5 w-3.5" />
+                  {urlErrors[i]}
+                </p>
               )}
 
               {urlScrapeErrors[i] && (
-                <div className="ml-10 mt-2">
-                  <div className="flex items-start gap-2 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2.5">
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                <div className="ml-12 mt-3">
+                  <div className="flex items-start gap-3 rounded-2xl border border-red-100 dark:border-red-900/30 bg-red-50/50 dark:bg-red-950/20 px-4 py-4">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
                     <div className="flex-1">
-                      <p className="text-sm text-amber-800">
-                        We couldn&apos;t read this listing. Enter details manually.
+                      <p className="text-xs font-bold text-red-800 dark:text-red-300 uppercase tracking-widest">
+                        Listing Scrape Failed
                       </p>
-                      <p className="mt-0.5 text-xs text-amber-600">{urlScrapeErrors[i]}</p>
+                      <p className="mt-1 text-sm text-red-700/80 dark:text-red-400/80 font-medium">{urlScrapeErrors[i]}</p>
                     </div>
                   </div>
                   {!inlineManual[i] ? (
                     <button
                       type="button"
                       onClick={() => showInlineManual(i)}
-                      className="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-800"
+                      className="mt-3 inline-flex items-center gap-2 text-[11px] font-black text-black dark:text-white uppercase tracking-[0.2em] hover:underline"
                     >
                       Enter details manually
                     </button>
                   ) : (
-                    <div className="mt-3 rounded-lg border border-indigo-300 dark:border-gray-600 bg-indigo-50/50 dark:bg-[#1E1E30] p-4">
-                      <p className="mb-3 text-xs font-semibold text-indigo-950 dark:text-gray-100">
+                    <div className="mt-4 rounded-2xl border border-border bg-neutral-50 dark:bg-neutral-900 p-6 shadow-sm">
+                      <p className="mb-4 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
                         Manual entry for Car {i + 1}
                       </p>
                       <NHTSACarFields
@@ -963,81 +960,78 @@ export default function ComparePage() {
 
         {/* Add Another Car button for URLs */}
         {canAddMoreUrlSlots ? (
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-4 border-indigo-300 text-indigo-600 hover:bg-indigo-50"
+          <button
+            className="mt-8 inline-flex items-center gap-2 rounded-full border-2 border-dashed border-border px-6 py-3.5 text-xs font-black text-muted-foreground uppercase tracking-widest transition-all hover:border-black hover:text-black dark:hover:border-white dark:hover:text-white"
             onClick={addUrl}
           >
-            <Plus className="mr-1.5 h-4 w-4" />
+            <Plus className="h-4 w-4" />
             Add Another Car
-          </Button>
+          </button>
         ) : isAtPlanLimit && urls.length < 4 ? (
-          <div className="mt-4 text-sm text-slate-500 dark:text-gray-400">
+          <div className="mt-6 rounded-2xl border border-border bg-neutral-50 dark:bg-neutral-900 px-5 py-4">
             {canMultiCar ? (
-              <span className="flex items-center gap-1.5">
-                <Lock className="h-3.5 w-3.5" />
+              <span className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                <Lock className="h-4 w-4" />
                 Plan limit reached (4 cars max)
               </span>
             ) : (
-              <span className="flex items-center gap-1.5">
-                <Lock className="h-3.5 w-3.5" />
-                Plan limit reached.{" "}
-                <button type="button" onClick={() => setSelectedPlan("car_pro_report")} className="font-semibold text-indigo-600 hover:text-indigo-800 underline">
-                  Upgrade to Pro to compare more cars
+              <span className="flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                <div className="flex items-center gap-2">
+                  <Lock className="h-4 w-4" />
+                  Upgrade to Pro to compare 4 cars
+                </div>
+                <button type="button" onClick={() => setSelectedPlan("car_pro_report")} className="font-black text-black dark:text-white underline decoration-2 underline-offset-4">
+                  Upgrade Now
                 </button>
               </span>
             )}
           </div>
         ) : null}
 
-        <p className="mt-4 text-xs text-slate-500 dark:text-gray-400">
+        <p className="mt-8 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
           Works with {EXAMPLE_SITES}
         </p>
       </section>
 
       {/* ═══ SECTION 3: MANUAL ENTRY (standalone) ═══ */}
-      <section className="mt-8 rounded-2xl border border-indigo-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+      <section className="mt-8 rounded-3xl border border-border bg-card shadow-sm overflow-hidden">
         <Collapsible
           open={manualOpen}
           onOpenChange={setManualOpen}
         >
-          <CollapsibleTrigger className="flex w-full items-center justify-between px-6 py-4 text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-indigo-600">
-            <span className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1E1E30]">
-                <Car className="h-4 w-4 text-slate-500 dark:text-gray-400" />
+          <CollapsibleTrigger className="flex w-full items-center justify-between px-8 py-5 text-sm font-medium transition-all hover:bg-neutral-50 dark:hover:bg-neutral-900">
+            <span className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-neutral-100 dark:bg-neutral-800 text-muted-foreground">
+                <Car className="h-5 w-5" />
               </div>
-              <span className="text-base font-bold text-indigo-950 dark:text-gray-100">Enter Details Manually Instead</span>
+              <span className="text-lg font-extrabold text-foreground tracking-tight">Enter Details Manually Instead</span>
             </span>
-            <ChevronDown className={`h-4 w-4 transition-transform ${manualOpen ? "rotate-180" : ""}`} />
+            <ChevronDown className={`h-5 w-5 transition-transform duration-500 ${manualOpen ? "rotate-180" : ""}`} />
           </CollapsibleTrigger>
-          <CollapsibleContent className="border-t border-indigo-300 dark:border-gray-600 px-6 pb-6 pt-4">
+          <CollapsibleContent className="border-t border-border px-8 pb-8 pt-6">
             {isAtPlanLimit && (
-              <div className="mb-4 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
-                <AlertCircle className="mr-2 inline h-4 w-4" />
-                {canMultiCar ? (
-                  <>Plan limit reached (4 cars max for this plan).</>
-                ) : (
-                  <>
-                    Car limit reached for your plan. Remove a URL above or{" "}
+              <div className="mb-6 rounded-3xl border border-black/10 bg-neutral-100 dark:bg-neutral-800 px-6 py-5 text-[10px] font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-4 shadow-sm">
+                <AlertCircle className="h-6 w-6 shrink-0 text-black dark:text-white" />
+                <div className="flex-1 flex items-center justify-between">
+                  <span>Plan limit reached (4 cars max).</span>
+                  {!canMultiCar && (
                     <button
                       type="button"
                       onClick={() => setSelectedPlan("car_pro_report")}
-                      className="font-semibold underline hover:text-amber-900 dark:hover:text-amber-100"
+                      className="rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black shadow-lg transition-transform hover:scale-105 active:scale-95"
                     >
-                      upgrade your plan
+                      Upgrade
                     </button>
-                    {" "}to add more cars.
-                  </>
-                )}
+                  )}
+                </div>
               </div>
             )}
             {manualEntries.map((entry, idx) => (
-              <div key={idx} className="mb-4 last:mb-0">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-indigo-950 dark:text-gray-100">Car {idx + 1}</span>
+              <div key={idx} className="mb-8 last:mb-0">
+                <div className="mb-4 flex items-center justify-between px-2">
+                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Car {idx + 1}</span>
                   {manualEntries.length > 2 && idx >= 2 && (
-                    <button type="button" onClick={() => removeManualEntry(idx)} className="text-xs text-slate-400 dark:text-gray-500 hover:text-red-500">
+                    <button type="button" onClick={() => removeManualEntry(idx)} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline">
                       Remove
                     </button>
                   )}
@@ -1054,23 +1048,25 @@ export default function ComparePage() {
 
             {/* Add Another Car button for manual entries */}
             {canAddMoreManualEntries ? (
-              <Button variant="ghost" size="sm" className="mt-2 text-indigo-600 hover:bg-indigo-50" onClick={addManualEntry}>
-                <Plus className="mr-1.5 h-4 w-4" />
+              <button className="mt-4 inline-flex items-center gap-2 rounded-full border-2 border-dashed border-border px-6 py-3.5 text-xs font-black text-muted-foreground uppercase tracking-widest transition-all hover:border-black hover:text-black dark:hover:border-white dark:hover:text-white" onClick={addManualEntry}>
+                <Plus className="h-4 w-4" />
                 Add Another Car
-              </Button>
+              </button>
             ) : isAtPlanLimit && manualEntries.length < 4 ? (
-              <div className="mt-2 text-sm text-slate-500 dark:text-gray-400">
+              <div className="mt-4 rounded-2xl border border-border bg-neutral-50 dark:bg-neutral-900 px-5 py-4">
                 {canMultiCar ? (
-                  <span className="flex items-center gap-1.5">
-                    <Lock className="h-3.5 w-3.5" />
+                  <span className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                    <Lock className="h-4 w-4" />
                     Plan limit reached (4 cars max)
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1.5">
-                    <Lock className="h-3.5 w-3.5" />
-                    Plan limit reached.{" "}
-                    <button type="button" onClick={() => setSelectedPlan("car_pro_report")} className="font-semibold text-indigo-600 hover:text-indigo-800 underline">
-                      Upgrade to Pro to compare more cars
+                  <span className="flex items-center gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                    <div className="flex items-center gap-2">
+                      <Lock className="h-4 w-4" />
+                      Upgrade to Pro to compare 4 cars
+                    </div>
+                    <button type="button" onClick={() => setSelectedPlan("car_pro_report")} className="font-black text-black dark:text-white underline decoration-2 underline-offset-4">
+                      Upgrade Now
                     </button>
                   </span>
                 )}
@@ -1081,18 +1077,18 @@ export default function ComparePage() {
       </section>
 
       {/* ═══ SECTION 4: PREFERENCES ═══ */}
-      <section className="mt-8 rounded-2xl border border-indigo-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-indigo-950 dark:text-gray-100">Your Preferences</h2>
-        <p className="mt-1 text-sm text-slate-500 dark:text-gray-400">
+      <section className="mt-8 rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <h2 className="text-xl font-extrabold text-foreground tracking-tight">Your Preferences</h2>
+        <p className="mt-1 text-sm text-muted-foreground font-medium">
           Help us tailor the analysis to what matters most to you.
         </p>
 
         {/* Priorities -- pill chips */}
-        <div className="mt-6">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">
-            What matters most to you?
+        <div className="mt-10">
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+            Primary Focus
           </p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">Select up to 3</p>
+          <p className="mb-4 text-xs font-bold text-foreground/40">Select up to 3</p>
           <div className="flex flex-wrap gap-2.5">
             {PRIORITIES.map((p) => {
               const isSelected = priorities.includes(p.value);
@@ -1101,15 +1097,12 @@ export default function ComparePage() {
                   key={p.value}
                   type="button"
                   onClick={() => togglePriority(p.value)}
-                  className={`inline-flex items-center gap-2 whitespace-nowrap rounded-xl border px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    isSelected
-                      ? "gradient-bg border-transparent text-white shadow-md shadow-indigo-200"
-                      : "border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] text-slate-600 dark:text-gray-300 hover:border-indigo-400 hover:shadow-sm"
-                  }`}
+                  className={`inline-flex items-center gap-2.5 whitespace-nowrap rounded-full border-2 px-6 py-3 text-sm font-black transition-all duration-300 ${isSelected
+                      ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xl scale-105"
+                      : "border-border bg-neutral-50 dark:bg-neutral-900 text-muted-foreground hover:border-black/20 dark:hover:border-white/20"
+                    }`}
                 >
-                  <span className={isSelected ? "text-white/90" : "text-slate-400"}>
-                    {p.icon}
-                  </span>
+                  {p.icon}
                   {p.value}
                 </button>
               );
@@ -1118,10 +1111,10 @@ export default function ComparePage() {
         </div>
 
         {/* Budget -- card select */}
-        <div className="mt-8">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">Budget priority</p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">How important is price to you?</p>
-          <div className="grid gap-3 sm:grid-cols-3">
+        <div className="mt-12">
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Budget Strategy</p>
+          <p className="mb-4 text-xs font-bold text-foreground/40">How important is price?</p>
+          <div className="grid gap-4 sm:grid-cols-3">
             {BUDGET_OPTIONS.map((opt) => {
               const isSelected = budget === opt.value;
               return (
@@ -1129,26 +1122,25 @@ export default function ComparePage() {
                   key={opt.value}
                   type="button"
                   onClick={() => setBudget(opt.value)}
-                  className={`relative rounded-xl border p-4 text-left transition-all duration-200 ${
-                    isSelected
-                      ? "border-indigo-500 bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/50 dark:to-violet-950/50 shadow-md ring-2 ring-indigo-200"
-                      : "border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] hover:border-indigo-400 hover:shadow-sm"
-                  }`}
+                  className={`relative rounded-2xl border-2 p-6 text-left transition-all duration-300 ${isSelected
+                      ? "border-black dark:border-white bg-neutral-50 dark:bg-neutral-900 shadow-xl ring-4 ring-black/5 dark:ring-white/5"
+                      : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+                    }`}
                 >
                   {isSelected && (
-                    <div className="absolute -right-1.5 -top-1.5">
-                      <div className="flex h-5 w-5 items-center justify-center rounded-full gradient-bg shadow">
-                        <Check className="h-3 w-3 text-white" />
+                    <div className="absolute -right-2 -top-2">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                        <Check className="h-4 w-4" />
                       </div>
                     </div>
                   )}
-                  <div className={`${isSelected ? "text-indigo-600" : "text-slate-400"}`}>
+                  <div className={`${isSelected ? "text-foreground" : "text-muted-foreground/50"}`}>
                     {opt.icon}
                   </div>
-                  <p className={`mt-2 text-sm font-bold ${isSelected ? "text-indigo-900 dark:text-indigo-300" : "text-slate-700 dark:text-gray-200"}`}>
+                  <p className={`mt-4 text-sm font-black uppercase tracking-widest ${isSelected ? "text-foreground" : "text-muted-foreground"}`}>
                     {opt.label}
                   </p>
-                  <p className="mt-0.5 text-xs text-slate-500 dark:text-gray-400">{opt.desc}</p>
+                  <p className="mt-1 text-[11px] font-bold text-muted-foreground leading-relaxed">{opt.desc}</p>
                 </button>
               );
             })}
@@ -1156,10 +1148,10 @@ export default function ComparePage() {
         </div>
 
         {/* Usage -- pill row */}
-        <div className="mt-8">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">How will you use this car?</p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">Pick your primary use</p>
-          <div className="flex flex-wrap gap-2">
+        <div className="mt-12">
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Usage Profile</p>
+          <p className="mb-4 text-xs font-bold text-foreground/40">Primary use case</p>
+          <div className="flex flex-wrap gap-2.5">
             {USAGE_OPTIONS.map((opt) => {
               const isSelected = usage === opt.value;
               return (
@@ -1167,15 +1159,12 @@ export default function ComparePage() {
                   key={opt.value}
                   type="button"
                   onClick={() => setUsage(opt.value)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    isSelected
-                      ? "gradient-bg border-transparent text-white shadow-md shadow-indigo-200"
-                      : "border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] text-slate-600 dark:text-gray-300 hover:border-indigo-400"
-                  }`}
+                  className={`inline-flex items-center gap-2.5 rounded-full border-2 px-6 py-3 text-sm font-black transition-all duration-300 ${isSelected
+                      ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xl scale-105"
+                      : "border-border bg-neutral-50 dark:bg-neutral-900 text-muted-foreground hover:border-black/20 dark:hover:border-white/20"
+                    }`}
                 >
-                  <span className={isSelected ? "text-white/90" : "text-slate-400"}>
-                    {opt.icon}
-                  </span>
+                  {opt.icon}
                   {opt.value}
                 </button>
               );
@@ -1184,10 +1173,10 @@ export default function ComparePage() {
         </div>
 
         {/* Keep duration -- pill row */}
-        <div className="mt-8">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">How long do you plan to keep it?</p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">Affects cost projections</p>
-          <div className="flex flex-wrap gap-2">
+        <div className="mt-12">
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Ownership Period</p>
+          <p className="mb-4 text-xs font-bold text-foreground/40">Affects depreciation projections</p>
+          <div className="flex flex-wrap gap-2.5">
             {KEEP_OPTIONS.map((opt) => {
               const isSelected = keepDuration === opt.value;
               return (
@@ -1195,18 +1184,15 @@ export default function ComparePage() {
                   key={opt.value}
                   type="button"
                   onClick={() => setKeepDuration(opt.value)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    isSelected
-                      ? "gradient-bg border-transparent text-white shadow-md shadow-indigo-200"
-                      : "border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] text-slate-600 dark:text-gray-300 hover:border-indigo-400"
-                  }`}
+                  className={`inline-flex items-center gap-2.5 rounded-full border-2 px-6 py-3 text-sm font-black transition-all duration-300 ${isSelected
+                      ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xl scale-105"
+                      : "border-border bg-neutral-50 dark:bg-neutral-900 text-muted-foreground hover:border-black/20 dark:hover:border-white/20"
+                    }`}
                 >
-                  <span className={isSelected ? "text-white/90" : "text-slate-400"}>
-                    {opt.icon}
-                  </span>
+                  {opt.icon}
                   {opt.label}
                   {"desc" in opt && opt.desc && (
-                    <span className={`text-xs ${isSelected ? "text-white/70" : "text-slate-400"}`}>
+                    <span className={`text-[10px] opacity-60`}>
                       ({opt.desc})
                     </span>
                   )}
@@ -1218,39 +1204,48 @@ export default function ComparePage() {
       </section>
 
       {/* ═══ GENERATE BUTTON ═══ */}
-      <div className="mt-10">
-        <Button
+      <div className="mt-12">
+        <button
           onClick={handleGenerate}
-          loading={submitting || redirectingToStripe}
-          loadingText={redirectingToStripe ? "Redirecting to checkout..." : "Generating..."}
-          disabled={isTooManyCars}
-          className="gradient-bg-hover w-full h-14 rounded-2xl text-base font-bold text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          disabled={isTooManyCars || submitting || redirectingToStripe}
+          className="w-full h-20 rounded-full bg-black text-white dark:bg-white dark:text-black text-xl font-black uppercase tracking-widest shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-3"
         >
-          Generate My Report
-        </Button>
-        <p className="mt-3 text-center text-xs text-slate-500 dark:text-gray-400">
+          {submitting || redirectingToStripe ? (
+            <>
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span>{redirectingToStripe ? "Redirecting..." : "Generating..."}</span>
+            </>
+          ) : (
+            <>
+              <Car className="h-6 w-6" />
+              <span>Generate My Report</span>
+            </>
+          )}
+        </button>
+        <p className="mt-6 text-center text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] opacity-40">
           {selectedPlan === "free"
-            ? "Takes about 45-90 seconds to generate your intelligent report."
-            : "You'll complete payment before your report is generated."}
+            ? "Takes about 45-90 seconds for deep analysis."
+            : "Complete payment to unlock full comparison results."}
         </p>
       </div>
 
       {/* ═══ API ERROR ═══ */}
       {apiError && (
-        <div className="mt-8 rounded-2xl border border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-6">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+        <div className="mt-10 rounded-3xl border-2 border-black dark:border-white bg-neutral-50 dark:bg-neutral-900 p-8 shadow-2xl">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-600 text-white shadow-lg">
+              <AlertCircle className="h-6 w-6" />
+            </div>
             <div>
-              <h3 className="font-semibold text-red-800">Something went wrong</h3>
-              <p className="mt-1 text-sm text-red-700">{apiError}</p>
-              <Button 
-                variant="ghost" 
-                onClick={handleGenerate} 
-                className="mt-3 text-sm font-medium text-red-700 underline hover:text-red-900 hover:bg-red-100 p-0 h-auto"
-                loading={submitting}
+              <h3 className="text-sm font-black uppercase tracking-widest text-foreground">Something went wrong</h3>
+              <p className="mt-2 text-sm font-bold text-muted-foreground leading-relaxed">{apiError}</p>
+              <button
+                onClick={handleGenerate}
+                className="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-black px-8 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-neutral-800 dark:bg-white dark:text-black"
+                disabled={submitting}
               >
-                Try again
-              </Button>
+                {submitting ? "Trying..." : "Try again"}
+              </button>
             </div>
           </div>
         </div>

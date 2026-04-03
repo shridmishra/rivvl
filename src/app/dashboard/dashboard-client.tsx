@@ -89,7 +89,7 @@ export function DashboardClient({
             loading={portalLoading}
             loadingText="Opening..."
             variant="outline"
-            className="h-12 rounded-xl border border-border bg-background px-6 text-sm font-bold text-primary hover:bg-primary/10 hover:border-primary/20 transition-all active:scale-[0.98]"
+            className="h-12 rounded-full border border-border bg-background px-8 text-sm font-bold text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-sm"
           >
             {!portalLoading && <CreditCard className="h-4 w-4" />}
             Manage Billing

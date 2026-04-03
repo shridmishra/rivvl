@@ -276,23 +276,23 @@ function PricingContent() {
 
       {/* Tab Toggle */}
       <div className="mt-10 flex justify-center">
-        <div className="inline-flex rounded-xl border border-border bg-secondary/20 p-1">
+        <div className="inline-flex rounded-full border border-border bg-neutral-100 dark:bg-neutral-800 p-1.5 shadow-inner">
           <button
             onClick={() => setTab("vehicles")}
-            className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${
+            className={`rounded-full px-8 py-2.5 text-sm font-bold transition-all duration-300 ${
               tab === "vehicles"
-                ? "bg-background text-primary shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-black text-white shadow-md dark:bg-white dark:text-black scale-105"
+                : "text-neutral-500 hover:text-black dark:hover:text-white"
             }`}
           >
             Vehicles
           </button>
           <button
             onClick={() => setTab("homes")}
-            className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${
+            className={`rounded-full px-8 py-2.5 text-sm font-bold transition-all duration-300 ${
               tab === "homes"
-                ? "bg-background text-primary shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-black text-white shadow-md dark:bg-white dark:text-black scale-105"
+                : "text-neutral-500 hover:text-black dark:hover:text-white"
             }`}
           >
             Real Estate
@@ -309,21 +309,19 @@ function PricingContent() {
           return (
             <div
               key={plan.name + tab}
-              className={`card-hover relative flex flex-col rounded-xl border p-6 bg-card shadow-sm ${
-                plan.highlighted ? "border-primary/50 ring-1 ring-primary/20 scale-105 z-10" : "border-border"
+              className={`card-hover relative flex flex-col rounded-[2rem] border p-8 bg-card shadow-sm transition-all duration-500 ${
+                plan.highlighted ? "border-black/10 ring-1 ring-black/5 scale-105 z-10 shadow-2xl dark:border-white/10 dark:ring-white/5" : "border-border hover:border-black/10"
               }`}
             >
               {plan.badge && (
-                <span className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-[10px] font-bold tracking-wide text-white shadow-sm ${
-                  plan.badge === "BEST VALUE" ? "bg-amber-500" : "bg-primary"
-                }`}>
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
                   {plan.badge}
                 </span>
               )}
               <div className={`flex items-center gap-1.5 ${plan.badge ? "mt-2" : ""}`}>
                 <h3 className="text-base font-bold text-foreground">{plan.name}</h3>
                 {plan.savingsBadge && (
-                  <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[9px] font-bold text-white leading-tight whitespace-nowrap">
+                  <span className="rounded-full bg-foreground px-2 py-0.5 text-[8px] font-black text-background leading-tight uppercase tracking-widest whitespace-nowrap">
                     {plan.savingsBadge}
                   </span>
                 )}
@@ -339,8 +337,8 @@ function PricingContent() {
               </div>
               <ul className="mt-6 flex-1 space-y-2.5">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-sm text-foreground/70 font-medium">
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                  <li key={feature} className="flex items-start gap-2 text-sm text-foreground/70 font-bold">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-foreground" />
                     {feature}
                   </li>
                 ))}
@@ -350,7 +348,7 @@ function PricingContent() {
                 <Button
                   asChild
                   variant="outline"
-                  className="mt-6 w-full border-primary/20 text-primary hover:bg-primary/5 transition-all font-bold"
+                  className="mt-6 w-full border-black/10 text-black hover:bg-neutral-100 dark:border-white/10 dark:text-white dark:hover:bg-neutral-800 transition-all font-bold"
                 >
                   <Link href={compareHref}>{plan.cta}</Link>
                 </Button>
@@ -360,7 +358,7 @@ function PricingContent() {
                   loading={isLoading}
                   loadingText="Redirecting..."
                   disabled={loadingRole !== null && !isLoading}
-                  className="mt-6 w-full bg-primary text-primary-foreground font-bold transition-all hover:bg-primary/90"
+                  className="mt-6 w-full bg-black text-white dark:bg-white dark:text-black font-extrabold transition-all hover:bg-neutral-800 dark:hover:bg-neutral-100 shadow-xl"
                 >
                   {plan.cta}
                 </Button>
@@ -371,7 +369,7 @@ function PricingContent() {
                   loadingText="Redirecting..."
                   disabled={loadingRole !== null && !isLoading}
                   variant="outline"
-                  className="mt-6 w-full border-primary/20 text-primary hover:bg-primary/5 transition-all font-bold"
+                  className="mt-6 w-full border-black/10 text-black hover:bg-neutral-100 dark:border-white/10 dark:text-white dark:hover:bg-neutral-800 transition-all font-bold"
                 >
                   {plan.cta}
                 </Button>
@@ -382,23 +380,23 @@ function PricingContent() {
       </div>
 
       {/* Bottom CTA */}
-      <section className="mt-24 rounded-2xl bg-primary px-8 py-16 text-center">
-        <h2 className="text-2xl font-extrabold tracking-tight text-primary-foreground sm:text-3xl">
+      <section className="mt-24 rounded-[3rem] bg-black dark:bg-white px-8 py-20 text-center shadow-2xl">
+        <h2 className="text-3xl font-extrabold tracking-tight text-white dark:text-black sm:text-4xl">
           Ready to compare?
         </h2>
-        <p className="mt-3 text-primary-foreground/80 font-medium">
+        <p className="mt-4 text-white/70 dark:text-black/70 font-medium">
           Start with a free comparison, no credit card required.
         </p>
-        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="mt-10 flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
           <Link
             href="/compare"
-            className="inline-flex items-center rounded-xl bg-background px-10 py-4 text-base font-bold text-primary shadow-sm transition-all hover:bg-background/90"
+            className="inline-flex items-center rounded-full bg-white dark:bg-black px-12 py-5 text-base font-bold text-black dark:text-white shadow-lg transition-all hover:scale-105 active:scale-[0.98]"
           >
             Compare Vehicles
           </Link>
           <Link
             href="/compare/homes"
-            className="inline-flex items-center rounded-xl bg-background px-10 py-4 text-base font-bold text-primary shadow-sm transition-all hover:bg-background/90"
+            className="inline-flex items-center rounded-full bg-white dark:bg-black px-12 py-5 text-base font-bold text-black dark:text-white shadow-lg transition-all hover:scale-105 active:scale-[0.98]"
           >
             Compare Real Estate
           </Link>
@@ -413,7 +411,7 @@ export default function PricingPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-foreground" />
         </div>
       }
     >

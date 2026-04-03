@@ -20,13 +20,13 @@ import type { DbReport, HomeReport } from "@/lib/supabase/types";
 /* ─── Plan tier badge config ─── */
 /* ─── Plan tier badge config ─── */
 const TIER_BADGE: Record<string, { label: string; className: string; icon?: boolean }> = {
-  free: { label: "Free", className: "bg-secondary text-muted-foreground" },
-  single: { label: "Full", className: "bg-primary/10 text-primary" },
-  pro: { label: "Pro", className: "bg-primary text-primary-foreground", icon: true },
+  free: { label: "Free", className: "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400" },
+  single: { label: "Full", className: "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" },
+  pro: { label: "Pro", className: "bg-black text-white dark:bg-white dark:text-black", icon: true },
   // Home plan tiers
-  home_standard: { label: "Standard", className: "bg-primary/10 text-primary" },
-  home_premium: { label: "Premium", className: "bg-primary text-primary-foreground" },
-  home_pro10: { label: "Pro 10", className: "bg-primary text-primary-foreground", icon: true },
+  home_standard: { label: "Standard", className: "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" },
+  home_premium: { label: "Premium", className: "bg-black text-white dark:bg-white dark:text-black" },
+  home_pro10: { label: "Pro 10", className: "bg-black text-white dark:bg-white dark:text-black", icon: true },
 };
 
 function PlanBadge({ tier }: { tier: string }) {
@@ -190,12 +190,12 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
       <div>
         <div className="flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-xl font-extrabold text-foreground tracking-tight sm:text-2xl">
-            <Car className="h-6 w-6 text-primary" />
+            <Car className="h-6 w-6 text-black dark:text-white" />
             Vehicle Reports
           </h2>
           <Link
             href="/compare"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-bold text-white shadow-md hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-100 transition-all active:scale-[0.98]"
           >
             <Car className="h-4 w-4" />
             New Comparison
@@ -213,7 +213,7 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
             </p>
             <Link
               href="/compare"
-              className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline"
+              className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-black dark:text-white hover:underline"
             >
               Compare your first cars <ArrowRight className="h-4 w-4" />
             </Link>
@@ -229,7 +229,7 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
               return (
                 <div
                   key={report.id}
-                  className="relative rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/20 hover:shadow-sm"
+                  className="relative rounded-3xl border border-border bg-card p-5 transition-all hover:border-black/10 hover:shadow-md dark:hover:border-white/10"
                 >
                   {/* Delete Confirmation Overlay */}
                   {isDeleting && (
@@ -263,9 +263,9 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                     <div className="flex items-center gap-4 min-w-0 flex-1">
                       <Link
                         href={`/report/${report.id}`}
-                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors hover:bg-primary/20"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-neutral-100 dark:bg-neutral-800 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                       >
-                        <FileText className="h-6 w-6 text-primary" />
+                        <FileText className="h-6 w-6 text-black dark:text-white" />
                       </Link>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
@@ -292,17 +292,17 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                                   if (e.key === "Enter") saveEdit(report.id);
                                   if (e.key === "Escape") cancelEdit();
                                 }}
-                                className="flex-1 rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none"
+                                className="flex-1 rounded-full border border-border bg-background px-4 py-2 text-sm font-bold focus:border-black focus:ring-4 focus:ring-black/5 dark:focus:border-white dark:focus:ring-white/5 focus:outline-none"
                               />
                               <button
                                 onClick={() => saveEdit(report.id)}
-                                className="rounded-lg p-1.5 text-success hover:bg-success/10 transition-colors"
+                                className="rounded-full p-2 text-success hover:bg-success/10 transition-colors"
                               >
                                 <Check className="h-5 w-5" />
                               </button>
                               <button
                                 onClick={cancelEdit}
-                                className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary/20 transition-colors"
+                                className="rounded-full p-2 text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                               >
                                 <X className="h-5 w-5" />
                               </button>
@@ -310,7 +310,7 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                           ) : (
                             <Link
                               href={`/report/${report.id}`}
-                              className="truncate text-base font-bold text-foreground hover:text-primary transition-colors"
+                              className="truncate text-base font-bold text-foreground hover:text-black dark:hover:text-white transition-colors"
                             >
                               {displayName}
                             </Link>
@@ -323,10 +323,10 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                                 e.preventDefault();
                                 startEdit(report);
                               }}
-                              className="shrink-0 rounded-lg p-1.5 text-muted-foreground/50 hover:bg-secondary/20 hover:text-primary transition-all"
+                              className="shrink-0 rounded-full p-1.5 text-muted-foreground/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white transition-all"
                               title="Rename report"
                             >
-                              <Pencil className="h-4 w-4" />
+                              <Pencil className="h-4 w-4 text-neutral-400 group-hover:text-black dark:group-hover:text-white" />
                             </button>
                           )}
                         </div>
@@ -354,10 +354,10 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                         className="rounded-lg p-2 text-muted-foreground/40 hover:bg-error/10 hover:text-error transition-all"
                         title="Delete report"
                       >
-                        <Trash2 className="h-5 w-5" />
+                        <Trash2 className="h-5 w-5 text-neutral-400 hover:text-red-500" />
                       </button>
                       <Link href={`/report/${report.id}`} className="rounded-lg p-2 hover:bg-secondary/20 transition-all">
-                        <ArrowRight className="h-6 w-6 text-muted-foreground/60" />
+                        <ArrowRight className="h-6 w-6 text-neutral-400 hover:text-black dark:hover:text-white" />
                       </Link>
                     </div>
                   </div>
@@ -372,12 +372,12 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
       <div>
         <div className="flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-xl font-extrabold text-foreground tracking-tight sm:text-2xl">
-            <Home className="h-6 w-6 text-primary" />
+            <Home className="h-6 w-6 text-black dark:text-white" />
             Real Estate Reports
           </h2>
           <Link
             href="/compare/homes"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-bold text-white shadow-md hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-100 transition-all active:scale-[0.98]"
           >
             <Home className="h-4 w-4" />
             New Comparison
@@ -395,7 +395,7 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
             </p>
             <Link
               href="/compare/homes"
-              className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline"
+              className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-black dark:text-white hover:underline"
             >
               Compare your first properties <ArrowRight className="h-4 w-4" />
             </Link>
@@ -407,7 +407,7 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
               const isDeleting = deleteId === report.id;
 
               return (
-                <div key={report.id} className="relative rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/20 hover:shadow-sm">
+                <div key={report.id} className="relative rounded-3xl border border-border bg-card p-5 transition-all hover:border-black/10 hover:shadow-md dark:hover:border-white/10">
                   {/* Delete Confirmation Overlay */}
                   {isDeleting && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-background/95 backdrop-blur-sm">
@@ -440,16 +440,16 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                     <div className="flex items-center gap-4 min-w-0 flex-1">
                       <Link
                         href={`/homes/report?id=${report.id}`}
-                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors hover:bg-primary/20"
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-neutral-100 dark:bg-neutral-800 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
                       >
-                        <Home className="h-6 w-6 text-primary" />
+                        <Home className="h-6 w-6 text-black dark:text-white" />
                       </Link>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <PlanBadge tier={report.plan_tier_at_generation} />
                           <Link
                             href={`/homes/report?id=${report.id}`}
-                            className="truncate text-base font-bold text-foreground hover:text-primary transition-colors"
+                            className="truncate text-base font-bold text-foreground hover:text-black dark:hover:text-white transition-colors"
                           >
                             {displayName}
                           </Link>
@@ -470,13 +470,13 @@ export function ReportsList({ initialReports, initialHomeReports }: { initialRep
                           e.preventDefault();
                           setDeleteId(report.id);
                         }}
-                        className="rounded-lg p-2 text-muted-foreground/40 hover:bg-error/10 hover:text-error transition-all"
+                        className="rounded-full p-2 text-neutral-400 hover:bg-error/10 hover:text-red-500 transition-all"
                         title="Delete report"
                       >
-                        <Trash2 className="h-5 w-5" />
+                        <Trash2 className="h-5 w-5 text-neutral-400 hover:text-red-500" />
                       </button>
-                      <Link href={`/homes/report?id=${report.id}`} className="rounded-lg p-2 hover:bg-secondary/20 transition-all">
-                        <ArrowRight className="h-6 w-6 text-muted-foreground/60" />
+                      <Link href={`/homes/report?id=${report.id}`} className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all">
+                        <ArrowRight className="h-6 w-6 text-neutral-400 hover:text-black dark:hover:text-white" />
                       </Link>
                     </div>
                   </div>

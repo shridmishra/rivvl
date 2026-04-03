@@ -762,17 +762,17 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
             <Link
               href="/homes"
-              className="cta-button w-full sm:w-auto inline-flex items-center justify-center rounded-none bg-black px-8 py-4 sm:px-12 sm:py-6 text-base sm:text-lg font-medium text-white shadow-2xl hover:bg-neutral-800 transition-all"
+              className="group inline-flex items-center justify-center rounded-full bg-black px-10 py-4 text-base font-bold text-white shadow-xl transition-all hover:scale-105 active:scale-[0.98]"
             >
               Get Home Report
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/vehicles"
-              className="cta-button w-full sm:w-auto inline-flex items-center justify-center rounded-none border border-black/20 bg-neutral-50 px-8 py-4 sm:px-12 sm:py-6 text-base sm:text-lg font-medium text-black hover:bg-black hover:text-white transition-all shadow-sm"
+              className="group inline-flex items-center justify-center rounded-full border border-black/10 bg-white px-10 py-4 text-base font-bold text-black shadow-md transition-all hover:bg-neutral-50 active:scale-[0.98]"
             >
               Get Vehicle Report
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
