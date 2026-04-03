@@ -7,14 +7,10 @@ import {
   Home,
   Car,
   ArrowRight,
-  CheckCircle2,
   ChevronDown,
-  ShieldAlert,
-  Quote,
   Users,
   Search,
   FileText,
-  Sparkles,
   BadgeCheck,
   Zap,
   BarChart3,
@@ -241,8 +237,10 @@ export default function HomePage() {
 
       // Number counter animation for stats
       const stats = gsap.utils.toArray(".stat-value");
-      stats.forEach((stat: any) => {
+      stats.forEach((statObj: unknown) => {
+        const stat = statObj as HTMLElement;
         const value = stat.getAttribute("data-value");
+        if (!value) return;
         const numeric = parseFloat(value);
         const suffix = value.replace(/[0-9.]/g, "");
         
@@ -257,7 +255,7 @@ export default function HomePage() {
             toggleActions: "play none none none",
           },
           onUpdate: () => {
-            stat.innerText = Math.floor(obj.count) + suffix;
+            stat.innerText = Math.floor(obj.count).toString() + suffix;
           }
         });
       });
@@ -281,19 +279,19 @@ export default function HomePage() {
       );
 
       // Interactive hover flip using GSAP for consistency
-      const icons = gsap.utils.toArray(".service-icon-container");
-      icons.forEach((icon: any) => {
-        icon.parentElement.addEventListener("mouseenter", () => {
+      const icons = gsap.utils.toArray(".service-icon-container") as HTMLElement[];
+      icons.forEach((icon: HTMLElement) => {
+        icon.parentElement?.addEventListener("mouseenter", () => {
           gsap.to(icon, { rotateY: 360, duration: 0.6, ease: "power2.out" });
         });
-        icon.parentElement.addEventListener("mouseleave", () => {
+        icon.parentElement?.addEventListener("mouseleave", () => {
           gsap.to(icon, { rotateY: 0, duration: 0.6, ease: "power2.out" });
         });
       });
 
       // How It Works Cards Animation
-      const cards = gsap.utils.toArray(".work-card");
-      cards.forEach((card: any, i: number) => {
+      const cards = gsap.utils.toArray(".work-card") as HTMLElement[];
+      cards.forEach((card: HTMLElement, i: number) => {
         if (i > 0) {
           gsap.from(card, {
             y: 400,
@@ -382,8 +380,8 @@ export default function HomePage() {
       });
 
       // Testimonial Nav Hover scaling
-      const navButtons = gsap.utils.toArray(".testimonial-nav-btn");
-      navButtons.forEach((btn: any) => {
+      const navButtons = gsap.utils.toArray(".testimonial-nav-btn") as HTMLElement[];
+      navButtons.forEach((btn: HTMLElement) => {
         btn.addEventListener("mouseenter", () => {
           gsap.to(btn, { scale: 1.1, duration: 0.3, ease: "power2.out" });
         });
@@ -703,7 +701,7 @@ export default function HomePage() {
 
               <div className="testimonial-content lg:pl-12">
                 <p className="text-black text-2xl sm:text-4xl font-medium leading-[1.25] tracking-tight">
-                  "{testimonials[currentTestimonial].quote}"
+                  &quot;{testimonials[currentTestimonial].quote}&quot;
                 </p>
               </div>
             </div>
