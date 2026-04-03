@@ -12,8 +12,10 @@ import { createClient } from "@/lib/supabase/client";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/vehicles", label: "Vehicles" },
   { href: "/homes", label: "Real Estate" },
+  { href: "/pricing", label: "Pricing" },
 ];
 
 export function Navbar() {
@@ -24,6 +26,7 @@ export function Navbar() {
   const [authReady, setAuthReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileName, setProfileName] = useState<string | null>(null);
+  const isTransparent = pathname === "/";
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -33,12 +36,10 @@ export function Navbar() {
   useEffect(() => {
     const supabase = createClient();
 
-    // Get initial session — with error handling so buttons always appear
     supabase.auth
       .getUser()
       .then(({ data: { user } }) => {
         setUser(user);
-        // Fetch profile name from profiles table
         if (user) {
           supabase
             .from("profiles")
@@ -50,14 +51,11 @@ export function Navbar() {
             });
         }
       })
-      .catch(() => {
-        // Auth failed — show logged-out state
-      })
+      .catch(() => {})
       .finally(() => {
         setAuthReady(true);
       });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -80,7 +78,6 @@ export function Navbar() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Listen for profile name updates from Account Settings
   useEffect(() => {
     function handleProfileUpdate(e: CustomEvent<{ full_name: string }>) {
       setProfileName(e.detail.full_name);
@@ -96,7 +93,6 @@ export function Navbar() {
       );
   }, []);
 
-  // Use profile name (from profiles table) first, then fall back to user_metadata, then email
   const displayName =
     profileName || user?.user_metadata?.full_name || user?.email;
 
@@ -126,9 +122,9 @@ export function Navbar() {
     router.refresh();
   }
 
-  /* ─── Theme toggle ─── */
+  /* ─── Theme toggle — Hidden on landing page ─── */
   function ThemeToggle() {
-    if (!mounted) return <div className="h-9 w-9" />;
+    if (!mounted || pathname === "/") return null;
     return (
       <button
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -144,24 +140,15 @@ export function Navbar() {
     );
   }
 
-  function LoggedOutButtons({ onClick }: { onClick?: () => void }) {
+  function LoggedOutButtons({ onClick, isTransparent }: { onClick?: () => void; isTransparent?: boolean }) {
     return (
       <>
-        <Button
-          variant="ghost"
-          className="text-foreground/80 hover:text-primary transition-colors"
-          asChild
-        >
-          <Link href="/login" onClick={onClick}>
-            Log in
-          </Link>
-        </Button>
         <Link
-          href="/vehicles"
+          href="/login"
           onClick={onClick}
-          className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
+          className={`inline-flex items-center justify-center rounded-none hover:rounded-full transition-all duration-500 ease-in-out ${isTransparent ? "bg-black/80 text-white px-8 h-12" : "bg-primary text-primary-foreground px-5 py-2.5"} text-base font-medium hover:opacity-90 active:scale-[0.98] uppercase tracking-widest`}
         >
-          Get Started
+          Login
         </Link>
       </>
     );
@@ -203,52 +190,72 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background border-b border-border shadow-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className={`${isTransparent ? "absolute top-0 bg-transparent border-none shadow-none" : "sticky top-0 bg-background border-b border-border shadow-sm"} z-50 w-full`}>
+      <div className="mx-auto flex h-24 max-w-8xl items-center justify-between px-4 sm:px-6 lg:px-24">
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/images/rivvl-logo-black.png"
-            alt="rivvl.ai"
-            width={120}
-            height={40}
-            className="h-8 w-auto dark:hidden"
-            priority
-          />
-          <Image
-            src="/images/rivvl-logo-white.png"
-            alt="rivvl.ai"
-            width={120}
-            height={40}
-            className="hidden h-8 w-auto dark:block"
-            priority
-          />
+          {isTransparent ? (
+            <Image
+              src="/images/rivvl-logo-white.png"
+              alt="rivvl.ai"
+              width={140}
+              height={45}
+              className="h-8 w-auto brightness-0 invert"
+              priority
+            />
+          ) : (
+            <>
+              <Image
+                src="/images/rivvl-logo-black.png"
+                alt="rivvl.ai"
+                width={120}
+                height={40}
+                className="h-8 w-auto dark:hidden"
+                priority
+              />
+              <Image
+                src="/images/rivvl-logo-white.png"
+                alt="rivvl.ai"
+                width={120}
+                height={40}
+                className="hidden h-8 w-auto dark:block"
+                priority
+              />
+            </>
+          )}
         </Link>
 
         {/* Desktop nav links */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-lg px-3 py-2 text-sm font-bold transition-colors hover:text-primary ${
-                pathname === link.href || pathname.startsWith(link.href + "/")
-                  ? "text-primary"
-                  : "text-foreground/70"
+              className={`group relative text-lg font-medium transition-colors hover:opacity-100 ${
+                isTransparent 
+                  ? "text-white" 
+                  : (pathname === link.href || pathname.startsWith(link.href + "/"))
+                    ? "text-primary"
+                    : "text-foreground/70"
               }`}
             >
-              {link.label}
+              <div className="relative h-[1.5em] overflow-hidden">
+                <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full">
+                  <span>{link.label}</span>
+                  <span className="absolute top-full">{link.label}</span>
+                </div>
+              </div>
+              <span className={`absolute -bottom-1 left-0 h-[1.25px] w-full origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-x-100 ${isTransparent ? "bg-white" : "bg-primary"}`} />
             </Link>
           ))}
         </nav>
 
-        {/* Desktop right buttons — ALWAYS visible, no skeleton */}
+        {/* Desktop right buttons */}
         <div className="hidden items-center gap-3 md:flex">
-          <ThemeToggle />
           {authReady && user ? (
             <div className="relative">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm font-bold text-foreground/80 transition-all hover:border-primary/30 hover:bg-primary/5 active:scale-[0.98]"
+                className={`flex items-center gap-2 rounded-full border ${isTransparent ? "border-white/30 text-white" : "border-border text-foreground/80"} px-3 py-1.5 text-sm font-bold transition-all hover:bg-white/10 active:scale-[0.98]`}
               >
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
                   {initials}
@@ -260,7 +267,6 @@ export function Navbar() {
                 </span>
               </button>
 
-              {/* Dropdown menu */}
               {menuOpen && (
                 <>
                   <div
@@ -288,7 +294,7 @@ export function Navbar() {
               )}
             </div>
           ) : (
-            <LoggedOutButtons />
+            <LoggedOutButtons isTransparent={isTransparent} />
           )}
         </div>
 
@@ -297,8 +303,8 @@ export function Navbar() {
           <ThemeToggle />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-foreground/80">
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className={isTransparent ? "text-white" : "text-foreground/80"}>
+                <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
@@ -320,7 +326,6 @@ export function Navbar() {
                 ))}
                 <hr className="my-2 border-border" />
 
-                {/* Always show buttons — logged-out is the default */}
                 {authReady && user ? (
                   <UserMenu onClose={() => setOpen(false)} />
                 ) : (

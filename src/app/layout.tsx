@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "rivvl - Intelligent Comparison Reports",
+  title: "Rivvl - Intelligent Comparison Reports",
   description:
     "Intelligent comparison reports for the biggest purchases of your life. Compare vehicles and real estate with detailed analysis, data enrichment, and clear recommendations.",
   icons: {
