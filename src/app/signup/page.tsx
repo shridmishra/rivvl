@@ -153,7 +153,7 @@ function SignupForm() {
   if (checkingAuth) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-black dark:text-white" />
       </div>
     );
   }
@@ -217,13 +217,13 @@ function SignupForm() {
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
           <div className="rounded-2xl border border-gray-300 bg-white p-8 shadow-lg dark:border-gray-600 dark:bg-[#1A1A2E]">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-900/50 dark:to-violet-900/50">
-              <svg
-                className="h-8 w-8 text-indigo-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <svg
+                  className="h-8 w-8 text-black dark:text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -242,7 +242,7 @@ function SignupForm() {
             </p>
             <Link
               href={`/login${redirectTo !== "/dashboard" ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
-              className="mt-6 inline-block text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+              className="mt-6 inline-block text-sm font-semibold text-black hover:text-zinc-600 dark:text-white dark:hover:text-zinc-300"
             >
               Back to sign in
             </Link>
@@ -253,7 +253,7 @@ function SignupForm() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8 bg-mesh-gradient">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center">
@@ -284,7 +284,7 @@ function SignupForm() {
         </div>
 
         {/* Card */}
-        <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8 shadow-lg dark:border-gray-600 dark:bg-[#1A1A2E] dark:shadow-gray-900/50">
+        <div className="mt-8 rounded-2xl glass-morphism p-8 shadow-xl">
           {/* Google OAuth */}
           <Button
             type="button"
@@ -353,7 +353,7 @@ function SignupForm() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="John Doe"
-                className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                className="mt-1 w-full rounded-lg border border-zinc-200 bg-background px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-gray-100"
               />
             </div>
 
@@ -371,7 +371,7 @@ function SignupForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                className="mt-1 w-full rounded-lg border border-zinc-200 bg-background px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-gray-100"
               />
             </div>
 
@@ -391,7 +391,7 @@ function SignupForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a strong password"
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2.5 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                  className="w-full rounded-lg border border-zinc-200 bg-background px-3 py-2.5 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-gray-100"
                 />
                 <button
                   type="button"
@@ -424,7 +424,7 @@ function SignupForm() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter your password"
-                  className="w-full rounded-lg border border-input bg-background px-3 py-2.5 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                  className="w-full rounded-lg border border-zinc-200 bg-background px-3 py-2.5 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-gray-100"
                 />
                 <button
                   type="button"
@@ -459,7 +459,7 @@ function SignupForm() {
 
             <Button
               type="submit"
-              className="w-full gradient-bg py-5 text-sm font-semibold text-white hover:opacity-90 transition-all"
+              className="w-full bg-black py-5 text-sm font-semibold text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 transition-all rounded-full"
               loading={loading}
               loadingText="Creating account..."
               disabled={googleLoading || !formValid}
@@ -474,7 +474,7 @@ function SignupForm() {
           Already have an account?{" "}
           <Link
             href={`/login${redirectTo !== "/dashboard" ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
-            className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+            className="font-semibold text-black hover:text-neutral-700 dark:text-white dark:hover:text-neutral-300"
           >
             Sign in
           </Link>
@@ -489,7 +489,7 @@ export default function SignupPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-black dark:text-white" />
         </div>
       }
     >

@@ -72,7 +72,6 @@ export default function HomesProgressPage() {
       return;
     }
 
-    // Build a label from the URLs
     const labels = (formData.urls || []).map((url: string) => {
       try {
         return new URL(url).pathname.split("/").filter(Boolean).slice(-2, -1)[0]?.replace(/-/g, " ") || "Property";
@@ -81,11 +80,10 @@ export default function HomesProgressPage() {
     const mlsLabels = (formData.mlsNumbers || []).map((m: string) => `MLS ${m}`);
     setPropertyLabel([...labels, ...mlsLabels].join(" vs "));
 
-    // Start timed progress steps
     const timers: NodeJS.Timeout[] = [];
     const stepDelays = [0, 5000, 12000, 20000, 30000, 45000, 60000];
     for (let i = 1; i < stepDelays.length; i++) {
-      timers.push(setTimeout(() => setStep(i), stepDelays[i]));
+        timers.push(setTimeout(() => setStep(i), stepDelays[i]));
     }
 
     const controller = new AbortController();
@@ -101,25 +99,17 @@ export default function HomesProgressPage() {
         });
 
         const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Something went wrong.");
 
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong. Please try again.");
-        }
-
-        // Store report data
-        sessionStorage.setItem(
-          "rivvl_home_report",
-          JSON.stringify({
-            report: data.report,
-            listings: data.listings,
-            reportId: data.reportId,
-            plan: data.plan,
-            paidData: data.paidData,
-          })
-        );
+        sessionStorage.setItem("rivvl_home_report", JSON.stringify({
+          report: data.report,
+          listings: data.listings,
+          reportId: data.reportId,
+          plan: data.plan,
+          paidData: data.paidData,
+        }));
         sessionStorage.removeItem("rivvl_home_pending_compare");
 
-        // Complete all remaining steps rapidly
         const animateRemaining = (currentStep: number): Promise<void> => {
           return new Promise((resolve) => {
             if (currentStep >= GENERATION_STEPS.length) {
@@ -138,16 +128,13 @@ export default function HomesProgressPage() {
         await animateRemaining(step);
         setStep(GENERATION_STEPS.length);
 
-        // Navigate to report page after a brief pause
         setTimeout(() => {
           router.push(`/homes/report/${data.reportId}`);
         }, 1200);
       } catch (err) {
         timers.forEach(clearTimeout);
         clearTimeout(timeoutId);
-        setError(
-          err instanceof Error ? err.message : "Something went wrong. Please try again."
-        );
+        setError(err instanceof Error ? err.message : "Something went wrong.");
       }
     })();
 
@@ -155,122 +142,80 @@ export default function HomesProgressPage() {
       timers.forEach(clearTimeout);
       clearTimeout(timeoutId);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Prevent accidental navigation during generation
-  useEffect(() => {
-    if (isComplete || error) return;
-    const handler = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-    };
-    window.addEventListener("beforeunload", handler);
-    return () => window.removeEventListener("beforeunload", handler);
-  }, [isComplete, error]);
+  }, [router]);
 
   if (error) {
     return (
-      <div className="flex min-h-[80vh] items-center justify-center px-4">
-        <div className="w-full max-w-lg">
-          <div className="rounded-2xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-8 text-center">
-            <AlertCircle className="mx-auto h-10 w-10 text-red-400" />
-            <h2 className="mt-4 text-lg font-bold text-red-800 dark:text-red-300">
-              Something went wrong
-            </h2>
-            <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>
-            <Button
-              onClick={() => router.push("/compare/homes")}
-              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#00D2FF] px-6 py-2.5 text-sm font-semibold text-[#0F0F1A] hover:bg-[#00B8E0] transition-all"
-            >
-              <ArrowLeft className="h-4 w-4" /> Try Again
-            </Button>
-          </div>
+      <div className="flex min-h-screen items-center justify-center px-4 bg-mesh-gradient">
+        <div className="w-full max-w-lg glass-morphism p-10 rounded-[2.5rem] shadow-2xl text-center">
+          <AlertCircle className="mx-auto h-12 w-12 text-red-500" />
+          <h2 className="mt-6 text-xl font-black text-black dark:text-white">Something went wrong</h2>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 font-medium">{error}</p>
+          <Button
+            onClick={() => router.push("/compare/homes")}
+            className="mt-8 rounded-full h-14 px-10 bg-black text-white dark:bg-white dark:text-black font-bold"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Try Again
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-sky-50/30 dark:from-[#0F0F1A] dark:via-[#0F0F1A] dark:to-[#1A1A2E] px-4">
+    <div className="flex min-h-screen items-center justify-center bg-mesh-gradient px-4">
       <div className="w-full max-w-lg">
-        {/* Header */}
         <div className="text-center">
           {isComplete ? (
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-500 shadow-xl shadow-emerald-200/50 transition-all duration-700">
-              <CheckCircle2 className="h-10 w-10 text-white" />
+            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-[2rem] bg-zinc-100 dark:bg-zinc-800 shadow-xl transition-all duration-700">
+              <CheckCircle2 className="h-12 w-12 text-black dark:text-white" />
             </div>
           ) : (
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-[#00D2FF] to-[#6C5CE7] shadow-xl shadow-sky-200/50">
-              <Loader2 className="h-10 w-10 animate-spin text-white" />
+            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-[2rem] bg-black dark:bg-white shadow-xl">
+              <Loader2 className="h-12 w-12 animate-spin text-white dark:text-black" />
             </div>
           )}
-          <h1 className="mt-6 text-2xl font-bold text-indigo-950 dark:text-gray-100">
+          <h1 className="mt-10 text-3xl font-black tracking-tight text-black dark:text-white sm:text-4xl">
             {isComplete ? (
-              "Your Report is Ready!"
+              "Ready!"
             ) : (
-              <span className="inline-flex items-center gap-1.5">
-                Generating Your{" "}
-                <Image src="/images/rivvl-logo-black.png" alt="rivvl" width={70} height={23} className="inline-block align-middle dark:invert" />
-                {" "}Report
+              <span className="inline-flex items-center gap-2">
+                Generating Report
               </span>
             )}
           </h1>
           {propertyLabel && (
-            <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">{propertyLabel}</p>
+            <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest">{propertyLabel}</p>
           )}
         </div>
 
-        {/* Steps card */}
-        <div className="mt-10 rounded-2xl border border-[#00D2FF]/20 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-lg">
-          <div className="space-y-3">
+        <div className="mt-12 glass-morphism p-8 sm:p-10 rounded-[2.5rem] shadow-2xl border border-white/20 dark:border-black/20">
+          <div className="space-y-4">
             {GENERATION_STEPS.map((s, i) => (
-              <div key={i} className="flex items-center gap-3">
+              <div key={i} className="flex items-center gap-4">
                 {i < step ? (
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                  </div>
+                  <CheckCircle2 className="h-5 w-5 text-black dark:text-white shrink-0" />
                 ) : i === step && !isComplete ? (
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-                    <Loader2 className="h-5 w-5 animate-spin text-[#00D2FF]" />
-                  </div>
+                  <Loader2 className="h-5 w-5 animate-spin text-black dark:text-white shrink-0" />
                 ) : (
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-                    <div className="h-4 w-4 rounded-full border-2 border-slate-200 dark:border-gray-600" />
-                  </div>
+                  <div className="h-5 w-5 rounded-full border-2 border-zinc-200 dark:border-zinc-800 shrink-0" />
                 )}
-                <span
-                  className={`text-sm transition-colors duration-300 ${
-                    i < step
-                      ? "font-medium text-emerald-700 dark:text-emerald-400"
-                      : i === step && !isComplete
-                        ? "font-medium text-indigo-950 dark:text-gray-100"
-                        : "text-slate-400 dark:text-gray-500"
-                  }`}
-                >
+                <span className={`text-sm font-bold transition-all ${i <= step ? "text-black dark:text-white" : "text-zinc-400"}`}>
                   {i < step ? s.done : s.label}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Progress bar */}
-          <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-gray-700">
+          <div className="mt-10 h-3 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-900">
             <div
-              className={`h-full rounded-full transition-all duration-1000 ease-out ${
-                isComplete ? "bg-emerald-500" : "bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7]"
-              }`}
-              style={{
-                width: `${Math.min(
-                  ((step + 1) / GENERATION_STEPS.length) * 100,
-                  100
-                )}%`,
-              }}
+              className="h-full bg-black dark:bg-white transition-all duration-1000 ease-out"
+              style={{ width: `${Math.min(((step + 1) / GENERATION_STEPS.length) * 100, 100)}%` }}
             />
           </div>
 
-          {/* Timing message */}
-          <p className="mt-4 text-center text-xs text-slate-400 dark:text-gray-500">
-            {isComplete ? "Redirecting to your report..." : getTimingMessage(elapsed)}
+          <p className="mt-6 text-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+            {isComplete ? "Redirecting..." : getTimingMessage(elapsed)}
           </p>
         </div>
       </div>

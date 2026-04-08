@@ -55,7 +55,7 @@ function LoginForm() {
   if (checkingAuth) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-black dark:text-white" />
       </div>
     );
   }
@@ -133,7 +133,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 bg-mesh-gradient">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center">
@@ -171,7 +171,7 @@ function LoginForm() {
         )}
 
         {/* Card */}
-        <div className="mt-8 rounded-2xl border border-gray-300 bg-white p-8 shadow-lg dark:border-gray-600 dark:bg-[#1A1A2E] dark:shadow-gray-900/50">
+        <div className="mt-8 rounded-2xl glass-morphism p-8 shadow-xl">
           {/* Google OAuth */}
           <Button
             type="button"
@@ -228,7 +228,7 @@ function LoginForm() {
                   loading={resending}
                   loadingText="Resending..."
                   disabled={!email}
-                  className="mt-2 h-auto p-0 text-sm font-semibold text-indigo-600 hover:text-indigo-500 hover:no-underline dark:text-indigo-400"
+                  className="mt-2 h-auto p-0 text-sm font-semibold text-black hover:text-neutral-700 hover:no-underline dark:text-white dark:hover:text-neutral-300"
                 >
                   {!resending && <Mail className="h-3.5 w-3.5 mr-1.5" />}
                   Resend confirmation email
@@ -258,7 +258,7 @@ function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="mt-1 w-full rounded-lg border border-gray-300 bg-background px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:border-gray-600 dark:bg-[#1E1E30] dark:text-gray-100"
+                className="mt-1 w-full rounded-lg border border-zinc-200 bg-background px-3 py-2.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-gray-100"
               />
             </div>
 
@@ -272,7 +272,7 @@ function LoginForm() {
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                  className="text-xs font-medium text-black hover:text-neutral-700 dark:text-white dark:hover:text-neutral-300"
                 >
                   Forgot password?
                 </Link>
@@ -285,7 +285,7 @@ function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full rounded-lg border border-gray-300 bg-background px-3 py-2.5 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:border-gray-600 dark:bg-[#1E1E30] dark:text-gray-100"
+                  className="w-full rounded-lg border border-zinc-200 bg-background px-3 py-2.5 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-gray-100"
                 />
                 <button
                   type="button"
@@ -303,7 +303,7 @@ function LoginForm() {
 
             <Button
               type="submit"
-              className="w-full gradient-bg py-5 text-sm font-semibold text-white hover:opacity-90"
+              className="w-full bg-black py-5 text-sm font-semibold text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 transition-all rounded-full"
               loading={loading}
               loadingText="Signing in..."
               disabled={googleLoading}
@@ -318,7 +318,7 @@ function LoginForm() {
           Don&apos;t have an account?{" "}
           <Link
             href={`/signup${redirectTo !== "/dashboard" ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
-            className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+            className="font-semibold text-black hover:text-neutral-700 dark:text-white dark:hover:text-neutral-300"
           >
             Sign up free
           </Link>
@@ -333,7 +333,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-black dark:text-white" />
         </div>
       }
     >

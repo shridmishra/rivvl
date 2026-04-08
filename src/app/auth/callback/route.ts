@@ -13,11 +13,16 @@ export async function GET(request: Request) {
   }
 
   // Determine where to send the user after auth
-  const destination = isSafeRedirect(redirect)
+  let destination = isSafeRedirect(redirect)
     ? redirect
     : isSafeRedirect(next)
       ? next
       : "/dashboard";
+
+  // Force reset-password page if this is a recovery link
+  if (searchParams.get("type") === "recovery") {
+    destination = "/reset-password";
+  }
 
   if (code) {
     const supabase = createClient();

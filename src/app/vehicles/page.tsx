@@ -141,9 +141,9 @@ export default function VehiclesPage() {
   }
 
   return (
-    <div className="flex flex-col bg-background min-h-screen">
+    <div className="flex flex-col bg-mesh-gradient min-h-screen">
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-background px-4 py-24 sm:py-32 lg:py-40">
+      <section className="relative overflow-hidden px-4 py-24 sm:py-32 lg:py-40">
         <div className="relative mx-auto max-w-4xl text-center">
           <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
             The Smarter Way to Compare Cars.
@@ -199,7 +199,7 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 2 — Our Pick Recommendation */}
-            <div className="rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+            <div className="rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <Trophy className="h-4 w-4" /> Our Pick Recommendation
               </div>
@@ -218,7 +218,7 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 3 — AI Pros and Cons */}
-            <div className="rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+            <div className="rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground">
                 <Zap className="h-4 w-4" /> Pros and Cons
               </div>
@@ -355,7 +355,7 @@ export default function VehiclesPage() {
             {plans.map((plan) => {
               const isLoading = loadingRole === plan.role;
               return (
-                <div key={plan.name} className={`card-hover relative flex flex-col rounded-[2.5rem] border p-8 bg-card shadow-sm ${plan.highlighted ? "border-foreground ring-1 ring-foreground/10 bg-foreground text-background scale-105 z-10 shadow-2xl" : "border-border hover:border-foreground/10"}`}>
+                <div key={plan.name} className={`card-hover relative flex flex-col rounded-[2.5rem] border p-8 shadow-sm transition-all duration-300 ${plan.highlighted ? "border-zinc-400 bg-white/80 backdrop-blur-md scale-105 z-10 shadow-2xl dark:border-zinc-600 dark:bg-black/80" : "border-zinc-200 bg-white/40 backdrop-blur-sm hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-700"}`}>
                   {plan.badge && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
                       {plan.badge}

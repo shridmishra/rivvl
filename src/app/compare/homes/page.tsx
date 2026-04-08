@@ -125,18 +125,14 @@ export default function CompareHomesPage() {
     window.history.replaceState({}, "", "/compare/homes");
 
     if (payment === "success" && stripeSessionId && stripePlan) {
-      // Restore saved data and AUTO-START comparison (don't make user click again)
       const savedRaw = sessionStorage.getItem("rivvl_home_pending_data");
       sessionStorage.removeItem("rivvl_home_pending_data");
 
       if (savedRaw) {
         try {
           const saved = JSON.parse(savedRaw);
-
-          // Support both new format (with preferences) and old format (array of properties)
           const propArray = Array.isArray(saved) ? saved : saved.properties || [];
           const prefs = saved.preferences || {};
-
           const urls = propArray
             .filter((p: { inputMode?: string }) => (p.inputMode || "url") === "url")
             .map((p: { url?: string }) => (p.url || "").trim())
@@ -147,7 +143,6 @@ export default function CompareHomesPage() {
             .filter((m: string) => m.length > 0);
 
           if (urls.length + mlsNumbers.length >= 2) {
-            // Build the compare payload and auto-navigate to progress page
             const compareData = {
               urls,
               mlsNumbers,
@@ -163,37 +158,12 @@ export default function CompareHomesPage() {
             router.push("/homes/report/progress");
             return;
           }
-        } catch { /* ignore parse errors, fall through to form restore */ }
-      }
-
-      // Fallback: restore from old URL-only format
-      const savedUrls = sessionStorage.getItem("rivvl_home_pending_urls");
-      if (savedUrls) {
-        try {
-          const urls = JSON.parse(savedUrls) as string[];
-          if (urls.filter((u) => u.trim()).length >= 2) {
-            const compareData = {
-              urls: urls.filter((u) => u.trim()),
-              mlsNumbers: [] as string[],
-              preferences: { priorities: [], buyerSituation: "", mustHaves: [] },
-              planType: stripePlan,
-              stripeSessionId,
-            };
-            sessionStorage.setItem("rivvl_home_pending_compare", JSON.stringify(compareData));
-            sessionStorage.removeItem("rivvl_home_pending_urls");
-            router.push("/homes/report/progress");
-            return;
-          }
         } catch { /* ignore */ }
-        sessionStorage.removeItem("rivvl_home_pending_urls");
       }
-
-      // Last resort: if no saved data, just set state and let user click Compare
       setPendingPayment({ planType: stripePlan, stripeSessionId });
       setSelectedPlan(stripePlan);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
 
   const canAddThird = selectedPlan === "home_premium" || selectedPlan === "home_pro10" || (pendingPayment && (pendingPayment.planType === "home_premium" || pendingPayment.planType === "home_pro10"));
   const maxProperties = canAddThird ? MAX_PROPERTIES_PREMIUM : MAX_PROPERTIES_FREE;
@@ -246,7 +216,6 @@ export default function CompareHomesPage() {
     );
   }
 
-  // Trim properties when downgrading plan
   useEffect(() => {
     if (properties.length > maxProperties) {
       setProperties((prev) => prev.slice(0, maxProperties));
@@ -255,8 +224,6 @@ export default function CompareHomesPage() {
 
   const redirectToStripeCheckout = useCallback(async (planTier: string) => {
     setRedirectingToStripe(true);
-
-    // Save FULL form data (properties + preferences) so comparison can auto-start after Stripe redirect
     const savedData = {
       properties: properties.map((p) => ({
         inputMode: p.inputMode,
@@ -266,28 +233,18 @@ export default function CompareHomesPage() {
       preferences: { priorities, buyerSituation, mustHaves },
     };
     sessionStorage.setItem("rivvl_home_pending_data", JSON.stringify(savedData));
-
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: planTier, source: "compare" }),
       });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to create checkout session");
-      }
-
+      if (!res.ok) throw new Error("Failed to create checkout session");
       const { url } = await res.json();
-      if (url) {
-        window.location.href = url;
-      } else {
-        throw new Error("No checkout URL returned");
-      }
+      if (url) window.location.href = url;
     } catch (err) {
       setRedirectingToStripe(false);
-      setError(err instanceof Error ? err.message : "Payment initialization failed. Please try again.");
+      setError(err instanceof Error ? err.message : "Payment initialization failed.");
     }
   }, [properties, priorities, buyerSituation, mustHaves]);
 
@@ -296,496 +253,169 @@ export default function CompareHomesPage() {
       router.push("/login?redirect=/compare/homes");
       return;
     }
-
     const urls = properties
       .filter((p) => p.inputMode === 'url')
       .map((p) => p.url.trim())
       .filter((u) => u.length > 0);
-
     const mlsNumbers = properties
       .filter((p) => p.inputMode === 'mls')
       .map((p) => p.mlsNumber.trim())
       .filter((m) => m.length > 0);
-
     if (urls.length + mlsNumbers.length < 2) {
-      setError("Please provide at least 2 property listing URLs or MLS numbers.");
+      setError("Please provide at least 2 properties.");
       return;
     }
-
-    // If paid plan selected and user hasn't paid yet, redirect to Stripe
     if (selectedPlan !== "free" && !pendingPayment) {
-      // Check if user already has this plan active
       const supabase = createClient();
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("home_plan_tier, home_reports_used, home_max_reports")
-        .eq("id", user.id)
-        .single();
-
+      const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       const currentPlan = profile?.home_plan_tier ?? "free";
       const used = profile?.home_reports_used ?? 0;
       const max = profile?.home_max_reports ?? 0;
       const hasCredits = currentPlan !== "free" && max > 0 && used < max;
-
-      const planHierarchy: Record<string, number> = {
-        free: 0, home_standard: 1, home_premium: 2, home_pro10: 3,
-      };
-
-      if (!hasCredits || (planHierarchy[currentPlan] ?? 0) < (planHierarchy[selectedPlan] ?? 0)) {
+      if (!hasCredits) {
         await redirectToStripeCheckout(selectedPlan);
         return;
       }
     }
-
     setIsLoading(true);
-    setError(null);
-
-    // Save comparison data and navigate to progress page
     const compareData = {
-      urls,
-      mlsNumbers,
-      preferences: {
-        priorities,
-        buyerSituation,
-        mustHaves,
-      },
-      ...(pendingPayment
-        ? {
-            planType: pendingPayment.planType,
-            stripeSessionId: pendingPayment.stripeSessionId,
-          }
-        : {}),
+      urls, mlsNumbers,
+      preferences: { priorities, buyerSituation, mustHaves },
+      ...(pendingPayment ? { planType: pendingPayment.planType, stripeSessionId: pendingPayment.stripeSessionId } : {}),
     };
-
     sessionStorage.setItem("rivvl_home_pending_compare", JSON.stringify(compareData));
     router.push("/homes/report/progress");
   }
 
-  const hasAtLeastTwoInputs =
-    properties.filter((p) => (p.inputMode === 'url' && p.url.trim().length > 0) || (p.inputMode === 'mls' && p.mlsNumber.trim().length > 0)).length >= 2;
+  const hasAtLeastTwoInputs = properties.filter((p) => (p.inputMode === 'url' && p.url.trim().length > 0) || (p.inputMode === 'mls' && p.mlsNumber.trim().length > 0)).length >= 2;
 
-  /* ─── Auth gate ─── */
   if (authReady && !user) {
     return (
-      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
-        <div className="mx-auto max-w-md text-center">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] bg-black dark:bg-white shadow-2xl">
-            <Lock className="h-10 w-10 text-white dark:text-black" />
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 bg-mesh-gradient">
+        <div className="max-w-md w-full glass-morphism p-12 rounded-[2.5rem] text-center shadow-2xl">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-zinc-100 dark:bg-zinc-800">
+            <Lock className="h-10 w-10 text-black dark:text-white" />
           </div>
-          <h1 className="mt-8 text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
-            Sign in to <br/> <span className="text-black/40 dark:text-white/40">Compare Real Estate</span>
-          </h1>
-          <p className="mt-3 text-slate-600 dark:text-gray-400">
-            Create a free account to start comparing properties.
-          </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Link
-              href="/login?redirect=/compare/homes"
-              className="inline-flex h-14 items-center justify-center rounded-full bg-black px-10 py-3 text-base font-bold text-white shadow-xl transition-all hover:bg-neutral-800 dark:bg-white dark:text-black"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup?redirect=/compare/homes"
-              className="inline-flex h-14 items-center justify-center rounded-full border border-black/10 bg-neutral-50 px-10 py-3 text-base font-bold text-black transition-all hover:bg-black hover:text-white dark:border-white/10 dark:bg-neutral-900 dark:text-white"
-            >
-              Sign up free
-            </Link>
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-black dark:text-white">Sign in</h1>
+          <p className="mt-4 text-zinc-600 dark:text-zinc-400 font-medium">Create a free account to start comparing.</p>
+          <div className="mt-10 flex flex-col gap-3">
+            <Link href="/login?redirect=/compare/homes" className="h-14 flex items-center justify-center rounded-2xl bg-black text-white dark:bg-white dark:text-black font-bold">Log in</Link>
+            <Link href="/signup?redirect=/compare/homes" className="h-14 flex items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 text-black font-bold">Sign up free</Link>
           </div>
         </div>
       </div>
     );
   }
 
-  /* ─── Loading state ─── */
   if (!authReady) {
     return (
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-[#00D2FF]" />
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-mesh-gradient">
+        <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-      {/* Back link */}
-      <Link
-        href="/homes"
-        className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-[#00D2FF] dark:text-gray-400"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Real Estate
-      </Link>
+    <div className="bg-mesh-gradient min-h-screen py-16 px-4">
+      <div className="mx-auto max-w-3xl">
+        <Link href="/homes" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-zinc-500 hover:text-black dark:hover:text-white transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Back to Real Estate
+        </Link>
 
-      {/* Header */}
-      <div className="text-center">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[2rem] bg-black dark:bg-white shadow-2xl">
-          <Home className="h-10 w-10 text-white dark:text-black" />
-        </div>
-        <h1 className="mt-8 text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl">
-          Compare Any Two <br/>
-          <span className="text-black/40 dark:text-white/40">Properties, Side by Side</span>
-        </h1>
-        <p className="mt-4 text-base text-muted-foreground font-medium">
-          Paste listings from Zillow, Redfin, or Realtor.com
-        </p>
-
-        {/* Feature strip */}
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {["Risk Report", "Financial Analysis", "Schools", "Crime Data", "Price History", "Smart Questions"].map((f) => (
-            <span key={f} className="inline-flex items-center gap-1.5 rounded-full border border-black/5 bg-neutral-100 dark:bg-neutral-800 px-4 py-1.5 text-[10px] font-extrabold text-black dark:text-white uppercase tracking-widest">
-              {f}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ═══ PLAN SELECTOR ═══ */}
-      <section className="mt-12 rounded-3xl border border-border bg-card p-8 shadow-sm">
-        <h2 className="text-xl font-extrabold text-foreground tracking-tight">Choose Your Plan</h2>
-        <p className="mt-1 text-sm text-muted-foreground font-medium">
-          Select the depth of analysis you need.
-        </p>
-
-        {homePlanTier !== "free" && (
-          <div className="mt-4 rounded-2xl border border-black/10 bg-neutral-100 dark:bg-neutral-800 px-5 py-4 text-[10px] font-black text-foreground uppercase tracking-widest flex items-center gap-3">
-            <Check className="h-4 w-4" />
-            Your current plan: {homePlanTier === "home_standard" ? "Standard" : homePlanTier === "home_premium" ? "Premium" : homePlanTier === "home_pro10" ? "Pro 10" : "Free"}
+        <div className="text-center mb-12">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-black dark:bg-white shadow-xl">
+            <Home className="h-10 w-10 text-white dark:text-black" />
           </div>
-        )}
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Free */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("free")}
-            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
-              selectedPlan === "free"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
-            }`}
-          >
-            {selectedPlan === "free" && (
-              <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
-                  <Check className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            )}
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">Free</p>
-            <div className="mt-2">
-              <span className="text-3xl font-black text-foreground">$0</span>
-            </div>
-            <div className="mt-6 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 2 properties</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Basic report</p>
-            </div>
-          </button>
-
-          {/* Standard */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("home_standard")}
-            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
-              selectedPlan === "home_standard"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
-            }`}
-          >
-            {selectedPlan === "home_standard" && (
-              <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
-                  <Check className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            )}
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">Standard</p>
-            <div className="mt-2">
-              <span className="text-3xl font-black text-foreground">$9.99</span>
-            </div>
-            <div className="mt-6 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 2 properties</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> All sections</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> PDF Export</p>
-            </div>
-          </button>
-
-          {/* Premium */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("home_premium")}
-            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
-              selectedPlan === "home_premium"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-black text-white dark:bg-white dark:text-black shadow-2xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10 hover:shadow-md"
-            }`}
-          >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
-              MOST POPULAR
-            </span>
-            {selectedPlan === "home_premium" && (
-              <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black dark:bg-black dark:text-white shadow-lg">
-                  <Check className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            )}
-            <p className={`text-[10px] font-extrabold uppercase tracking-[0.2em] ${selectedPlan === "home_premium" ? "text-primary-foreground/60" : "text-muted-foreground"}`}>Premium</p>
-            <div className={`mt-2 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`}>
-              <span className="text-3xl font-black">$19.99</span>
-            </div>
-            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "home_premium" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`} /> 3 properties</p>
-              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`} /> All sections</p>
-              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "home_premium" ? "text-primary-foreground" : "text-foreground"}`} /> PDF Export</p>
-            </div>
-          </button>
-
-          {/* Pro 10 */}
-          <button
-            type="button"
-            onClick={() => setSelectedPlan("home_pro10")}
-            className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${
-              selectedPlan === "home_pro10"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
-            }`}
-          >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-500 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-xl">
-              BEST VALUE
-            </span>
-            {selectedPlan === "home_pro10" && (
-              <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
-                  <Check className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            )}
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">Pro 10</p>
-            <div className="mt-2">
-              <span className="text-3xl font-black text-foreground">$99.99</span>
-            </div>
-            <div className="mt-1">
-              <span className="rounded-full bg-foreground px-2 py-0.5 text-[8px] font-black text-background leading-tight uppercase tracking-widest">50% OFF</span>
-            </div>
-            <div className="mt-4 flex-1 space-y-2 text-[11px] font-bold text-muted-foreground">
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> 10 Reports</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0 text-foreground" /> Extended comparisons</p>
-            </div>
-          </button>
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-black dark:text-white sm:text-5xl">Compare Properties</h1>
+          <p className="mt-4 text-zinc-600 dark:text-zinc-400 font-medium">Paste listings from Zillow, Redfin, or Realtor.com</p>
         </div>
-      </section>
 
-      {/* Supported sites note */}
-      <div className="mt-12 flex items-start gap-3 rounded-2xl border border-black/5 bg-neutral-100 dark:bg-neutral-800/50 px-6 py-4">
-        <Info className="mt-0.5 h-5 w-5 shrink-0 text-black dark:text-white" />
-        <p className="text-sm text-muted-foreground font-medium">
-          We support listings from Zillow, Redfin, Realtor.com, and most major
-          real estate sites.
-        </p>
-      </div>
-
-      {/* Property inputs */}
-      <div className="mt-8 space-y-6">
-        {properties.map((property, index) => (
-          <div
-            key={property.id}
-            className="rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1A1A2E] p-5 shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100">
-                Property {index + 1}
-              </h3>
-              {properties.length > 2 && (
-                <button
-                  onClick={() => removeProperty(property.id)}
-                  className="rounded-md p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
-              {property.inputMode === 'url' ? (
-                <div className="flex items-center gap-3 rounded-full border border-border bg-neutral-50 dark:bg-neutral-900 px-5 py-3.5 focus-within:border-black dark:focus-within:border-white focus-within:ring-4 focus-within:ring-black/5 dark:focus-within:ring-white/5 transition-all">
-                  <Link2 className="h-5 w-5 shrink-0 text-neutral-400" />
-                  <input
-                    type="url"
-                    placeholder="Paste listing URL here"
-                    value={property.url}
-                    onChange={(e) => updateProperty(property.id, e.target.value)}
-                    disabled={isLoading}
-                    className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground/50 focus:outline-none disabled:opacity-50"
-                  />
-                </div>
-              ) : (
-                <div>
-                  <div className="flex items-center gap-3 rounded-full border border-border bg-neutral-50 dark:bg-neutral-900 px-5 py-3.5 focus-within:border-black dark:focus-within:border-white focus-within:ring-4 focus-within:ring-black/5 dark:focus-within:ring-white/5 transition-all">
-                    <Home className="h-5 w-5 shrink-0 text-neutral-400" />
-                    <input
-                      type="text"
-                      placeholder="e.g. VAFX2123456"
-                      value={property.mlsNumber}
-                      onChange={(e) => updateMlsNumber(property.id, e.target.value)}
-                      disabled={isLoading}
-                      className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground/50 focus:outline-none disabled:opacity-50"
-                    />
-                  </div>
-                  <p className="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-5">
-                    <Info className="h-3 w-3" />
-                    Enter the MLS number from your listing sheet
-                  </p>
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => toggleInputMode(property.id)}
-                disabled={isLoading}
-                className="mt-3 px-5 text-[10px] font-extrabold text-black dark:text-white uppercase tracking-widest hover:underline transition-all disabled:opacity-50"
-              >
-                {property.inputMode === 'url' ? 'Use MLS number' : 'Use listing URL'}
-              </button>
-          </div>
-        ))}
-      </div>
-
-      {/* Add property button */}
-      {properties.length < MAX_PROPERTIES_PREMIUM && !isLoading && (
-        canAddThird ? (
-          properties.length < maxProperties && (
-            <button
-              onClick={addProperty}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-dashed border-border py-4 text-xs font-extrabold uppercase tracking-widest text-muted-foreground transition-all hover:border-black hover:text-black dark:hover:border-white dark:hover:text-white"
-            >
-              <Plus className="h-4 w-4" />
-              Add Third Property
-            </button>
-          )
-        ) : (
-          <div className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-dashed border-border py-4 text-xs font-extrabold uppercase tracking-widest text-muted-foreground/30 cursor-not-allowed">
-            <Lock className="h-4 w-4" />
-            Selection Premium plan for 3 properties
-          </div>
-        )
-      )}
-
-      {/* ═══ BUYER PREFERENCES ═══ */}
-      <section className="mt-12 rounded-3xl border border-border bg-card p-8 shadow-sm">
-        <h2 className="text-xl font-extrabold text-foreground tracking-tight">Your Preferences</h2>
-        <p className="mt-1 text-sm text-muted-foreground font-medium">
-          Help us tailor the analysis to what matters most to you.
-        </p>
-
-        {/* Priorities */}
-        <div className="mt-6">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">
-            What matters most to you?
-          </p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">Select up to 3 ({priorities.length}/3)</p>
-          <div className="flex flex-wrap gap-2.5">
-            {(() => { const atLimit = priorities.length >= 3; return HOME_PRIORITIES.map((p) => {
-              const isSelected = priorities.includes(p.value);
+        <section className="glass-morphism p-8 sm:p-10 rounded-[2.5rem] shadow-2xl mb-8">
+          <h2 className="text-xl font-bold text-black dark:text-white">Choose Your Plan</h2>
+          <div className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {["free", "home_standard", "home_premium", "home_pro10"].map((p) => {
+              const works = { free: { name: "Free", price: "$0" }, home_standard: { name: "Standard", price: "$9.99" }, home_premium: { name: "Premium", price: "$19.99" }, home_pro10: { name: "Pro 10", price: "$99.99" } }[p];
+              const isSelected = selectedPlan === p;
+              const isPopular = p === "home_premium";
               return (
                 <button
-                  key={p.value}
-                  type="button"
-                  onClick={() => togglePriority(p.value)}
-                  className={`inline-flex items-center gap-2 whitespace-nowrap rounded-xl border px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
+                  key={p}
+                  onClick={() => setSelectedPlan(p)}
+                  className={`relative flex flex-col rounded-2xl border p-5 text-left transition-all duration-300 ${
                     isSelected
-                      ? "bg-[#00D2FF] border-transparent text-[#0F0F1A] shadow-md"
-                      : `border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] text-slate-600 dark:text-gray-300 hover:border-[#00D2FF] hover:shadow-sm${atLimit ? " opacity-50 cursor-not-allowed" : ""}`
+                      ? "border-zinc-400 bg-white/80 shadow-2xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/80"
+                      : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20"
                   }`}
                 >
-                  <span className={isSelected ? "text-[#0F0F1A]/70" : "text-slate-400"}>
-                    {p.icon}
-                  </span>
-                  {p.value}
-                </button>
-              );
-            }); })()}
-          </div>
-        </div>
-
-        {/* Buyer Situation */}
-        <div className="mt-8">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">Buyer situation</p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">Select exactly 1</p>
-          <div className="flex flex-wrap gap-2">
-            {BUYER_SITUATIONS.map((opt) => {
-              const isSelected = buyerSituation === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setBuyerSituation(isSelected ? "" : opt.value)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    isSelected
-                      ? "bg-[#00D2FF] border-transparent text-[#0F0F1A] shadow-md"
-                      : "border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] text-slate-600 dark:text-gray-300 hover:border-[#00D2FF]"
-                  }`}
-                >
-                  {opt.value}
-                  {opt.desc && <span className="text-xs opacity-70">({opt.desc})</span>}
+                  {isPopular && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black px-3 py-1 text-[8px] font-black uppercase tracking-widest text-white shadow-lg dark:bg-white dark:text-black">
+                      MOST POPULAR
+                    </span>
+                  )}
+                  {isSelected && (
+                    <div className="absolute -right-1.5 -top-1.5">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg">
+                        <Check className="h-3 w-3" />
+                      </div>
+                    </div>
+                  )}
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? "text-zinc-500" : "text-zinc-400"}`}>{works?.name}</p>
+                  <p className={`mt-2 text-2xl font-black ${isSelected ? "text-black dark:text-white" : "text-black/60 dark:text-white/60"}`}>{works?.price}</p>
                 </button>
               );
             })}
           </div>
+        </section>
+
+        <div className="space-y-6">
+          {properties.map((p, index) => (
+            <div key={p.id} className="glass-morphism p-8 rounded-[2rem] shadow-xl border border-zinc-100 dark:border-zinc-800">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-black uppercase tracking-widest text-zinc-500">Property {index + 1}</h3>
+                {properties.length > 2 && <button onClick={() => removeProperty(p.id)} className="text-zinc-400 hover:text-red-500"><X className="h-5 w-5"/></button>}
+              </div>
+
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/50 px-5 py-4 dark:border-zinc-800 dark:bg-black/50">
+                {p.inputMode === 'url' ? <Link2 className="h-5 w-5 text-zinc-400" /> : <Home className="h-5 w-5 text-zinc-400" />}
+                <input
+                  type={p.inputMode === 'url' ? "url" : "text"}
+                  placeholder={p.inputMode === 'url' ? "Paste listing URL" : "MLS number"}
+                  value={p.inputMode === 'url' ? p.url : p.mlsNumber}
+                  onChange={(e) => p.inputMode === 'url' ? updateProperty(p.id, e.target.value) : updateMlsNumber(p.id, e.target.value)}
+                  className="w-full bg-transparent text-sm font-bold placeholder:text-zinc-300 focus:outline-none"
+                />
+              </div>
+              <button onClick={() => toggleInputMode(p.id)} className="mt-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-black dark:hover:text-white">Switch to {p.inputMode === 'url' ? "MLS" : "URL"}</button>
+            </div>
+          ))}
         </div>
 
-        {/* Must Haves */}
-        <div className="mt-8">
-          <p className="text-sm font-semibold text-indigo-950 dark:text-gray-100">Must haves</p>
-          <p className="mb-3 text-xs text-slate-500 dark:text-gray-400">Select up to 3 ({mustHaves.length}/3)</p>
-          <div className="flex flex-wrap gap-2">
-            {(() => { const atMustHaveLimit = mustHaves.length >= 3; return MUST_HAVES.map((item) => {
-              const isSelected = mustHaves.includes(item);
-              return (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => toggleMustHave(item)}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
-                    isSelected
-                      ? "bg-[#00D2FF] border-transparent text-[#0F0F1A] shadow-md"
-                      : `border-slate-300 dark:border-gray-600 bg-white dark:bg-[#1E1E30] text-slate-600 dark:text-gray-300 hover:border-[#00D2FF]${atMustHaveLimit ? " opacity-50 cursor-not-allowed" : ""}`
-                  }`}
-                >
-                  {isSelected && <Check className="h-3.5 w-3.5" />}
-                  {item}
-                </button>
-              );
-            }); })()}
-          </div>
-        </div>
-      </section>
-
-      {/* Error */}
-      {error && (
-        <div className="mt-4 flex items-start gap-2 rounded-xl border border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 px-4 py-3">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-          <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
-          <button onClick={() => setError(null)} className="ml-auto">
-            <X className="h-4 w-4 text-red-500" />
+        {properties.length < maxProperties && (
+          <button onClick={addProperty} className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-zinc-200 py-6 text-xs font-black uppercase tracking-widest text-zinc-400 hover:border-zinc-400 hover:text-zinc-600 transition-all">
+            <Plus className="h-5 w-5" /> Add Property
           </button>
-        </div>
-      )}
+        )}
 
-      {/* Compare button */}
-      <div className="mt-12">
-        <Button
-          onClick={handleCompare}
-          disabled={!hasAtLeastTwoInputs}
-          loading={isLoading || redirectingToStripe}
-          loadingText={redirectingToStripe ? "Redirecting..." : "Preparing..."}
-          className="w-full py-8 text-lg font-black uppercase tracking-widest shadow-2xl transition-all hover:scale-[1.01] active:scale-[0.99] rounded-full bg-black text-white dark:bg-white dark:text-black"
-        >
-          <div className="flex items-center gap-3">
-            <Home className="h-6 w-6" />
-            {selectedPlan === "free" ? "Start Free Comparison" : `Purchase & Compare: ${selectedPlan === "home_standard" ? "$9.99" : selectedPlan === "home_premium" ? "$19.99" : selectedPlan === "home_pro10" ? "$99.99" : "$0"}`}
+        <section className="mt-12 glass-morphism p-10 rounded-[2.5rem] shadow-2xl">
+          <h2 className="text-xl font-bold text-black dark:text-white">Preferences</h2>
+          <div className="mt-8 space-y-8">
+            <div>
+              <p className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4">Top Priorities (Max 3)</p>
+              <div className="flex flex-wrap gap-2">
+                {HOME_PRIORITIES.map(opt => (
+                  <button key={opt.value} onClick={() => togglePriority(opt.value)} className={`px-4 py-2.5 rounded-full text-xs font-bold border transition-all ${priorities.includes(opt.value) ? "bg-black text-white dark:bg-white dark:text-black" : "border-zinc-200 bg-white/50 text-zinc-600 dark:border-zinc-800 dark:bg-black/50"}`}>{opt.value}</button>
+                ))}
+              </div>
+            </div>
           </div>
+        </section>
+
+        {error && <div className="mt-8 p-4 rounded-2xl bg-red-50 border border-red-100 text-red-600 text-sm font-bold flex gap-2"><AlertCircle className="h-5 w-5"/>{error}</div>}
+
+        <Button onClick={handleCompare} disabled={!hasAtLeastTwoInputs} loading={isLoading || redirectingToStripe} className="mt-12 w-full py-10 rounded-full text-xl font-black uppercase tracking-widest shadow-2xl bg-black text-white dark:bg-white dark:text-black">
+          {selectedPlan === "free" ? "Start Free Comparison" : "Purchase & Compare"}
         </Button>
       </div>
-
     </div>
   );
 }

@@ -240,7 +240,8 @@ function PricingContent() {
   const compareHref = tab === "vehicles" ? "/compare" : "/compare/homes";
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-mesh-gradient">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       {/* Cancelled Banner */}
       {showCancelled && (
         <div className="mb-8 flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20 px-4 py-3">
@@ -309,12 +310,14 @@ function PricingContent() {
           return (
             <div
               key={plan.name + tab}
-              className={`card-hover relative flex flex-col rounded-[2rem] border p-8 bg-card shadow-sm transition-all duration-500 ${
-                plan.highlighted ? "border-black/10 ring-1 ring-black/5 scale-105 z-10 shadow-2xl dark:border-white/10 dark:ring-white/5" : "border-border hover:border-black/10"
+              className={`card-hover relative flex flex-col rounded-[2rem] border p-8 shadow-sm transition-all duration-500 ${
+                plan.highlighted 
+                  ? "border-zinc-300 ring-1 ring-zinc-200/50 scale-105 z-10 shadow-2xl bg-white/90 backdrop-blur-md dark:border-zinc-700 dark:ring-zinc-800/50 dark:bg-black/90" 
+                  : "border-zinc-200 bg-white/40 backdrop-blur-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-600"
               }`}
             >
               {plan.badge && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black px-5 py-2 text-[9px] font-black uppercase tracking-widest text-white shadow-xl dark:bg-white dark:text-black">
                   {plan.badge}
                 </span>
               )}
@@ -380,28 +383,29 @@ function PricingContent() {
       </div>
 
       {/* Bottom CTA */}
-      <section className="mt-24 rounded-[3rem] bg-black dark:bg-white px-8 py-20 text-center shadow-2xl">
-        <h2 className="text-3xl font-extrabold tracking-tight text-white dark:text-black sm:text-4xl">
+      <section className="mt-24 rounded-[3rem] bg-zinc-950 px-8 py-20 text-center shadow-2xl border border-white/5">
+        <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
           Ready to compare?
         </h2>
-        <p className="mt-4 text-white/70 dark:text-black/70 font-medium">
+        <p className="mt-4 text-zinc-400 font-medium font-bold">
           Start with a free comparison, no credit card required.
         </p>
         <div className="mt-10 flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
           <Link
             href="/compare"
-            className="inline-flex items-center rounded-full bg-white dark:bg-black px-12 py-5 text-base font-bold text-black dark:text-white shadow-lg transition-all hover:scale-105 active:scale-[0.98]"
+            className="inline-flex items-center rounded-full bg-white px-12 py-5 text-base font-bold text-black shadow-lg transition-all hover:scale-105 active:scale-[0.98]"
           >
             Compare Vehicles
           </Link>
           <Link
             href="/compare/homes"
-            className="inline-flex items-center rounded-full bg-white dark:bg-black px-12 py-5 text-base font-bold text-black dark:text-white shadow-lg transition-all hover:scale-105 active:scale-[0.98]"
+            className="inline-flex items-center rounded-full bg-white px-12 py-5 text-base font-bold text-black shadow-lg transition-all hover:scale-105 active:scale-[0.98]"
           >
             Compare Real Estate
           </Link>
         </div>
       </section>
+      </div>
     </div>
   );
 }

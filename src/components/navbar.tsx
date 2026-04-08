@@ -146,7 +146,7 @@ export function Navbar() {
         <Link
           href="/login"
           onClick={onClick}
-          className={`inline-flex items-center justify-center rounded-none hover:rounded-full transition-all duration-100 ${isTransparent ? "bg-black/80 text-white px-6 h-10" : "bg-primary text-primary-foreground px-5 py-2.5"} text-base font-medium hover:opacity-90 active:scale-[0.98] uppercase tracking-widest`}
+          className={`inline-flex items-center justify-center rounded-full transition-all duration-100 ${isTransparent ? "bg-black/80 text-white px-6 h-10" : "bg-black dark:bg-white text-white dark:text-black px-5 py-2.5"} text-base font-medium hover:opacity-90 active:scale-[0.98] uppercase tracking-widest`}
         >
           Login
         </Link>
@@ -170,7 +170,7 @@ export function Navbar() {
         <Link
           href="/dashboard"
           onClick={onClose}
-          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold text-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"
+          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold text-foreground/80 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
         >
           <LayoutDashboard className="h-4 w-4" />
           Dashboard
@@ -280,7 +280,7 @@ export function Navbar() {
                     <Link
                       href="/dashboard"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-foreground/80 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                     >
                       <LayoutDashboard className="h-4 w-4" />
                       Dashboard

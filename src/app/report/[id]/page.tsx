@@ -345,27 +345,25 @@ function GeneratingView({
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-[#0F0F1A] dark:via-[#0F0F1A] dark:to-[#1A1A2E] px-4">
+    <div className="flex min-h-screen items-center justify-center bg-mesh-gradient px-4">
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="text-center">
           {isComplete ? (
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-500 shadow-xl shadow-emerald-200/50 transition-all duration-700">
-              <CheckCircle2 className="h-10 w-10 text-white" />
+            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-[2rem] bg-zinc-100 dark:bg-zinc-800 shadow-xl transition-all duration-700">
+              <CheckCircle2 className="h-12 w-12 text-black dark:text-white" />
             </div>
           ) : (
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl gradient-bg shadow-xl shadow-indigo-200/50">
-              <Loader2 className="h-10 w-10 animate-spin text-white" />
+            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-[2rem] bg-black dark:bg-white shadow-xl">
+              <Loader2 className="h-12 w-12 animate-spin text-white dark:text-black" />
             </div>
           )}
-          <h1 className="mt-6 text-2xl font-bold text-indigo-950 dark:text-gray-100">
+          <h1 className="mt-10 text-3xl font-black tracking-tight text-black dark:text-white sm:text-4xl">
             {isComplete ? (
-              "Your Report is Ready!"
+              "Ready!"
             ) : (
-              <span className="inline-flex items-center gap-1.5">
-                Generating Your{" "}
-                <Image src="/images/rivvl-logo-black.png" alt="rivvl" width={70} height={23} className="inline-block align-middle dark:invert" />
-                {" "}Report
+              <span className="inline-flex items-center gap-2">
+                Generating Report
               </span>
             )}
           </h1>
@@ -1096,7 +1094,7 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-[#0F0F1A]">
+    <div className="flex min-h-screen bg-mesh-gradient">
       {/* ═══ MOBILE SIDEBAR OVERLAY ═══ */}
       {sidebarOpen && (
         <div
@@ -1119,10 +1117,10 @@ export default function ReportPage() {
           >
             <X className="h-5 w-5" />
           </button>
-          <p className="text-xs font-bold uppercase tracking-widest text-indigo-500">
+          <p className="text-xs font-black uppercase tracking-widest text-zinc-500">
             Comparison Report
           </p>
-          <h2 className="mt-1 text-sm font-bold text-indigo-950 dark:text-gray-100 leading-tight">
+          <h2 className="mt-1 text-sm font-black text-black dark:text-white leading-tight">
             {report.customName || shortCarNames.join(" vs ")}
           </h2>
           {/* Car thumbnails */}

@@ -694,7 +694,7 @@ export default function ComparePage() {
   // Show loading state while processing payment return from Stripe
   if (processingPayment) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center px-4 bg-background">
+      <div className="flex min-h-[60vh] items-center justify-center px-4 bg-mesh-gradient">
         <div className="text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-sm">
             <Loader2 className="h-8 w-8 animate-spin text-primary-foreground" />
@@ -711,7 +711,7 @@ export default function ComparePage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 bg-background">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 bg-mesh-gradient min-h-screen">
       {/* Page Header */}
       <div className="text-center">
         <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
@@ -732,7 +732,7 @@ export default function ComparePage() {
       </div>
 
       {/* ═══ SECTION 1: PLAN SELECTION (now FIRST) ═══ */}
-      <section className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <section className="mt-10 rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm p-8 shadow-sm dark:border-zinc-800 dark:bg-black/40">
         <h2 className="text-lg font-bold text-foreground">Choose Your Plan</h2>
         <p className="mt-1 text-sm text-muted-foreground font-medium">
           Select the depth of analysis you need.
@@ -744,8 +744,8 @@ export default function ComparePage() {
             type="button"
             onClick={() => setSelectedPlan("free")}
             className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "free"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+                ? "border-zinc-400 bg-white/60 shadow-xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/60"
+                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
             {selectedPlan === "free" && (
@@ -772,8 +772,8 @@ export default function ComparePage() {
             type="button"
             onClick={() => setSelectedPlan("car_single")}
             className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "car_single"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+                ? "border-zinc-400 bg-white/60 shadow-xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/60"
+                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
             {selectedPlan === "car_single" && (
@@ -801,11 +801,11 @@ export default function ComparePage() {
             type="button"
             onClick={() => setSelectedPlan("car_pro_report")}
             className={`relative flex flex-col rounded-2xl border pt-10 p-6 text-left transition-all duration-300 ${selectedPlan === "car_pro_report"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-black text-white dark:bg-white dark:text-black shadow-2xl scale-105 z-10"
-                : "border-border bg-card hover:border-black/10 dark:hover:border-white/10 hover:shadow-md"
+                ? "border-zinc-400 bg-white/80 shadow-2xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/80"
+                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black px-5 py-2 text-[9px] font-black uppercase tracking-widest text-white shadow-xl dark:bg-white dark:text-black">
               MOST POPULAR
             </span>
             {selectedPlan === "car_pro_report" && (
@@ -815,12 +815,12 @@ export default function ComparePage() {
                 </div>
               </div>
             )}
-            <p className={`text-[10px] font-extrabold uppercase tracking-[0.2em] ${selectedPlan === "car_pro_report" ? "text-background/60" : "text-muted-foreground"}`}>Pro Report</p>
-            <div className={`mt-2 ${selectedPlan === "car_pro_report" ? "text-background" : "text-foreground"}`}>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-zinc-500">Pro Report</p>
+            <div className={`mt-2 ${selectedPlan === "car_pro_report" ? "text-black dark:text-white font-black" : "text-foreground"}`}>
               <span className="text-3xl font-black">$9.99</span>
               <span className="ml-1 text-[10px] font-black uppercase tracking-widest opacity-60">/one-time</span>
             </div>
-            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "car_pro_report" ? "text-background/80" : "text-muted-foreground"}`}>
+            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "car_pro_report" ? "text-zinc-600 dark:text-zinc-400" : "text-muted-foreground"}`}>
               <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> Up to 4 cars</p>
               <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> All 11 sections</p>
               <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> Charts & Picks</p>
@@ -833,8 +833,8 @@ export default function ComparePage() {
             type="button"
             onClick={() => setSelectedPlan("car_pro10")}
             className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "car_pro10"
-                ? "border-black dark:border-white ring-4 ring-black/5 dark:ring-white/5 bg-neutral-50 dark:bg-neutral-900 shadow-xl"
-                : "border-border bg-background hover:border-black/10 dark:hover:border-white/10"
+                ? "border-zinc-400 bg-white/60 shadow-xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/60"
+                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-500 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-xl">
@@ -896,7 +896,7 @@ export default function ComparePage() {
                       type="url"
                       value={url}
                       onChange={(e) => updateUrl(i, e.target.value)}
-                      placeholder="Paste any car listing URL"
+                      placeholder={i === 0 ? "Paste Vehicle 1 URL" : i === 1 ? "Paste Vehicle 2 URL" : "Paste another car URL"}
                       className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
                     />
                   </div>
@@ -1028,7 +1028,7 @@ export default function ComparePage() {
             {manualEntries.map((entry, idx) => (
               <div key={idx} className="mb-8 last:mb-0">
                 <div className="mb-4 flex items-center justify-between px-2">
-                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Car {idx + 1}</span>
+                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Vehicle {idx + 1}</span>
                   {manualEntries.length > 2 && idx >= 2 && (
                     <button type="button" onClick={() => removeManualEntry(idx)} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline">
                       Remove

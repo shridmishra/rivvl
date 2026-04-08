@@ -143,9 +143,9 @@ export default function HomesPage() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-mesh-gradient min-h-screen">
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-background px-4 py-24 sm:py-32 lg:py-40">
+      <section className="relative overflow-hidden px-4 py-24 sm:py-32 lg:py-40">
         <div className="relative mx-auto max-w-4xl text-center">
           <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tighter text-foreground sm:text-6xl lg:text-7xl">
             The Smarter Way to <br/>
@@ -179,7 +179,7 @@ export default function HomesPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid w-full items-stretch gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6">
             {/* Card 1: Property Risk Report */}
-            <div className="sm:col-span-1 lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground">
                 <ShieldAlert className="h-4 w-4" /> Property Risk Report
               </div>
@@ -244,7 +244,7 @@ export default function HomesPage() {
             </div>
 
             {/* Card 4: 5-Year Financial Projection */}
-            <div className="sm:col-span-1 lg:col-span-2 flex flex-col rounded-3xl border border-border bg-card shadow-sm p-8 transition-all hover:shadow-xl hover:border-foreground/10">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <DollarSign className="h-4 w-4" /> 5-Year Financial Projection
               </div>
@@ -387,10 +387,10 @@ export default function HomesPage() {
               return (
                 <div 
                   key={plan.name} 
-                  className={`card-hover relative flex flex-col rounded-[2.5rem] border p-10 transition-all duration-500 shadow-sm ${
+                  className={`card-hover relative flex flex-col rounded-[2.5rem] border p-10 transition-all duration-300 shadow-sm ${
                     plan.highlighted 
-                      ? "border-foreground/10 ring-1 ring-foreground/10 bg-foreground text-background scale-105 z-10 shadow-2xl" 
-                      : "border-border bg-card hover:border-foreground/10"
+                      ? "border-zinc-300 bg-white/80 backdrop-blur-md scale-105 z-10 shadow-2xl dark:border-zinc-700 dark:bg-black/80" 
+                      : "border-zinc-200 bg-white/40 backdrop-blur-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-600"
                   }`}
                 >
                   {plan.badge && (

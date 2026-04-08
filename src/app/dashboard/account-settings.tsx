@@ -139,9 +139,9 @@ export function AccountSettings({
       : authProvider.charAt(0).toUpperCase() + authProvider.slice(1);
 
   return (
-    <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-sm">
+    <div className="mt-8 rounded-2xl glass-morphism p-6 shadow-sm">
       {error && (
-        <div className="mb-6 rounded-xl border border-error/20 bg-error/10 px-4 py-3 text-sm text-error">
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4" />
             <p className="font-bold">{error}</p>
@@ -156,13 +156,13 @@ export function AccountSettings({
       )}
 
       {nameSuccess && (
-        <div className="mb-6 rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success font-bold">
+        <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-600 font-bold dark:bg-emerald-900/20 dark:text-emerald-400">
           Name updated successfully.
         </div>
       )}
 
       {passwordSuccess && (
-        <div className="mb-6 rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success font-bold">
+        <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-600 font-bold dark:bg-emerald-900/20 dark:text-emerald-400">
           Password updated successfully.
         </div>
       )}
@@ -188,7 +188,7 @@ export function AccountSettings({
                   maxLength={100}
                   value={nameValue}
                   onChange={(e) => setNameValue(e.target.value)}
-                  className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                  className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-bold focus:border-black dark:focus:border-white focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:outline-none transition-all"
                   autoFocus
                   onKeyDown={(e) => {
                     if (e.key === "Enter") saveName();
@@ -247,7 +247,7 @@ export function AccountSettings({
                     value={emailValue}
                     onChange={(e) => setEmailValue(e.target.value)}
                     placeholder="New email address"
-                    className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                    className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-bold focus:border-black dark:focus:border-white focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:outline-none transition-all"
                     autoFocus
                     onKeyDown={(e) => {
                       if (e.key === "Enter") saveEmail();
@@ -346,7 +346,7 @@ export function AccountSettings({
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         placeholder="Enter your current password"
-                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-black dark:focus:border-white focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:outline-none transition-all"
                       />
                       <button
                         type="button"
@@ -371,7 +371,7 @@ export function AccountSettings({
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="Minimum 8 chars"
-                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-black dark:focus:border-white focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:outline-none transition-all"
                       />
                       <button
                         type="button"
@@ -396,7 +396,7 @@ export function AccountSettings({
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Re-enter new"
-                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm font-bold focus:border-black dark:focus:border-white focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:outline-none transition-all"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") savePassword();
                         }}
@@ -420,7 +420,7 @@ export function AccountSettings({
                   loading={passwordSaving}
                   loadingText="Updating..."
                   disabled={!currentPassword || !newPassword || !confirmPassword}
-                  className="w-full h-12 rounded-xl bg-primary font-bold text-white hover:bg-primary/90 transition-all active:scale-[0.98]"
+                  className="w-full h-12 rounded-full bg-black dark:bg-white font-bold text-white dark:text-black hover:opacity-90 transition-all active:scale-[0.98]"
                 >
                   Update Password
                 </Button>
