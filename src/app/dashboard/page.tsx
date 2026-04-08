@@ -194,7 +194,7 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="rounded-3xl border border-zinc-200 bg-white/50 backdrop-blur-sm p-8 shadow-sm transition-all hover:border-black/10 dark:border-zinc-800 dark:bg-black/50 dark:hover:border-white/10">
+    <div className="rounded-3xl border border-border bg-white/50 backdrop-blur-sm p-8 shadow-sm transition-all hover:border-black/10 dark:border-zinc-800 dark:bg-black/50 dark:hover:border-white/10">
       <div className="flex items-center gap-3">
         {icon}
         <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{label}</span>

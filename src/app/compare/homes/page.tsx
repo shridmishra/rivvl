@@ -300,7 +300,7 @@ export default function CompareHomesPage() {
           <p className="mt-4 text-zinc-600 dark:text-zinc-400 font-medium">Create a free account to start comparing.</p>
           <div className="mt-10 flex flex-col gap-3">
             <Link href="/login?redirect=/compare/homes" className="h-14 flex items-center justify-center rounded-2xl bg-black text-white dark:bg-white dark:text-black font-bold">Log in</Link>
-            <Link href="/signup?redirect=/compare/homes" className="h-14 flex items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 text-black font-bold">Sign up free</Link>
+            <Link href="/signup?redirect=/compare/homes" className="h-14 flex items-center justify-center rounded-2xl border border-border bg-white/50 text-black font-bold">Sign up free</Link>
           </div>
         </div>
       </div>
@@ -344,7 +344,7 @@ export default function CompareHomesPage() {
                   className={`relative flex flex-col rounded-2xl border p-5 text-left transition-all duration-300 ${
                     isSelected
                       ? "border-zinc-400 bg-white/80 shadow-2xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/80"
-                      : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20"
+                      : "border-border bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20"
                   }`}
                 >
                   {isPopular && (
@@ -375,7 +375,7 @@ export default function CompareHomesPage() {
                 {properties.length > 2 && <button onClick={() => removeProperty(p.id)} className="text-zinc-400 hover:text-red-500"><X className="h-5 w-5"/></button>}
               </div>
 
-              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/50 px-5 py-4 dark:border-zinc-800 dark:bg-black/50">
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-white/50 px-5 py-4 dark:border-zinc-800 dark:bg-black/50">
                 {p.inputMode === 'url' ? <Link2 className="h-5 w-5 text-zinc-400" /> : <Home className="h-5 w-5 text-zinc-400" />}
                 <input
                   type={p.inputMode === 'url' ? "url" : "text"}
@@ -391,7 +391,7 @@ export default function CompareHomesPage() {
         </div>
 
         {properties.length < maxProperties && (
-          <button onClick={addProperty} className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-zinc-200 py-6 text-xs font-black uppercase tracking-widest text-zinc-400 hover:border-zinc-400 hover:text-zinc-600 transition-all">
+          <button onClick={addProperty} className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border py-6 text-xs font-black uppercase tracking-widest text-zinc-400 hover:border-zinc-400 hover:text-zinc-600 transition-all">
             <Plus className="h-5 w-5" /> Add Property
           </button>
         )}
@@ -403,7 +403,7 @@ export default function CompareHomesPage() {
               <p className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4">Top Priorities (Max 3)</p>
               <div className="flex flex-wrap gap-2">
                 {HOME_PRIORITIES.map(opt => (
-                  <button key={opt.value} onClick={() => togglePriority(opt.value)} className={`px-4 py-2.5 rounded-full text-xs font-bold border transition-all ${priorities.includes(opt.value) ? "bg-black text-white dark:bg-white dark:text-black" : "border-zinc-200 bg-white/50 text-zinc-600 dark:border-zinc-800 dark:bg-black/50"}`}>{opt.value}</button>
+                  <button key={opt.value} onClick={() => togglePriority(opt.value)} className={`px-4 py-2.5 rounded-full text-xs font-bold border transition-all ${priorities.includes(opt.value) ? "bg-black text-white dark:bg-white dark:text-black" : "border-border bg-white/50 text-zinc-600 dark:border-zinc-800 dark:bg-black/50"}`}>{opt.value}</button>
                 ))}
               </div>
             </div>

@@ -4,7 +4,7 @@ import { FileQuestion } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 text-center bg-mesh-gradient text-foreground">
-      <div className="glass-morphism p-12 rounded-[2.5rem] shadow-2xl max-w-md w-full border border-zinc-200 dark:border-zinc-800">
+      <div className="glass-morphism p-12 rounded-[2.5rem] shadow-2xl max-w-md w-full border border-border dark:border-zinc-800">
         <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
           <FileQuestion className="h-12 w-12 text-black/40 dark:text-white/40" />
         </div>
@@ -23,7 +23,7 @@ export default function NotFound() {
           </Link>
           <Link
             href="/compare"
-            className="inline-flex items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 px-6 py-4 text-sm font-bold text-black hover:bg-zinc-50 transition-all dark:border-zinc-800 dark:bg-black/50 dark:text-white dark:hover:bg-zinc-900"
+            className="inline-flex items-center justify-center rounded-2xl border border-border bg-white/50 px-6 py-4 text-sm font-bold text-black hover:bg-zinc-50 transition-all dark:border-zinc-800 dark:bg-black/50 dark:text-white dark:hover:bg-zinc-900"
           >
             Compare Vehicles
           </Link>

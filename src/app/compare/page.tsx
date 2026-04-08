@@ -732,7 +732,7 @@ export default function ComparePage() {
       </div>
 
       {/* ═══ SECTION 1: PLAN SELECTION (now FIRST) ═══ */}
-      <section className="mt-10 rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm p-8 shadow-sm dark:border-zinc-800 dark:bg-black/40">
+      <section className="mt-10 rounded-3xl border border-border bg-white/40 backdrop-blur-sm p-8 shadow-sm dark:border-zinc-800 dark:bg-black/40">
         <h2 className="text-lg font-bold text-foreground">Choose Your Plan</h2>
         <p className="mt-1 text-sm text-muted-foreground font-medium">
           Select the depth of analysis you need.
@@ -745,7 +745,7 @@ export default function ComparePage() {
             onClick={() => setSelectedPlan("free")}
             className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "free"
                 ? "border-zinc-400 bg-white/60 shadow-xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/60"
-                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
+                : "border-border bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
             {selectedPlan === "free" && (
@@ -773,7 +773,7 @@ export default function ComparePage() {
             onClick={() => setSelectedPlan("car_single")}
             className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "car_single"
                 ? "border-zinc-400 bg-white/60 shadow-xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/60"
-                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
+                : "border-border bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
             {selectedPlan === "car_single" && (
@@ -800,31 +800,32 @@ export default function ComparePage() {
           <button
             type="button"
             onClick={() => setSelectedPlan("car_pro_report")}
-            className={`relative flex flex-col rounded-2xl border pt-10 p-6 text-left transition-all duration-300 ${selectedPlan === "car_pro_report"
-                ? "border-zinc-400 bg-white/80 shadow-2xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/80"
-                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
-              }`}
+            className={`relative flex flex-col rounded-2xl border pt-10 p-6 text-left transition-all duration-300 ${
+              selectedPlan === "car_pro_report"
+                ? "border-primary/20 bg-primary/5 ring-1 ring-primary/20 scale-105 z-10 shadow-2xl dark:border-primary/30 dark:bg-primary/10"
+                : "border-border bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20"
+            }`}
           >
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black px-5 py-2 text-[9px] font-black uppercase tracking-widest text-white shadow-xl dark:bg-white dark:text-black">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-5 py-2 text-[9px] font-black uppercase tracking-widest text-white shadow-xl">
               MOST POPULAR
             </span>
             {selectedPlan === "car_pro_report" && (
               <div className="absolute -right-1.5 -top-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black dark:bg-black dark:text-white shadow-lg">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-lg">
                   <Check className="h-3.5 w-3.5" />
                 </div>
               </div>
             )}
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-zinc-500">Pro Report</p>
-            <div className={`mt-2 ${selectedPlan === "car_pro_report" ? "text-black dark:text-white font-black" : "text-foreground"}`}>
+            <p className={`text-[10px] font-extrabold uppercase tracking-[0.2em] ${selectedPlan === "car_pro_report" ? "text-primary/60 font-black" : "text-zinc-500"}`}>Pro Report</p>
+            <div className={`mt-2 ${selectedPlan === "car_pro_report" ? "text-primary font-black" : "text-foreground"}`}>
               <span className="text-3xl font-black">$9.99</span>
               <span className="ml-1 text-[10px] font-black uppercase tracking-widest opacity-60">/one-time</span>
             </div>
-            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "car_pro_report" ? "text-zinc-600 dark:text-zinc-400" : "text-muted-foreground"}`}>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> Up to 4 cars</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> All 11 sections</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> Charts & Picks</p>
-              <p className="flex items-center gap-2"><Check className="h-3.5 w-3.5 shrink-0" /> PDF Download</p>
+            <div className={`mt-6 flex-1 space-y-2 text-[11px] font-bold ${selectedPlan === "car_pro_report" ? "text-primary/80" : "text-muted-foreground"}`}>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "car_pro_report" ? "text-primary" : ""}`} /> Up to 4 cars</p>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "car_pro_report" ? "text-primary" : ""}`} /> All 11 sections</p>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "car_pro_report" ? "text-primary" : ""}`} /> Charts & Picks</p>
+              <p className="flex items-center gap-2"><Check className={`h-3.5 w-3.5 shrink-0 ${selectedPlan === "car_pro_report" ? "text-primary" : ""}`} /> PDF Download</p>
             </div>
           </button>
 
@@ -834,7 +835,7 @@ export default function ComparePage() {
             onClick={() => setSelectedPlan("car_pro10")}
             className={`relative flex flex-col rounded-2xl border p-6 text-left transition-all duration-300 ${selectedPlan === "car_pro10"
                 ? "border-zinc-400 bg-white/60 shadow-xl scale-105 z-10 dark:border-zinc-600 dark:bg-black/60"
-                : "border-zinc-200 bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
+                : "border-border bg-white/20 hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/20 dark:hover:border-zinc-700"
               }`}
           >
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-500 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-xl">

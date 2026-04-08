@@ -141,11 +141,11 @@ function ScoreGauge({
           className="absolute inset-0 flex flex-col items-center justify-center"
         >
           <span className="text-2xl font-bold text-slate-900 dark:text-gray-100">{score}</span>
-          <span className="text-xs text-slate-400 dark:text-gray-500">/{max}</span>
+          <span className="text-xs text-muted-foreground dark:text-gray-500">/{max}</span>
         </div>
       </div>
       {label && (
-        <p className="mt-1 text-xs font-medium text-slate-500 dark:text-gray-400">{label}</p>
+        <p className="mt-1 text-xs font-medium text-muted-foreground dark:text-gray-400">{label}</p>
       )}
     </div>
   );
@@ -159,7 +159,7 @@ function Stars({ rating, size = 16 }: { rating: number | null | undefined; size?
   // If no rating data, show "Not Rated" text instead of empty gray stars
   if (rating == null || rating === 0) {
     return (
-      <span className="text-xs font-medium text-slate-400 dark:text-gray-500 italic">Not Rated</span>
+      <span className="text-xs font-medium text-muted-foreground dark:text-gray-500 italic">Not Rated</span>
     );
   }
 
@@ -187,42 +187,43 @@ function Stars({ rating, size = 16 }: { rating: number | null | undefined; size?
 
 function LockedSection({ title, icon, teaser, onUpgrade }: { title: string; icon: React.ReactNode; teaser?: string; onUpgrade?: () => void }) {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-slate-200 dark:border-gray-600 bg-white dark:bg-[#1A1A2E]">
-      <div className="flex items-center gap-3 px-6 py-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-200 dark:bg-gray-700 text-slate-400 dark:text-gray-500">
+    <div className="relative overflow-hidden rounded-2xl border border-border glass-morphism">
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-border/50">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
           {icon}
         </div>
-        <h2 className="text-lg font-bold text-slate-400 dark:text-gray-500">{title}</h2>
-        <Lock className="ml-auto h-4 w-4 text-slate-400 dark:text-gray-500" />
+        <h2 className="text-lg font-black text-foreground/70">{title}</h2>
+        <Lock className="ml-auto h-4 w-4 text-primary" />
       </div>
       <div className="relative px-6 pb-6">
         {/* Blurred preview - tantalizing content */}
-        <div className="pointer-events-none select-none blur-[6px] opacity-50">
+        <div className="pointer-events-none select-none blur-[8px] opacity-40">
           <div className="grid grid-cols-2 gap-4">
-            <div className="h-28 rounded-lg bg-gradient-to-br from-indigo-100 to-violet-100 p-4">
-              <div className="h-3 w-2/3 rounded bg-indigo-200" />
-              <div className="mt-3 h-6 w-1/2 rounded bg-indigo-300" />
-              <div className="mt-2 h-3 w-3/4 rounded bg-indigo-200" />
+            <div className="h-28 rounded-lg bg-gradient-to-br from-primary/10 to-violet-500/10 p-4">
+              <div className="h-3 w-2/3 rounded bg-primary/20" />
+              <div className="mt-3 h-6 w-1/2 rounded bg-primary/30" />
+              <div className="mt-2 h-3 w-3/4 rounded bg-primary/20" />
             </div>
-            <div className="h-28 rounded-lg bg-gradient-to-br from-violet-100 to-indigo-100 p-4">
-              <div className="h-3 w-2/3 rounded bg-violet-200" />
-              <div className="mt-3 h-6 w-1/2 rounded bg-violet-300" />
-              <div className="mt-2 h-3 w-3/4 rounded bg-violet-200" />
+            <div className="h-28 rounded-lg bg-gradient-to-br from-violet-500/10 to-primary/10 p-4">
+              <div className="h-3 w-2/3 rounded bg-violet-500/20" />
+              <div className="mt-3 h-6 w-1/2 rounded bg-violet-500/30" />
+              <div className="mt-2 h-3 w-3/4 rounded bg-violet-500/20" />
             </div>
           </div>
-          <div className="mt-3 h-4 w-full rounded bg-slate-100" />
-          <div className="mt-2 h-4 w-4/5 rounded bg-slate-100" />
-          <div className="mt-2 h-4 w-2/3 rounded bg-slate-100" />
+          <div className="mt-3 h-4 w-full rounded bg-muted/50" />
+          <div className="mt-2 h-4 w-4/5 rounded bg-muted/50" />
         </div>
         {/* Upgrade overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 dark:bg-[#1A1A2E]/60 backdrop-blur-[2px]">
-          <Lock className="h-7 w-7 text-indigo-400" />
-          <p className="mt-2 text-sm font-semibold text-indigo-950 dark:text-gray-100">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/40 backdrop-blur-[4px]">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-xl shadow-primary/20 mb-4">
+            <Lock className="h-7 w-7" />
+          </div>
+          <p className="text-base font-black text-foreground tracking-tight">
             {teaser || "Unlock with Full Report"}
           </p>
           <Button
             onClick={onUpgrade}
-            className="mt-3 rounded-xl gradient-bg px-6 py-2 text-sm font-bold text-white shadow-lg shadow-indigo-200 hover:shadow-xl transition-shadow"
+            className="mt-4 rounded-xl bg-primary px-8 py-6 text-base font-black text-white shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all"
           >
             Unlock Full Report
           </Button>
@@ -287,7 +288,7 @@ function GeneratingView({
           <h2 className="mt-4 text-xl font-bold text-indigo-950 dark:text-gray-100">
             Report Limit Reached
           </h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-gray-400">
+          <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400">
             You&apos;ve used all your available reports. Upgrade your plan to
             generate more comparisons.
           </p>
@@ -300,7 +301,7 @@ function GeneratingView({
             </a>
             <button
               onClick={() => router.push("/compare")}
-              className="w-full rounded-xl border border-slate-200 dark:border-gray-600 py-3 text-sm font-semibold text-slate-600 dark:text-gray-400 transition-colors hover:bg-slate-50 dark:hover:bg-[#1E1E30]"
+              className="w-full rounded-xl border border-border dark:border-gray-600 py-3 text-sm font-semibold text-muted-foreground dark:text-gray-400 transition-colors hover:bg-muted/30 dark:hover:bg-primary/10"
             >
               Back to Compare
             </button>
@@ -368,12 +369,12 @@ function GeneratingView({
             )}
           </h1>
           {carLabel && (
-            <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">{carLabel}</p>
+            <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400">{carLabel}</p>
           )}
         </div>
 
         {/* Steps card */}
-        <div className="mt-10 rounded-2xl border border-indigo-100 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-lg">
+        <div className="mt-10 rounded-2xl border border-border dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-lg">
           <div className="space-y-3">
             {GENERATION_STEPS.map((s, i) => (
               <div key={i} className="flex items-center gap-3">
@@ -387,7 +388,7 @@ function GeneratingView({
                   </div>
                 ) : (
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-                    <div className="h-4 w-4 rounded-full border-2 border-slate-200 dark:border-gray-600" />
+                    <div className="h-4 w-4 rounded-full border-2 border-border dark:border-gray-600" />
                   </div>
                 )}
                 <span
@@ -396,7 +397,7 @@ function GeneratingView({
                       ? "font-medium text-emerald-700"
                       : i === step && !isComplete
                         ? "font-medium text-indigo-950 dark:text-gray-100"
-                        : "text-slate-400 dark:text-gray-500"
+                        : "text-muted-foreground dark:text-gray-500"
                   }`}
                 >
                   {i < step ? s.done : s.label}
@@ -406,7 +407,7 @@ function GeneratingView({
           </div>
 
           {/* Progress bar */}
-          <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-gray-700">
+          <div className="mt-6 h-2 overflow-hidden rounded-full bg-muted/50 dark:bg-gray-700">
             <div
               className={`h-full rounded-full transition-all duration-1000 ease-out ${
                 isComplete ? "bg-emerald-500" : "gradient-bg"
@@ -535,7 +536,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
       <div className="relative z-10 mx-4 w-full max-w-sm animate-in fade-in zoom-in rounded-2xl border border-indigo-200 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-2xl">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-indigo-950 dark:text-gray-100">Share Report</h3>
-          <button onClick={onClose} className="rounded-lg p-1.5 text-slate-400 dark:text-gray-500 hover:bg-slate-100 dark:hover:bg-[#1E1E30]">
+          <button onClick={onClose} className="rounded-lg p-1.5 text-muted-foreground dark:text-gray-500 hover:bg-muted/50 dark:hover:bg-primary/10">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -543,7 +544,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
         <div className="mt-5 space-y-2.5">
           <button
             onClick={copyLink}
-            className="flex w-full items-center gap-3 rounded-xl border border-indigo-100 dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-slate-700 dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30]"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
               <Link2 className="h-4 w-4" />
@@ -557,7 +558,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareEmail}
-            className="flex w-full items-center gap-3 rounded-xl border border-indigo-100 dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-slate-700 dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30]"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
@@ -567,7 +568,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareTwitter}
-            className="flex w-full items-center gap-3 rounded-xl border border-indigo-100 dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-slate-700 dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30]"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-100 text-sky-600">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
@@ -577,7 +578,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareFacebook}
-            className="flex w-full items-center gap-3 rounded-xl border border-indigo-100 dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-slate-700 dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30]"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
@@ -587,7 +588,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareWhatsApp}
-            className="flex w-full items-center gap-3 rounded-xl border border-indigo-100 dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-slate-700 dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30]"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
@@ -1012,7 +1013,7 @@ export default function ReportPage() {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center">
           <Loader2 className="mx-auto h-10 w-10 animate-spin text-indigo-600" />
-          <p className="mt-4 text-sm text-slate-500 dark:text-gray-400">Loading your report...</p>
+          <p className="mt-4 text-sm text-muted-foreground dark:text-gray-400">Loading your report...</p>
         </div>
       </div>
     );
@@ -1038,7 +1039,7 @@ export default function ReportPage() {
             </button>
             <button
               onClick={() => router.push("/compare")}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] px-6 py-2.5 text-sm font-semibold text-slate-700 dark:text-gray-300"
+              className="inline-flex items-center gap-2 rounded-lg border border-border dark:border-gray-600 bg-white dark:bg-[#1A1A2E] px-6 py-2.5 text-sm font-semibold text-foreground dark:text-gray-300"
             >
               <ArrowLeft className="h-4 w-4" /> New Comparison
             </button>
@@ -1105,15 +1106,15 @@ export default function ReportPage() {
 
       {/* ═══ SIDEBAR ═══ */}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-indigo-100 dark:border-gray-700 bg-white dark:bg-[#1A1A2E] transition-transform duration-300 lg:sticky lg:top-0 lg:z-0 lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-50 flex h-full w-64 flex-col glass-morphism transition-transform duration-300 lg:sticky lg:top-0 lg:z-0 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Sidebar header */}
-        <div className="border-b border-indigo-100 dark:border-gray-700 px-5 py-5">
+        <div className="border-b border-border px-5 py-5">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="absolute right-3 top-3 rounded-lg p-1.5 text-slate-400 dark:text-gray-500 hover:bg-slate-100 dark:hover:bg-[#1E1E30] lg:hidden"
+            className="absolute right-3 top-3 rounded-lg p-1.5 text-muted-foreground dark:text-gray-500 hover:bg-muted/50 dark:hover:bg-primary/10 lg:hidden"
           >
             <X className="h-5 w-5" />
           </button>
@@ -1128,13 +1129,13 @@ export default function ReportPage() {
             {report.cars.map((car, i) => (
               <div
                 key={i}
-                className={`rounded-lg border p-2 text-center text-xs ${CAR_BORDER_CLASSES[i] || "border-slate-200 dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-slate-50 dark:bg-[#1E1E30]"}`}
+                className={`rounded-lg border p-2 text-center text-xs ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}
               >
-                <Car className={`mx-auto h-5 w-5 ${CAR_ICON_CLASSES[i] || "text-slate-400 dark:text-gray-500"}`} />
-                <p className="mt-1 font-semibold text-slate-700 dark:text-gray-300 truncate">
+                <Car className={`mx-auto h-5 w-5 ${CAR_ICON_CLASSES[i] || "text-muted-foreground dark:text-gray-500"}`} />
+                <p className="mt-1 font-semibold text-foreground dark:text-gray-300 truncate">
                   {car.make ? toTitleCase(car.make) : ""} {car.model}
                 </p>
-                <p className="text-slate-500 dark:text-gray-400">
+                <p className="text-muted-foreground dark:text-gray-400">
                   {car.price ? `$${car.price.toLocaleString()}` : "Price not listed"}
                 </p>
               </div>
@@ -1153,26 +1154,26 @@ export default function ReportPage() {
                 onClick={() => scrollTo(item.id)}
                 className={`flex w-full items-center gap-3 px-5 py-2.5 text-left text-sm transition-all ${
                   isActive
-                    ? "border-l-[3px] border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 font-semibold text-indigo-700 dark:text-indigo-300"
-                    : "border-l-[3px] border-transparent text-slate-500 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-300"
+                    ? "border-l-[3px] border-primary bg-primary/5 font-bold text-primary"
+                    : "border-l-[3px] border-transparent text-muted-foreground hover:bg-primary/5 hover:text-primary"
                 } ${isLocked ? "opacity-50" : ""}`}
               >
-                <span className={isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-gray-500"}>
+                <span className={isActive ? "text-primary" : "text-muted-foreground"}>
                   {item.icon}
                 </span>
                 <span className="flex-1 truncate">{item.label}</span>
-                {isLocked && <Lock className="h-3 w-3 text-slate-400 dark:text-gray-500" />}
+                {isLocked && <Lock className="h-3 w-3 text-muted-foreground" />}
               </button>
             );
           })}
         </nav>
 
         {/* Sidebar footer */}
-        <div className="border-t border-indigo-100 dark:border-gray-700 px-5 py-4">
+        <div className="border-t border-border px-5 py-4">
           <Button
             variant="ghost"
             onClick={() => router.push("/compare")}
-            className="flex w-full items-center gap-2 text-xs text-slate-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-300"
+            className="flex w-full items-center gap-2 text-xs text-muted-foreground hover:text-primary"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> New Comparison
           </Button>
@@ -1180,23 +1181,23 @@ export default function ReportPage() {
       </aside>
 
       {/* ═══ MAIN CONTENT ═══ */}
-      <main ref={mainRef} className="flex-1 min-w-0">
+      <main ref={mainRef} className="flex-1 min-w-0 bg-mesh-gradient">
         {/* Top bar */}
-        <div className="sticky top-0 z-30 flex items-center gap-3 border-b border-indigo-100 dark:border-gray-700 bg-white/90 dark:bg-[#1A1A2E]/90 px-4 py-3 backdrop-blur-sm sm:px-6">
+        <div className="sticky top-0 z-30 flex items-center gap-3 border-b border-border glass-morphism px-4 py-3 sm:px-6">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="rounded-lg p-2 text-slate-500 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-[#1E1E30] lg:hidden"
+            className="rounded-lg p-2 text-muted-foreground hover:bg-primary/5 lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
           <div className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider ${
             isFree
-              ? "bg-slate-100 dark:bg-gray-700 text-slate-600 dark:text-gray-300"
+              ? "bg-muted/50 dark:bg-gray-700 text-muted-foreground dark:text-gray-300"
               : "gradient-bg text-white"
           }`}>
             {isFree ? "Free Report" : a.reportType === "pro" ? "Pro Report" : "Full Report"}
           </div>
-          <span className="hidden text-xs text-slate-400 dark:text-gray-500 sm:block">
+          <span className="hidden text-xs text-muted-foreground dark:text-gray-500 sm:block">
             {new Date(report.createdAt).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
@@ -1218,21 +1219,21 @@ export default function ReportPage() {
               loading={pdfLoading}
               loadingText=""
               variant="ghost"
-              className="sm:hidden rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-indigo-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="sm:hidden rounded-lg p-2 text-muted-foreground dark:text-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary transition-colors"
             >
               {!pdfLoading && <Download className="h-4 w-4" />}
             </Button>
             <button
               onClick={() => window.print()}
               title="Print report"
-              className="rounded-lg p-2 text-slate-400 dark:text-gray-500 hover:bg-slate-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all border border-transparent hover:border-indigo-100 dark:hover:border-indigo-700/50"
+              className="rounded-lg p-2 text-muted-foreground dark:text-gray-500 hover:bg-muted/30 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary transition-all border border-transparent hover:border-border dark:hover:border-primary/50"
             >
               <Printer className="h-4 w-4" />
             </button>
             <button
               onClick={() => setShareOpen(true)}
               title="Share report"
-              className="rounded-lg p-2 text-slate-400 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-[#1E1E30] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all border border-transparent hover:border-indigo-100 dark:hover:border-indigo-700/50"
+              className="rounded-lg p-2 text-muted-foreground dark:text-gray-400 hover:bg-muted/30 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary transition-all border border-transparent hover:border-border dark:hover:border-primary/50"
             >
               <Share2 className="h-4 w-4" />
             </button>
@@ -1376,7 +1377,7 @@ export default function ReportPage() {
             ) : a.depreciation ? (
               <SectionCard title="Depreciation Forecast" icon={<TrendingDown className="h-4 w-4" />}>
                 {report.cars.some((c) => !c.price) && (
-                  <p className="mb-3 text-xs text-slate-500 dark:text-gray-400 italic">
+                  <p className="mb-3 text-xs text-muted-foreground dark:text-gray-400 italic">
                     * Starting values for vehicles without a listed price are based on market estimates.
                   </p>
                 )}
@@ -1428,7 +1429,7 @@ export default function ReportPage() {
               <h3 className="mt-3 text-xl font-bold text-indigo-950 dark:text-gray-100">
                 Want the Full Picture?
               </h3>
-              <p className="mt-2 text-sm text-slate-600 dark:text-gray-400 max-w-md mx-auto">
+              <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400 max-w-md mx-auto">
                 Unlock all 11 sections: our pick, price analysis, cost of ownership,
                 depreciation forecast, features, priority matching, and the final verdict.
               </p>
@@ -1462,17 +1463,17 @@ export default function ReportPage() {
                   Before You Buy: Get a Vehicle History Report
                 </h2>
               </div>
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300 mb-4">
+              <p className="text-sm leading-relaxed text-foreground dark:text-gray-300 mb-4">
                 rivvl provides comprehensive data-driven analysis based on publicly
                 available data, but we do not include accident history or salvage
                 title information in our reports. Before making a purchase decision,
                 we strongly recommend obtaining a vehicle history report from a
                 trusted provider such as Carfax, AutoCheck, or a similar service.
               </p>
-              <p className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
+              <p className="text-sm font-semibold text-foreground dark:text-gray-300 mb-2">
                 A vehicle history report can reveal:
               </p>
-              <ul className="space-y-1.5 text-sm text-slate-700 dark:text-gray-300 ml-1">
+              <ul className="space-y-1.5 text-sm text-foreground dark:text-gray-300 ml-1">
                 <li className="flex items-start gap-2">
                   <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
                   Previous accidents and damage reports
@@ -1498,7 +1499,7 @@ export default function ReportPage() {
                   Recall history and completion status
                 </li>
               </ul>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-gray-300">
+              <p className="mt-4 text-sm leading-relaxed text-foreground dark:text-gray-300">
                 This additional step, combined with your rivvl analysis and a
                 professional mechanic inspection, will give you the most complete
                 picture before making your decision.
@@ -1517,7 +1518,7 @@ export default function ReportPage() {
                   Important Disclaimer
                 </h2>
               </div>
-              <div className="space-y-3 text-xs leading-relaxed text-slate-500 dark:text-gray-400">
+              <div className="space-y-3 text-xs leading-relaxed text-muted-foreground dark:text-gray-400">
                 <p>This report is generated by rivvl.ai for informational and educational purposes only. It does not constitute automotive advice, financial advice, or a professional vehicle appraisal.</p>
                 <p>rivvl.ai is a technology platform that aggregates and analyzes publicly available vehicle data. We are not licensed automotive dealers, mechanics, appraisers, or financial advisors. Nothing in this report should be interpreted as a recommendation to buy or avoid any specific vehicle.</p>
                 <p>Vehicle scores and ratings are generated by automated analysis using data from government databases, manufacturer information, and public listing sources. They may not account for all factors relevant to your specific needs. Data accuracy depends on third-party sources which may contain errors or outdated information.</p>
@@ -1529,7 +1530,7 @@ export default function ReportPage() {
           </section>
 
           {/* Footer */}
-          <div className="pb-8 pt-4 text-center text-xs text-slate-400 dark:text-gray-500">
+          <div className="pb-8 pt-4 text-center text-xs text-muted-foreground dark:text-gray-500">
             <p>Report ID: {report.id}</p>
             <p className="mt-1">
               Data sourced from NHTSA, FuelEconomy.gov, and listing analysis
@@ -1552,7 +1553,7 @@ export default function ReportPage() {
               <h3 className="mt-4 text-xl font-bold text-indigo-950 dark:text-gray-100">
                 Unlock All 11 Sections
               </h3>
-              <p className="mt-2 text-sm text-slate-600 dark:text-gray-400">
+              <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400">
                 Get the complete analysis for this report.
               </p>
             </div>
@@ -1561,11 +1562,11 @@ export default function ReportPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-bold text-indigo-950 dark:text-gray-100">{upgradePlanLabel}</p>
-                  <p className="text-xs text-slate-500 dark:text-gray-400">One-time payment</p>
+                  <p className="text-xs text-muted-foreground dark:text-gray-400">One-time payment</p>
                 </div>
                 <p className="text-2xl font-bold text-indigo-600">{upgradePrice}</p>
               </div>
-              <ul className="mt-4 space-y-1.5 text-xs text-slate-600 dark:text-gray-400">
+              <ul className="mt-4 space-y-1.5 text-xs text-muted-foreground dark:text-gray-400">
                 <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> All 11 report sections</li>
                 <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> Charts, tables & scoring</li>
                 <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> Intelligent recommendation</li>
@@ -1593,13 +1594,13 @@ export default function ReportPage() {
               </button>
               <button
                 onClick={() => { setShowUpgradeModal(false); setUpgradeError(null); }}
-                className="w-full rounded-xl border border-slate-200 dark:border-gray-600 py-3 text-sm font-semibold text-slate-600 dark:text-gray-400 transition-colors hover:bg-slate-50 dark:hover:bg-[#1E1E30]"
+                className="w-full rounded-xl border border-border dark:border-gray-600 py-3 text-sm font-semibold text-muted-foreground dark:text-gray-400 transition-colors hover:bg-muted/30 dark:hover:bg-primary/10"
               >
                 Maybe Later
               </button>
             </div>
 
-            <p className="mt-4 text-center text-[11px] text-slate-400 dark:text-gray-500">
+            <p className="mt-4 text-center text-[11px] text-muted-foreground dark:text-gray-500">
               Need to compare more cars?{" "}
               <a href="/compare" className="font-medium text-indigo-600 hover:underline">
                 Start a new comparison with a Pro plan.
@@ -1626,16 +1627,16 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-600 overflow-hidden hover:shadow-md transition-shadow">
-      <div className="bg-gradient-to-r from-purple-50 to-transparent dark:from-[#6C5CE7]/10 dark:to-transparent rounded-t-lg px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#6C5CE7] text-white">
+    <div className="glass-morphism rounded-3xl shadow-sm border border-border overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-primary/20">
+      <div className="bg-gradient-to-r from-violet-500/10 to-transparent rounded-t-lg px-6 py-5 border-b border-border/50">
+        <div className="flex items-center gap-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white shadow-lg shadow-violet-600/20">
             {icon}
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-[#6C5CE7] pl-4">{title}</h2>
+          <h2 className="text-xl font-black text-foreground tracking-tight border-l-4 border-violet-600 pl-4 uppercase">{title}</h2>
         </div>
       </div>
-      <div className="px-6 py-6">{children}</div>
+      <div className="px-6 py-8">{children}</div>
     </div>
   );
 }
@@ -1658,20 +1659,20 @@ function ExecutiveSummary({
   carNames: string[];
 }) {
   return (
-    <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-600 p-6">
+    <div className="glass-morphism rounded-3xl shadow-xl border border-border p-8">
       {/* Report type badge */}
-      <div className="flex items-center gap-3 mb-4">
-        <span className="rounded-full px-4 py-1 bg-[#6C5CE7] text-white text-xs font-bold uppercase">
+      <div className="flex items-center gap-3 mb-6">
+        <span className="rounded-full px-5 py-1.5 bg-violet-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-violet-600/20">
           Comparison Report
         </span>
       </div>
       {/* Winner banner — only show for multi-car comparisons */}
       {cars.length >= 2 && (
-        <div className="text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-4 py-1.5 text-xs font-bold text-emerald-700">
-            <Trophy className="h-3.5 w-3.5" /> Our Pick
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-5 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-600">
+            <Trophy className="h-4 w-4" /> Our Pick
           </span>
-          <h1 className="mt-2 text-xl font-semibold text-gray-900 dark:text-gray-100 sm:text-2xl">
+          <h1 className="mt-4 text-3xl font-black text-foreground sm:text-4xl lg:text-5xl tracking-tight">
             {verdict.winner}
           </h1>
         </div>
@@ -1708,7 +1709,7 @@ function ExecutiveSummary({
                   </p>
                 )}
                 {car?.mileage && (
-                  <p className="text-xs text-slate-500 dark:text-gray-400">{car.mileage.toLocaleString()} mi</p>
+                  <p className="text-xs text-muted-foreground dark:text-gray-400">{car.mileage.toLocaleString()} mi</p>
                 )}
               </div>
               {score && (
@@ -1731,7 +1732,7 @@ function ExecutiveSummary({
       {/* Confidence bar */}
       {!isFree && summary.confidenceScore != null && (
         <div className="mt-4 flex items-center gap-3">
-          <span className="text-xs text-slate-500 dark:text-gray-400 dark:text-gray-400">Confidence</span>
+          <span className="text-xs text-muted-foreground dark:text-gray-400 dark:text-gray-400">Confidence</span>
           <div className="flex-1 h-2 rounded-full bg-slate-200 dark:bg-gray-700">
             <div
               className="h-2 rounded-full gradient-bg transition-all duration-700"
@@ -1743,7 +1744,7 @@ function ExecutiveSummary({
       )}
 
       {/* Overview */}
-      <p className="mt-4 text-[15px] leading-relaxed text-slate-600 dark:text-gray-400">
+      <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground dark:text-gray-400">
         {summary.overview}
       </p>
     </div>
@@ -1788,7 +1789,7 @@ function SpecsTable({
           {specs.comparisonTable.map((row, i) => {
             const values = getValues(row);
             return (
-              <tr key={i} className={`border-b border-gray-100 dark:border-gray-700 ${i % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#1E1E30]/50"}`}>
+              <tr key={i} className={`border-b border-gray-100 dark:border-border ${i % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#1E1E30]/50"}`}>
                 <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">{row.category}</td>
                 {shortCarNames.map((_, ci) => {
                   const isWinner = row.advantage === `car${ci + 1}`;
@@ -1855,7 +1856,7 @@ function PriceSection({
         {data.cars.map((car, i) => {
           const hasListed = isValidNumeric(car.listedPrice);
           return (
-            <div key={i} className={`rounded-xl border p-4 flex flex-col justify-between ${CAR_BORDER_CLASSES[i] || "border-slate-200 dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-slate-50 dark:bg-[#1E1E30]"}`}>
+            <div key={i} className={`rounded-xl border p-4 flex flex-col justify-between ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}>
               <div>
                 <h4 className="text-sm font-bold text-indigo-950 dark:text-gray-100">{car.name}</h4>
                 <div className="mt-3 flex items-baseline gap-2">
@@ -1867,14 +1868,14 @@ function PriceSection({
                   </span>
                 </div>
               </div>
-              <div className="mt-2 text-xs text-slate-500 dark:text-gray-400">
+              <div className="mt-2 text-xs text-muted-foreground dark:text-gray-400">
                 Market: {safeDollars(car.estimatedMarketValue)} | Negotiate: {car.negotiationRoom}
               </div>
             </div>
           );
         })}
       </div>
-      <p className="mt-4 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-4 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -1910,7 +1911,7 @@ function CostSection({
 
   return (
     <div>
-      <h4 className="text-sm font-semibold text-slate-600 dark:text-gray-400 mb-3">5-Year Cost Breakdown</h4>
+      <h4 className="text-sm font-semibold text-muted-foreground dark:text-gray-400 mb-3">5-Year Cost Breakdown</h4>
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={fiveYearData} layout="vertical" barGap={4}>
@@ -1929,19 +1930,19 @@ function CostSection({
       <div className={`mt-4 grid gap-3 ${numCars > 2 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2"}`}>
         {data.fiveYear.cars.map((c, i) => (
           <div key={i} className={`rounded-lg border p-4 text-center ${
-            i === cheaperIdx ? "border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20" : "border-slate-200 dark:border-gray-600 bg-slate-50 dark:bg-[#1E1E30]"
+            i === cheaperIdx ? "border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20" : "border-border dark:border-gray-600 bg-muted/30 dark:bg-[#1E1E30]"
           }`}>
             {numCars >= 2 && i === cheaperIdx && (
               <span className="rounded-full bg-emerald-500 px-2.5 py-0.5 text-[11px] font-bold text-white">Cheapest</span>
             )}
-            <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">{c.name}: 5-Year Total</p>
-            <p className={`text-2xl font-bold ${i === cheaperIdx ? "text-emerald-700 dark:text-emerald-400" : "text-slate-700 dark:text-gray-300"}`}>
+            <p className="mt-1 text-xs text-muted-foreground dark:text-gray-400">{c.name}: 5-Year Total</p>
+            <p className={`text-2xl font-bold ${i === cheaperIdx ? "text-emerald-700 dark:text-emerald-400" : "text-foreground dark:text-gray-300"}`}>
               ${c.total.toLocaleString()}
             </p>
           </div>
         ))}
       </div>
-      <p className="mt-4 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-4 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -1984,14 +1985,14 @@ function DepreciationChart({
       <div className="mt-4 flex flex-wrap gap-4 justify-center">
         {data.cars.map((c, i) => (
           <div key={i} className="text-center">
-            <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${CAR_PILL_BG[i] || "bg-slate-100 dark:bg-gray-700"} ${CAR_TEXT_CLASSES[i] || "text-slate-700 dark:text-gray-300"}`}>
+            <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${CAR_PILL_BG[i] || "bg-muted/50 dark:bg-gray-700"} ${CAR_TEXT_CLASSES[i] || "text-foreground dark:text-gray-300"}`}>
               {c.retentionRate5Year} retained
             </span>
-            <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">{c.name}</p>
+            <p className="mt-1 text-xs text-muted-foreground dark:text-gray-400">{c.name}</p>
           </div>
         ))}
       </div>
-      <p className="mt-4 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-4 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -2014,13 +2015,13 @@ function SafetyVisual({
         {data.cars.map((car, i) => (
           <div
             key={i}
-            className={`rounded-xl border p-5 ${CAR_BORDER_CLASSES[i] || "border-slate-200 dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-slate-50 dark:bg-[#1E1E30]"}`}
+            className={`rounded-xl border p-5 ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}
           >
             <h4 className="text-sm font-bold text-indigo-950 dark:text-gray-100">{car.name}</h4>
 
             <div className="mt-3">
               <Stars rating={car.overallRating} size={20} />
-              <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Overall NHTSA Rating</p>
+              <p className="mt-1 text-xs text-muted-foreground dark:text-gray-400">Overall NHTSA Rating</p>
             </div>
 
             <div className="mt-3 grid grid-cols-3 gap-2">
@@ -2031,7 +2032,7 @@ function SafetyVisual({
               ].map((c) => (
                 <div key={c.label}>
                   <Stars rating={c.rating} size={14} />
-                  <p className="mt-0.5 text-xs text-slate-500 dark:text-gray-400">{c.label}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground dark:text-gray-400">{c.label}</p>
                 </div>
               ))}
             </div>
@@ -2077,7 +2078,7 @@ function SafetyVisual({
           </div>
         ))}
       </div>
-      <p className="mt-4 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-4 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -2160,8 +2161,8 @@ function FuelVisual({
           </ResponsiveContainer>
         </div>
       ) : (
-        <div className="h-48 flex items-center justify-center rounded-lg border border-slate-200 dark:border-gray-600 bg-slate-50 dark:bg-[#1E1E30]">
-          <p className="text-sm text-slate-500 dark:text-gray-400">Data unavailable from government sources</p>
+        <div className="h-48 flex items-center justify-center rounded-lg border border-border dark:border-gray-600 bg-muted/30 dark:bg-[#1E1E30]">
+          <p className="text-sm text-muted-foreground dark:text-gray-400">Data unavailable from government sources</p>
         </div>
       )}
 
@@ -2172,33 +2173,33 @@ function FuelVisual({
           const hasCost = isValidNumeric(car.annualFuelCost);
           const hasCO2 = isValidNumeric(car.co2Emissions);
           return (
-            <div key={i} className={`rounded-xl border p-4 flex flex-col ${CAR_BORDER_CLASSES[i] || "border-slate-200 dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-slate-50 dark:bg-[#1E1E30]"}`}>
+            <div key={i} className={`rounded-xl border p-4 flex flex-col ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}>
               <h4 className="text-sm font-bold text-indigo-950 dark:text-gray-100">{car.name}</h4>
               <div className="mt-2 grid grid-cols-3 gap-2 text-center flex-1 items-start">
                 <div>
                   <p className="text-2xl font-bold text-emerald-600">{hasCombined ? car.combinedMPG : "N/A"}</p>
-                  <p className="text-xs text-slate-500 dark:text-gray-400">Combined MPG</p>
-                  {!hasCombined && <p className="text-[10px] text-slate-400">EPA data unavailable</p>}
+                  <p className="text-xs text-muted-foreground dark:text-gray-400">Combined MPG</p>
+                  {!hasCombined && <p className="text-[10px] text-muted-foreground">EPA data unavailable</p>}
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-slate-700 dark:text-gray-300">{hasCost ? `$${car.annualFuelCost.toLocaleString()}` : "N/A"}</p>
-                  <p className="text-xs text-slate-500 dark:text-gray-400">Annual Cost</p>
-                  {!hasCost && <p className="text-[10px] text-slate-400">EPA data unavailable</p>}
+                  <p className="text-lg font-bold text-foreground dark:text-gray-300">{hasCost ? `$${car.annualFuelCost.toLocaleString()}` : "N/A"}</p>
+                  <p className="text-xs text-muted-foreground dark:text-gray-400">Annual Cost</p>
+                  {!hasCost && <p className="text-[10px] text-muted-foreground">EPA data unavailable</p>}
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="flex items-center gap-1">
                     <Leaf className="h-3.5 w-3.5 text-emerald-500" />
-                    <span className="text-lg font-bold text-slate-700 dark:text-gray-300">{hasCO2 ? car.co2Emissions : "N/A"}</span>
+                    <span className="text-lg font-bold text-foreground dark:text-gray-300">{hasCO2 ? car.co2Emissions : "N/A"}</span>
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-gray-400">g/mi CO2</p>
-                  {!hasCO2 && <p className="text-[10px] text-slate-400">EPA data unavailable</p>}
+                  <p className="text-xs text-muted-foreground dark:text-gray-400">g/mi CO2</p>
+                  {!hasCO2 && <p className="text-[10px] text-muted-foreground">EPA data unavailable</p>}
                 </div>
               </div>
             </div>
           );
         })}
       </div>
-      <p className="mt-4 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-4 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -2254,11 +2255,11 @@ function ReliabilityVisual({
               strokeWidth={7}
               color={CAR_COLORS[i] || CAR_COLORS[0]}
             />
-            <p className="mt-2 text-xs font-semibold text-slate-700 dark:text-gray-300">{car.name}</p>
+            <p className="mt-2 text-xs font-semibold text-foreground dark:text-gray-300">{car.name}</p>
             <p className="text-[10px] text-gray-400">
               {complaintDataRetrieved[i] ? "Based on NHTSA data" : "Estimate (based on historical brand/model data)"}
             </p>
-            <p className="text-xs text-slate-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground dark:text-gray-400">
               {complaintDataRetrieved[i] ? `${car.complaintCount} complaints` : "\u2014"}
             </p>
           </div>
@@ -2268,7 +2269,7 @@ function ReliabilityVisual({
       {/* Problem breakdown chart */}
       {problemData.length > 0 && (
         <div className="mt-6">
-          <h4 className="text-sm font-semibold text-slate-500 dark:text-gray-400 mb-2">Complaints by Component</h4>
+          <h4 className="text-sm font-semibold text-muted-foreground dark:text-gray-400 mb-2">Complaints by Component</h4>
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={problemData} layout="vertical" barGap={2}>
@@ -2297,7 +2298,7 @@ function ReliabilityVisual({
           NHTSA complaint data could not be retrieved for this vehicle. This may reflect a data availability limitation, not zero complaints. Verify at NHTSA.gov.
         </p>
       )}
-      <p className="mt-4 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-4 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -2365,9 +2366,9 @@ function FeaturesGrid({
       {/* Feature count header */}
       <div className={`grid gap-4 mb-5 ${numCars > 2 ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-2"}`}>
         {shortCarNames.map((name, i) => (
-          <div key={i} className={`rounded-xl border p-4 text-center ${CAR_BORDER_CLASSES[i] || "border-slate-200 dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-slate-50 dark:bg-[#1E1E30]"}`}>
-            <p className={`text-2xl font-bold ${CAR_TEXT_CLASSES[i] || "text-slate-700 dark:text-gray-300"}`}>{featureCounts[i]}<span className="text-base font-normal text-slate-400 dark:text-gray-500">/{total}</span></p>
-            <p className="text-sm text-slate-600 dark:text-gray-400 mt-1">{name}</p>
+          <div key={i} className={`rounded-xl border p-4 text-center ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}>
+            <p className={`text-2xl font-bold ${CAR_TEXT_CLASSES[i] || "text-foreground dark:text-gray-300"}`}>{featureCounts[i]}<span className="text-base font-normal text-muted-foreground dark:text-gray-500">/{total}</span></p>
+            <p className="text-sm text-muted-foreground dark:text-gray-400 mt-1">{name}</p>
           </div>
         ))}
       </div>
@@ -2376,10 +2377,10 @@ function FeaturesGrid({
       <div className="overflow-x-auto -mx-6 px-6">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b-2 border-indigo-100 dark:border-gray-700">
-              <th className="py-2.5 pr-4 text-left text-sm font-semibold text-slate-500 dark:text-gray-400">Feature</th>
+            <tr className="border-b-2 border-border dark:border-border">
+              <th className="py-2.5 pr-4 text-left text-sm font-semibold text-muted-foreground dark:text-gray-400">Feature</th>
               {shortCarNames.map((name, i) => (
-                <th key={i} className={`w-24 px-2 py-2.5 text-center text-sm font-semibold ${CAR_TEXT_CLASSES[i] || "text-slate-700 dark:text-gray-300"}`}>{name}</th>
+                <th key={i} className={`w-24 px-2 py-2.5 text-center text-sm font-semibold ${CAR_TEXT_CLASSES[i] || "text-foreground dark:text-gray-300"}`}>{name}</th>
               ))}
             </tr>
           </thead>
@@ -2392,8 +2393,8 @@ function FeaturesGrid({
                   </td>
                 </tr>
                 {grouped[category].map((row, ri) => (
-                  <tr key={ri} className={ri % 2 === 0 ? "bg-slate-50/60 dark:bg-[#1E1E30]/60" : ""}>
-                    <td className="py-2.5 pr-4 text-sm text-slate-700 dark:text-gray-300">{row.feature}</td>
+                  <tr key={ri} className={ri % 2 === 0 ? "bg-muted/30/60 dark:bg-[#1E1E30]/60" : ""}>
+                    <td className="py-2.5 pr-4 text-sm text-foreground dark:text-gray-300">{row.feature}</td>
                     {Array.from({ length: numCars }, (_, ci) => {
                       const val = getHasFeature(row, ci);
                       return (
@@ -2426,13 +2427,13 @@ function FeaturesGrid({
         </table>
       </div>
       {/* Feature legend */}
-      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-gray-400">
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground dark:text-gray-400">
         <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Confirmed</span>
         <span className="flex items-center gap-1.5"><XCircle className="h-4 w-4 text-red-400" /> Not Available</span>
         <span className="flex items-center gap-1.5"><HelpCircle className="h-4 w-4 text-amber-400" /> Unverified</span>
         <span className="flex items-center gap-1.5"><Info className="h-4 w-4 text-blue-400" /> Estimate (standard equipment)</span>
       </div>
-      <p className="mt-3 text-[15px] text-slate-600 dark:text-gray-400 leading-relaxed">{data.summary}</p>
+      <p className="mt-3 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
   );
 }
@@ -2505,7 +2506,7 @@ function PriorityRadar({
       {numCars >= 2 && (
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {data.cars.map((car, i) => (
-            <span key={i} className={`rounded-full px-3 py-1 text-xs font-medium ${CAR_PILL_BG[i] || "bg-slate-100 dark:bg-gray-700"} ${CAR_TEXT_CLASSES[i] || "text-slate-700 dark:text-gray-300"}`}>
+            <span key={i} className={`rounded-full px-3 py-1 text-xs font-medium ${CAR_PILL_BG[i] || "bg-muted/50 dark:bg-gray-700"} ${CAR_TEXT_CLASSES[i] || "text-foreground dark:text-gray-300"}`}>
               {car.name}: {car.bestFor}
             </span>
           ))}
@@ -2529,48 +2530,48 @@ function FinalVerdictVisual({
   numCars: number;
 }) {
   return (
-    <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-600 overflow-hidden">
-      <div className="bg-gradient-to-r from-purple-50 to-transparent dark:from-[#6C5CE7]/10 dark:to-transparent px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#6C5CE7] text-white shadow-lg">
-            <Trophy className="h-5 w-5" />
+    <div className="glass-morphism rounded-3xl shadow-2xl border border-border overflow-hidden">
+      <div className="bg-gradient-to-r from-violet-500/10 to-transparent px-6 py-6 border-b border-border/50">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-xl shadow-violet-600/20">
+            <Trophy className="h-6 w-6" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-[#6C5CE7] pl-4">Final Verdict</h2>
+          <h2 className="text-2xl font-black text-foreground border-l-4 border-violet-600 pl-4 uppercase tracking-tight">Final Verdict</h2>
         </div>
       </div>
-      <div className="p-6">
+      <div className="p-8">
 
         {/* Winner — only show for multi-car comparisons */}
         {numCars >= 2 && (
-          <div className="mt-5 text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-md">
-              <Trophy className="h-3.5 w-3.5" /> Winner
+          <div className="mb-8 text-center">
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-6 py-2 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-emerald-500/20">
+              <Trophy className="h-4 w-4" /> Winner
             </span>
-            <h3 className="mt-2 text-2xl font-bold text-emerald-700">{verdict.winner}</h3>
+            <h3 className="mt-4 text-3xl font-black text-emerald-600 lg:text-4xl tracking-tight">{verdict.winner}</h3>
           </div>
         )}
 
         {/* Score gauges for all cars */}
-        <div className="mt-5 flex justify-center gap-8 flex-wrap">
+        <div className="flex justify-center gap-10 flex-wrap">
           {verdict.scores.map((sc, i) => {
             const isWinner = numCars >= 2 && sc.name === verdict.winner;
             return (
-            <div key={i} className={`text-center relative rounded-xl p-4 ${isWinner ? "border-2 border-emerald-400 bg-emerald-50/50 shadow-lg shadow-emerald-100" : ""}`}>
+            <div key={i} className={`text-center relative rounded-2xl p-6 transition-all duration-300 ${isWinner ? "bg-emerald-500/5 ring-2 ring-emerald-500/20 shadow-2xl shadow-emerald-500/10 scale-110 z-10" : "bg-muted/30"}`}>
               {isWinner && (
-                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
-                    <Trophy className="h-2.5 w-2.5" /> WINNER
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 text-[9px] font-black tracking-widest text-white shadow-lg">
+                    <Trophy className="h-3 w-3" /> WINNER
                   </span>
                 </div>
               )}
               <ScoreGauge
                 score={sc.overall}
                 max={10}
-                size={100}
+                size={110}
                 strokeWidth={8}
                 color={isWinner ? "#10B981" : "#94A3B8"}
               />
-              <p className={`mt-2 text-xs font-semibold ${isWinner ? "text-emerald-700 dark:text-emerald-400" : "text-indigo-950 dark:text-gray-100"}`}>{sc.name}</p>
+              <p className={`mt-3 text-sm font-black uppercase tracking-wider ${isWinner ? "text-emerald-600" : "text-foreground/60"}`}>{sc.name}</p>
             </div>
             );
           })}
@@ -2578,37 +2579,37 @@ function FinalVerdictVisual({
 
         {/* Best for scenarios — only render for multi-car comparisons */}
         {numCars >= 2 && verdict.bestForScenarios && verdict.bestForScenarios.length > 0 && (
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
             {verdict.bestForScenarios.map((s, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 dark:border-gray-600 bg-white dark:bg-[#1E1E30] px-3 py-1.5 text-xs"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-2 text-xs shadow-sm transition-all hover:border-primary/30"
               >
-                <span className="text-slate-500 dark:text-gray-400">{s.scenario}:</span>
-                <span className="font-bold text-indigo-700 dark:text-indigo-300">{s.winner}</span>
+                <span className="text-muted-foreground font-medium uppercase tracking-wider text-[10px]">{s.scenario}:</span>
+                <span className="font-black text-primary">{s.winner}</span>
               </span>
             ))}
           </div>
         )}
 
         {/* Final statement */}
-        <p className="mt-5 text-sm leading-relaxed text-slate-700 dark:text-gray-300 text-center">
+        <p className="mt-8 text-base leading-relaxed text-foreground/80 font-medium text-center max-w-2xl mx-auto">
           {verdict.finalStatement}
         </p>
 
         {/* Action buttons */}
-        <div className="mt-5 flex justify-center gap-3 no-print">
+        <div className="mt-10 flex justify-center gap-4 no-print">
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 dark:border-gray-600 px-4 py-2 text-xs font-semibold text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-[#1E1E30]"
+            className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-6 py-3 text-sm font-black uppercase tracking-widest text-foreground hover:bg-muted/30 transition-all active:scale-95"
           >
-            <Printer className="h-3.5 w-3.5" /> Print Report
+            <Printer className="h-4 w-4" /> Print
           </button>
           <button
             onClick={onShare}
-            className="inline-flex items-center gap-1.5 rounded-lg gradient-bg px-4 py-2 text-xs font-semibold text-white"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
           >
-            <Share2 className="h-3.5 w-3.5" /> Share
+            <Share2 className="h-4 w-4" /> Share
           </button>
         </div>
       </div>

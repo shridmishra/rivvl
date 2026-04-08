@@ -55,7 +55,7 @@ export default function PrivacyPage() {
             </p>
           </section>
 
-          <section className="pt-8 border-t border-zinc-200 dark:border-zinc-800">
+          <section className="pt-8 border-t border-border dark:border-zinc-800">
             <h2 className="text-xl font-bold text-black dark:text-white mb-4">Contact</h2>
             <p className="font-medium">
               For privacy-related questions, please contact us at{" "}

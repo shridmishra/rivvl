@@ -199,7 +199,7 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 2 — Our Pick Recommendation */}
-            <div className="rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
+            <div className="rounded-3xl border border-border bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
                 <Trophy className="h-4 w-4" /> Our Pick Recommendation
               </div>
@@ -218,7 +218,7 @@ export default function VehiclesPage() {
             </div>
 
             {/* Card 3 — AI Pros and Cons */}
-            <div className="rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
+            <div className="rounded-3xl border border-border bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground">
                 <Zap className="h-4 w-4" /> Pros and Cons
               </div>
@@ -355,28 +355,32 @@ export default function VehiclesPage() {
             {plans.map((plan) => {
               const isLoading = loadingRole === plan.role;
               return (
-                <div key={plan.name} className={`card-hover relative flex flex-col rounded-[2.5rem] border p-8 shadow-sm transition-all duration-300 ${plan.highlighted ? "border-zinc-400 bg-white/80 backdrop-blur-md scale-105 z-10 shadow-2xl dark:border-zinc-600 dark:bg-black/80" : "border-zinc-200 bg-white/40 backdrop-blur-sm hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-700"}`}>
+                <div key={plan.name} className={`card-hover relative flex flex-col rounded-[2.5rem] border p-8 shadow-sm transition-all duration-300 ${
+                  plan.highlighted 
+                    ? "border-primary/20 bg-primary/5 scale-105 z-10 shadow-2xl ring-1 ring-primary/20 dark:border-primary/30 dark:bg-primary/10" 
+                    : "border-border bg-white/40 backdrop-blur-sm hover:border-zinc-300 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-700"
+                }`}>
                   {plan.badge && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-5 py-2 text-[9px] font-black uppercase tracking-widest text-background shadow-xl">
                       {plan.badge}
                     </span>
                   )}
                   <div className={`flex items-center gap-1.5 ${plan.badge ? "mt-2" : ""}`}>
-                    <h3 className={`text-base font-bold ${plan.highlighted ? "text-background" : "text-foreground"}`}>{plan.name}</h3>
+                    <h3 className={`text-base font-bold ${plan.highlighted ? "text-primary" : "text-foreground"}`}>{plan.name}</h3>
                     {plan.savingsBadge && (
-                      <span className={`rounded-full px-2 py-0.5 text-[8px] font-black leading-tight uppercase tracking-widest shadow-sm ${plan.highlighted ? "bg-background text-foreground" : "bg-foreground text-background"}`}>{plan.savingsBadge}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[8px] font-black leading-tight uppercase tracking-widest shadow-sm ${plan.highlighted ? "bg-primary text-white" : "bg-foreground text-background"}`}>{plan.savingsBadge}</span>
                     )}
                   </div>
                   <div className="mt-3 flex items-baseline gap-2">
-                    <span className={`text-3xl font-extrabold ${plan.highlighted ? "text-background" : "text-foreground"}`}>{plan.price}</span>
-                    <span className={`text-sm font-bold ${plan.highlighted ? "text-background/60" : "text-muted-foreground"}`}>{plan.period}</span>
+                    <span className={`text-3xl font-extrabold ${plan.highlighted ? "text-primary" : "text-foreground"}`}>{plan.price}</span>
+                    <span className={`text-sm font-bold ${plan.highlighted ? "text-primary/60" : "text-muted-foreground"}`}>{plan.period}</span>
                   </div>
-                  <p className={`mt-2 text-xs font-medium ${plan.highlighted ? "text-background/60" : "text-muted-foreground"}`}>{plan.vehicles} &middot; {plan.sections}</p>
+                  <p className={`mt-2 text-xs font-medium ${plan.highlighted ? "text-primary/60 shadow-sm" : "text-muted-foreground"}`}>{plan.vehicles} &middot; {plan.sections}</p>
                   <ul className="mt-10 flex-1 space-y-4">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-3 text-sm font-bold">
-                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${plan.highlighted ? "text-background" : "text-foreground"}`} />
-                        <span className={plan.highlighted ? "text-background/80" : "text-foreground"}>{f}</span>
+                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${plan.highlighted ? "text-primary" : "text-foreground"}`} />
+                        <span className={plan.highlighted ? "text-foreground" : "text-foreground"}>{f}</span>
                       </li>
                     ))}
                   </ul>
@@ -387,7 +391,7 @@ export default function VehiclesPage() {
                       asChild 
                       className={`mt-6 w-full h-12 rounded-full font-bold transition-all ${
                         plan.highlighted 
-                          ? "bg-background text-foreground hover:bg-secondary" 
+                          ? "bg-primary text-white hover:bg-primary/90" 
                           : "border-border bg-secondary/50 text-foreground hover:bg-foreground hover:text-background"
                       }`}
                     >
@@ -400,7 +404,7 @@ export default function VehiclesPage() {
                       loadingText="Redirecting..."
                       disabled={loadingRole !== null && !isLoading}
                       className={`mt-6 w-full h-12 rounded-full font-bold shadow-xl transition-all ${
-                        plan.highlighted ? "bg-background text-foreground hover:bg-secondary" : "bg-foreground text-background hover:opacity-90"
+                        plan.highlighted ? "bg-primary text-white hover:bg-primary/90" : "bg-foreground text-background hover:opacity-90"
                       }`}
                     >
                       {plan.cta}

@@ -31,9 +31,9 @@ import {
   Star,
   ExternalLink,
   History,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { InfoTooltip } from "@/components/ui/Tooltip";
 import {
   ResponsiveContainer,
   BarChart,
@@ -45,6 +45,7 @@ import {
   Legend,
   Cell,
 } from "recharts";
+import { cn } from "@/lib/utils";
 
 /* ═══════════════════════════════════════════════════════════════════════ */
 /*                              TYPES                                    */
@@ -330,27 +331,6 @@ function scoreRingColor(score: number): string {
 
 type BadgeLevel = "red" | "yellow" | "green" | "gray";
 
-function badgeBorderColor(level: BadgeLevel): string {
-  switch (level) {
-    case "red": return "border-l-red-500";
-    case "yellow": return "border-l-amber-500";
-    case "green": return "border-l-emerald-500";
-    case "gray": return "border-l-gray-400";
-  }
-}
-
-function badgeClasses(level: BadgeLevel): string {
-  switch (level) {
-    case "red":
-      return "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    case "yellow":
-      return "bg-amber-50 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
-    case "green":
-      return "bg-emerald-50 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300";
-    case "gray":
-      return "bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
-  }
-}
 
 interface RiskItem {
   label: string;
@@ -455,18 +435,18 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
     <div className="flex flex-col items-center">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#e5e7eb" strokeWidth={strokeWidth} />
+          <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="currentColor" strokeOpacity={0.1} strokeWidth={strokeWidth} />
           <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} className="transition-all duration-700 ease-out" />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="flex items-center gap-1">
             {isWinner && <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />}
-            <span className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>{score}</span>
+            <span className="text-3xl font-black tracking-tighter text-foreground">{score}</span>
           </div>
-          <span className="text-[9px] text-slate-400">/10</span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Score</span>
         </div>
       </div>
-      {label && <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-gray-400 text-center">{label}</p>}
+      {label && <p className="mt-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] text-center">{label}</p>}
     </div>
   );
 }
@@ -798,11 +778,12 @@ const params = useParams();
   const visibleTocItems = tocItems.filter(t => t.show);
 
   return (
-    <div className="flex flex-row gap-8 max-w-screen-xl mx-auto px-4 py-10 sm:py-14">
+    <div className="min-h-screen bg-mesh-gradient">
+    <div className="flex flex-row gap-8 max-w-screen-xl mx-auto px-4 py-10 sm:py-16">
       {/* ═══ SIDEBAR TABLE OF CONTENTS ═══ */}
-      <nav className="hidden lg:block w-56 flex-shrink-0">
-        <div className="sticky top-8 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#6C5CE7] mb-3">In This Report</p>
+      <nav className="hidden lg:block w-64 flex-shrink-0">
+        <div className="sticky top-24 glass-morphism rounded-3xl p-6 shadow-xl border border-border">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400 mb-6 px-2">Analysis Index</p>
           <ul className="space-y-0.5">
             {visibleTocItems.map((item) => {
               const isActive = activeSection === item.id;
@@ -817,19 +798,19 @@ const params = useParams();
                       const el = document.getElementById(item.id);
                       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
                     }}
-                    className={`block rounded-md py-1.5 text-xs transition-all flex items-center gap-1.5 ${
-                      item.nested ? "pl-5 pr-2.5" : "px-2.5"
+                    className={`block rounded-xl py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-3 transition-all duration-300 ${
+                      item.nested ? "pl-6 pr-2.5" : "px-3"
                     } ${
                       isLocked
-                        ? "text-gray-400 dark:text-gray-600 cursor-default"
+                        ? "text-muted-foreground/30 cursor-default"
                         : isActive
-                          ? "bg-purple-50 dark:bg-[#6C5CE7]/10 font-semibold text-[#6C5CE7] rounded-lg"
-                          : "text-slate-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#15152A] hover:text-[#6C5CE7]"
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                          : "text-muted-foreground hover:bg-muted/50 hover:text-primary"
                     }`}
                   >
-                    {item.nested && <span className="text-gray-300 dark:text-gray-600 text-[8px]">&#9679;</span>}
-                    {isLocked && <Lock className="h-3 w-3 flex-shrink-0 text-gray-400 dark:text-gray-600" />}
-                    <span className={item.nested ? "text-[11px]" : ""}>{item.label}</span>
+                    {item.nested && <span className="h-1 w-1 rounded-full bg-current opacity-30" />}
+                    {isLocked && <Lock className="h-3 w-3 flex-shrink-0 opacity-40" />}
+                    <span>{item.label}</span>
                   </a>
                 </li>
               );
@@ -841,8 +822,8 @@ const params = useParams();
       {/* ═══ MAIN REPORT CONTENT ═══ */}
       <div className="flex-1 min-w-0">
       {/* Top bar */}
-      <div className="flex items-center justify-between mb-6">
-        <Link href="/compare/homes" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-[#00D2FF] dark:text-gray-400">
+      <div className="flex items-center justify-between mb-8">
+        <Link href="/compare/homes" className="inline-flex items-center gap-1.5 text-sm font-black uppercase tracking-widest text-muted-foreground transition-all hover:text-primary dark:text-gray-400 hover:scale-[1.02] active:scale-[0.98]">
           <ArrowLeft className="h-4 w-4" />
           New Comparison
         </Link>
@@ -851,8 +832,7 @@ const params = useParams();
             onClick={handleDownloadPdf}
             loading={pdfLoading}
             loadingText="Generating..."
-            variant="outline"
-            className="inline-flex items-center gap-2 rounded-xl border border-[#00D2FF]/30 bg-white dark:bg-[#1A1A2E] px-4 py-2 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10"
+            className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20"
           >
             {!pdfLoading && <Download className="h-4 w-4" />}
             Download PDF
@@ -861,64 +841,86 @@ const params = useParams();
       </div>
 
       {/* ─── SECTION 1: REPORT HEADER + EXECUTIVE SUMMARY ─── */}
-      <div id="executive-summary" data-toc-section className="scroll-mt-20 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h1 className="text-2xl font-bold text-indigo-950 dark:text-gray-100 sm:text-3xl">
-          <span className="bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] bg-clip-text text-transparent">Real Estate Comparison Report</span>
-        </h1>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {properties.map((p, i) => (
-            <span key={i} className="inline-flex items-center gap-1.5 rounded-full border border-[#00D2FF]/30 bg-[#00D2FF]/5 px-3 py-1 text-xs font-medium text-[#00D2FF]">
-              <Home className="h-3 w-3" />
-              {p.address}
-            </span>
-          ))}
-        </div>
-        <p className="mt-2 text-xs text-slate-400 dark:text-gray-500">
-          Generated on {new Date(report.generatedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-        </p>
-        {isPaid && report.property1Summary && report.property2Summary ? (
-          <div className="mt-4 grid gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border-l-[3px] border-l-[#6C5CE7] bg-[#f3f0ff] dark:bg-[#6C5CE7]/10 p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Home className="h-4 w-4 text-[#6C5CE7]" />
-                <h4 className="text-sm font-bold text-[#6C5CE7]">{properties[0]?.address}</h4>
+      <div id="executive-summary" data-toc-section className="scroll-mt-24 glass-morphism rounded-3xl border border-border p-10 shadow-xl overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
+        
+        <div className="relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+                <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Comprehensive Analysis</span>
               </div>
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.property1Summary}</p>
+              <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
+                Real Estate <span className="text-primary italic">Intelligence</span>
+              </h1>
+              <p className="text-xs text-muted-foreground font-medium opacity-60 uppercase tracking-widest">
+                Generated Signature • {new Date(report.generatedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+              </p>
             </div>
-            <div className="rounded-lg border-l-[3px] border-l-[#00D2FF] bg-[#e8fbff] dark:bg-[#00D2FF]/10 p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Home className="h-4 w-4 text-[#00D2FF]" />
-                <h4 className="text-sm font-bold text-[#00D2FF]">{properties[1]?.address}</h4>
-              </div>
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.property2Summary}</p>
-            </div>
-          </div>
-        ) : (
-          <div className="mt-4 rounded-lg bg-gradient-to-r from-[#6C5CE7]/5 to-[#00D2FF]/5 p-4">
-            {isPaid ? (
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.summary}</p>
-            ) : (
-              <div className="relative">
-                <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
-                  {report.summary.split(/(?<=[.!?])\s+/).slice(0, 1).join(" ")}...
-                </p>
-                <div className="mt-3 flex flex-col items-start gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1 text-[11px] text-gray-500 dark:text-gray-400">
-                    🔒 Full analysis unlocked in paid report
-                  </span>
-                  <Button
-                    onClick={handleUpgradeCheckout}
-                    loading={upgradeLoading}
-                    loadingText="Redirecting..."
-                    className="inline-flex items-center gap-1.5 rounded-lg gradient-bg px-5 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90"
-                  >
-                    {!upgradeLoading && `Get Full Report: ${upgradePrice} →`}
-                  </Button>
+            
+            <div className="flex flex-wrap gap-2 max-w-md">
+              {properties.map((p, i) => (
+                <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 dark:bg-background/40 border border-border shadow-sm backdrop-blur-sm">
+                  <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground truncate max-w-[120px]">{p.address}</span>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
-        )}
+
+          <div className="h-px w-full bg-gradient-to-r from-border/50 via-border to-border/50 mb-10" />
+
+          {isPaid && report.property1Summary && report.property2Summary ? (
+            <div className="grid gap-8 lg:grid-cols-2">
+              <div className="group relative overflow-hidden rounded-3xl border border-border bg-white/40 dark:bg-background/20 p-8 transition-all hover:bg-white/60">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-1 w-10 rounded-full bg-[#6C5CE7]" />
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6C5CE7]">Property Alpha</h4>
+                </div>
+                <p className="text-sm leading-relaxed text-foreground/80 font-medium italic">&quot;{report.property1Summary}&quot;</p>
+              </div>
+              <div className="group relative overflow-hidden rounded-3xl border border-border bg-white/40 dark:bg-background/20 p-8 transition-all hover:bg-white/60">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-1 w-10 rounded-full bg-[#00D2FF]" />
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00D2FF]">Property Beta</h4>
+                </div>
+                <p className="text-sm leading-relaxed text-foreground/80 font-medium italic">&quot;{report.property2Summary}&quot;</p>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-3xl bg-primary/5 p-10 border border-primary/10">
+              {isPaid ? (
+                <p className="text-sm leading-relaxed text-foreground dark:text-gray-300 italic font-medium text-center max-w-3xl mx-auto">&quot;{report.summary}&quot;</p>
+              ) : (
+                <div className="flex flex-col items-center text-center max-w-2xl mx-auto py-4">
+                  <p className="text-sm leading-relaxed text-muted-foreground mb-8">
+                    {report.summary.split(/(?<=[.!?])\s+/).slice(0, 1).join(" ")}...
+                  </p>
+                  <div className="flex flex-col items-center gap-8">
+                    <div className="flex -space-x-4">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="h-12 w-12 rounded-full bg-muted border-4 border-background flex items-center justify-center text-muted-foreground shadow-sm">
+                          <Lock className="h-5 w-5" />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="space-y-6">
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Unlock Full Investment Intelligence</p>
+                      <Button
+                        onClick={handleUpgradeCheckout}
+                        loading={upgradeLoading}
+                        className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/30 hover:shadow-primary/40 transition-all hover:-translate-y-1 active:translate-y-0"
+                      >
+                        {upgradeLoading ? "Preparing Intelligence..." : `Upgrade Now: ${upgradePrice}`}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ─── SECTION 2: SCORE DASHBOARD (Stacked: Bar Chart on top, Ring Grid below) ─── */}
@@ -1042,62 +1044,75 @@ const params = useParams();
       {/* ─── RED FLAGS IN THIS LISTING (Sprint 1, Feature 5) ─── */}
       {report.redFlags && report.redFlags.length > 0 ? (
         isPaid ? (
-          <section id="red-flags" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-              <AlertTriangle className="h-5 w-5 text-white" />
-              Red Flags in This Listing
-            </h2>
-            <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-              {report.redFlags.map((rf, ri) => (
-                <div key={ri} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ri] }} />
-                    <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[ri]?.address ?? `Property ${ri + 1}`}</h3>
+          <section id="red-flags" data-toc-section className="mt-12 scroll-mt-24">
+            <div className="glass-morphism rounded-3xl border border-red-500/30 shadow-xl overflow-hidden">
+              <div className="bg-gradient-to-r from-red-500/10 to-transparent px-8 py-6 border-b border-red-500/20">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-600/20">
+                    <AlertTriangle className="h-5 w-5" />
                   </div>
-                  {rf.noFlagsDetected ? (
-                    <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/10 px-3 py-3">
-                      <Check className="h-4 w-4 text-emerald-500" />
-                      <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">No major red flags detected</span>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {rf.rulesFlags.map((flag, fi) => (
-                        <div key={`rule-${fi}`} className={`rounded-lg border-l-4 ${flag.severity === "red" ? "border-l-red-500 bg-red-50 dark:bg-red-900/10" : "border-l-amber-500 bg-amber-50 dark:bg-amber-900/10"} px-3 py-2.5`}>
-                          <p className={`text-xs leading-relaxed ${flag.severity === "red" ? "text-red-800 dark:text-red-300" : "text-amber-800 dark:text-amber-300"}`}>{flag.text}</p>
-                        </div>
-                      ))}
-                      {rf.aiRedFlags.map((flag, fi) => (
-                        <div key={`ai-${fi}`} className="rounded-lg border-l-4 border-l-amber-500 bg-amber-50 dark:bg-amber-900/10 px-3 py-2.5">
-                          <p className="text-xs leading-relaxed text-amber-800 dark:text-amber-300">{flag}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <h2 className="text-xl font-black uppercase tracking-widest text-red-600">Red Flags Matrix</h2>
                 </div>
-              ))}
+              </div>
+              <div className="p-8">
+                <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                  {report.redFlags.map((rf, ri) => (
+                    <div key={ri} className="space-y-4">
+                      <div className="flex items-center gap-2 border-b border-border/50 pb-3">
+                        <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ri] }} />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-foreground truncate">{shortAddr(properties[ri]?.address ?? `Prop ${ri + 1}`)}</span>
+                      </div>
+                      {rf.noFlagsDetected ? (
+                        <div className="flex items-center gap-2 rounded-xl bg-emerald-50/5 dark:bg-emerald-500/5 border border-emerald-500/20 px-4 py-3">
+                          <Check className="h-4 w-4 text-emerald-500" />
+                          <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600">Secure: No major flags</span>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {rf.rulesFlags.map((flag, fi) => (
+                            <div key={`rule-${fi}`} className={`group relative rounded-xl border-l-4 p-4 transition-all hover:translate-x-1 ${flag.severity === "red" ? "border-l-red-500 bg-red-50/50 dark:bg-red-900/20" : "border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/20"}`}>
+                              <p className={`text-xs font-black leading-relaxed ${flag.severity === "red" ? "text-red-700 dark:text-red-400" : "text-amber-700 dark:text-amber-400"}`}>{flag.text}</p>
+                            </div>
+                          ))}
+                          {rf.aiRedFlags.map((flag, fi) => (
+                            <div key={`ai-${fi}`} className="group relative rounded-xl border-l-4 border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/20 p-4 transition-all hover:translate-x-1">
+                              <p className="text-xs font-black leading-relaxed text-amber-700 dark:text-amber-400">{flag}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
         ) : (
-          <section id="red-flags" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-              <AlertTriangle className="h-5 w-5 text-white" />
-              Red Flags in This Listing
-            </h2>
-            <div className="mt-4 relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-              <div className="blur-sm select-none pointer-events-none p-5 space-y-3">
-                {[1, 2, 3].map(n => (
-                  <div key={n} className="rounded-lg border-l-4 border-l-amber-400 bg-amber-50 dark:bg-amber-900/10 px-3 py-2.5">
-                    <p className="text-xs text-amber-300">This is a placeholder for a red flag finding that requires the full report to view.</p>
-                  </div>
-                ))}
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-[#1A1A2E]/60 gap-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-[#6C5CE7]">
-                  <Lock className="h-4 w-4" />
-                  Unlock red flag analysis for these properties
+          <section id="red-flags" data-toc-section className="mt-12 scroll-mt-24">
+            <div className="glass-morphism rounded-3xl border border-border/50 shadow-xl overflow-hidden relative">
+              <div className="bg-muted px-8 py-6 border-b border-border/50 opacity-40">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="h-5 w-5" />
+                  <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Red Flags Matrix</h2>
                 </div>
-                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
-                  {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice}`}
+              </div>
+              <div className="p-8 blur-[8px] pointer-events-none select-none">
+                <div className="grid gap-6 lg:grid-cols-2">
+                  {[1, 2].map(n => (
+                    <div key={n} className="rounded-xl border-l-4 border-l-amber-400 bg-amber-50 px-4 py-3">
+                      <p className="text-xs text-amber-300">Placeholder for flag analytics</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 dark:bg-background/60 backdrop-blur-sm transition-all group-hover:bg-white/30">
+                <div className="mb-4 rounded-2xl bg-white p-4 shadow-2xl dark:bg-zinc-900 border border-border">
+                  <Lock className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-lg font-black text-foreground mb-1">Unlock Threat Assessment</h3>
+                <p className="text-xs text-muted-foreground mb-6">Identify potential dealbreakers before they surface in escrow.</p>
+                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="h-12 px-8 rounded-2xl bg-primary text-primary-foreground font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                  {upgradeLoading ? "Preparing..." : `Unlock Analysis: ${upgradePrice}`}
                 </button>
               </div>
             </div>
@@ -1106,47 +1121,55 @@ const params = useParams();
       ) : null}
 
       {/* ─── SECTION 3: KEY FACTS TABLE ─── */}
-      <section id="key-facts" data-toc-section className="mt-8 scroll-mt-20">
-        <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">Key Facts Comparison</h2>
-        <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-[#6C5CE7]">
-                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Feature</th>
-                {properties.map((p, i) => (
-                  <th key={i} className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
-                    <div className="flex items-center justify-center gap-1.5">
-                      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                      {shortAddr(p.address)}
-                    </div>
-                  </th>
-                ))}
-                <th className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Winner</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(() => {
-                const allRows = buildComparisonRows(properties, listings, isPaid);
-                const FREE_ROW_LABELS = ["Price", "Bedrooms", "Bathrooms", "Square Feet"];
-                return allRows.map((row, ri) => {
-                  const isFreeVisible = isPaid || FREE_ROW_LABELS.includes(row.label);
-                  return (
-                    <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                      <td className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-gray-400">
-                        {!isFreeVisible && <Lock className="inline h-3 w-3 mr-1 text-slate-400" />}
-                        {row.label}
-                      </td>
-                      {row.values.map((val, vi) => {
-                        const isHoaWarning = row.label === "HOA Fee" && val.includes("Not listed");
-                        return (
-                          <td key={vi} className={`px-4 py-2.5 text-center text-xs font-medium ${!isFreeVisible ? "text-slate-300 dark:text-gray-600 select-none blur-sm" : isHoaWarning ? "text-amber-600 dark:text-amber-400" : row.bestIndex === vi ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400 font-bold" : "text-slate-700 dark:text-gray-300"}`}>
-                            {val}
-                          </td>
-                        );
-                      })}
-                      <td className="px-4 py-2.5 text-center">
-                        {!isFreeVisible ? (
-                          <Lock className="mx-auto h-3 w-3 text-slate-300" />
+      <section id="key-facts" data-toc-section className="mt-12 scroll-mt-24">
+        <div className="glass-morphism rounded-3xl border border-border shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-primary/10 to-transparent px-8 py-6 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Specifications Matrix</h2>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-muted/50">
+                  <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border/50">Vector</th>
+                  {properties.map((p, i) => (
+                    <th key={i} className="px-4 py-4 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border/50">
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                        {shortAddr(p.address)}
+                      </div>
+                    </th>
+                  ))}
+                  <th className="px-4 py-4 text-center text-[10px] font-black uppercase tracking-widest text-primary border-b border-border/50">Alpha</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/30">
+                {(() => {
+                  const allRows = buildComparisonRows(properties, listings, isPaid);
+                  const FREE_ROW_LABELS = ["Price", "Bedrooms", "Bathrooms", "Square Feet"];
+                  return allRows.map((row, ri) => {
+                    const isFreeVisible = isPaid || FREE_ROW_LABELS.includes(row.label);
+                    return (
+                      <tr key={ri} className="group transition-colors hover:bg-primary/5">
+                        <td className="px-6 py-4 text-[11px] font-black uppercase tracking-wider text-muted-foreground">
+                          {!isFreeVisible && <Lock className="inline h-3 w-3 mr-2 opacity-40 text-primary" />}
+                          {row.label}
+                        </td>
+                        {row.values.map((val, vi) => {
+                          const isHoaWarning = row.label === "HOA Fee" && val.includes("Not listed");
+                          return (
+                            <td key={vi} className={`px-4 py-4 text-center text-xs font-medium ${!isFreeVisible ? "text-muted-foreground/20 select-none blur-[4px]" : isHoaWarning ? "text-amber-500" : row.bestIndex === vi ? "bg-primary/5 text-primary font-black" : "text-foreground"}`}>
+                              {val}
+                            </td>
+                          );
+                        })}
+                        <td className="px-4 py-4 text-center">
+                          {!isFreeVisible ? (
+                            <Lock className="mx-auto h-3.5 w-3.5 text-primary opacity-20" />
                         ) : row.bestIndex !== null ? (
                           <Check className="mx-auto h-3.5 w-3.5 text-emerald-500" />
                         ) : (
@@ -1168,143 +1191,171 @@ const params = useParams();
             </button>
           </div>
         )}
+        </div>
       </section>
 
       {/* ─── SECTION 4: PROS AND CONS ─── */}
-      <section id="pros-cons" data-toc-section className="mt-8 scroll-mt-20">
-        <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">Pros and Cons</h2>
-        <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
-          <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Overall Comparison at a Glance</h3>
-          <ResponsiveContainer width="100%" height={Math.max(120, properties.length * 50)}>
-            <BarChart data={properties.map((p, i) => ({ name: shortAddr(p.address), score: p.overallScore, fill: PROPERTY_COLORS[i] }))} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
-              <XAxis type="number" domain={[0, 10]} tick={{ fontSize: 11 }} />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: "#64748B" }} width={120} />
-              <Tooltip formatter={(value) => `${Number(value)}/10`} />
-              <Bar dataKey="score" name="Overall Score" barSize={24} radius={[0, 4, 4, 0]} label={{ position: "right", fontSize: 11, fill: "#64748B", formatter: (v: unknown) => `${v}/10` }}>
-                {properties.map((_, i) => (
-                  <Cell key={i} fill={PROPERTY_COLORS[i]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+      <section id="pros-cons" data-toc-section className="mt-12 scroll-mt-24">
+        <div className="glass-morphism rounded-3xl border border-border shadow-xl overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-violet-500/10 to-transparent px-8 py-6 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white shadow-lg shadow-violet-600/20">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Competitive Advantage</h2>
+            </div>
+          </div>
+          <div className="p-8">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">Aggregate Sentiment Analysis</h3>
+            <div className="h-[200px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={properties.map((p, i) => ({ name: shortAddr(p.address), score: p.overallScore, fill: PROPERTY_COLORS[i] }))} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.05} horizontal={false} />
+                  <XAxis type="number" domain={[0, 10]} hide />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fontWeight: 900, fill: "currentColor", opacity: 0.6 }} width={100} />
+                  <Tooltip 
+                    cursor={{ fill: 'currentColor', opacity: 0.05 }}
+                    contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--border)', fontSize: '11px', fontWeight: 900 }}
+                  />
+                  <Bar dataKey="score" name="Overall Intelligence" barSize={16} radius={[0, 4, 4, 0]}>
+                    {properties.map((_, i) => (
+                      <Cell key={i} fill={PROPERTY_COLORS[i]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
-        <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+
+        <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
           {properties.map((p, i) => {
             const visiblePros = isPaid ? p.pros : p.pros.slice(0, 1);
             const hiddenPros = isPaid ? [] : p.pros.slice(1);
             const visibleCons = isPaid ? p.cons : p.cons.slice(0, 1);
             const hiddenCons = isPaid ? [] : p.cons.slice(1);
-            const minBlurredPros = isPaid ? 0 : Math.max(0, 3 - hiddenPros.length);
-            const minBlurredCons = isPaid ? 0 : Math.max(0, 2 - hiddenCons.length);
             return (
-              <div key={i} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                  <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{p.address}</h3>
+              <div key={i} className="glass-morphism rounded-3xl border border-border bg-white/30 dark:bg-background/20 p-8 transition-all hover:bg-white/50 backdrop-blur-sm">
+                <div className="flex items-center gap-2 mb-6 border-b border-border/50 pb-4">
+                  <div className="h-2 w-2 rounded-full shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                  <h3 className="text-[11px] font-black uppercase tracking-widest text-foreground truncate" title={p.address}>{shortAddr(p.address)}</h3>
                 </div>
-                <div className="space-y-2">
-                  {visiblePros.map((pro, pi) => (
-                    <div key={`pro-${pi}`} className="flex items-start gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/10 px-3 py-2">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />
-                      <span className="text-xs text-slate-700 dark:text-gray-300">{pro}</span>
+                
+                <div className="space-y-6">
+                  {/* Pros */}
+                  <div className="space-y-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500">Catalysts</p>
+                    <div className="space-y-2">
+                      {visiblePros.map((pro, pi) => (
+                        <div key={pi} className="flex items-start gap-2 group">
+                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                            <Check className="h-2 w-2" />
+                          </div>
+                          <span className="text-xs font-medium text-foreground/80 leading-relaxed">{pro}</span>
+                        </div>
+                      ))}
+                      {!isPaid && hiddenPros.length > 0 && (
+                        <div className="flex items-start gap-2 opacity-30 select-none blur-[2px]">
+                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-slate-200">
+                            <Lock className="h-2 w-2" />
+                          </div>
+                          <span className="text-xs font-medium">Additional insight secured</span>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                  {hiddenPros.map((_, pi) => (
-                    <div key={`hpro-${pi}`} className="flex items-start gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2 select-none">
-                      <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
-                      <span className="text-xs text-gray-300 dark:text-gray-600 blur-sm">Upgrade to unlock this insight</span>
+                  </div>
+
+                  {/* Cons */}
+                  <div className="space-y-3">
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-red-500">Liabilities</p>
+                    <div className="space-y-2">
+                      {visibleCons.map((con, ci) => (
+                        <div key={ci} className="flex items-start gap-2 group">
+                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-red-500/10 text-red-500 transition-colors group-hover:bg-red-500 group-hover:text-white">
+                            <X className="h-2 w-2" />
+                          </div>
+                          <span className="text-xs font-medium text-foreground/80 leading-relaxed">{con}</span>
+                        </div>
+                      ))}
+                      {!isPaid && hiddenCons.length > 0 && (
+                        <div className="flex items-start gap-2 opacity-30 select-none blur-[2px]">
+                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-slate-200">
+                            <Lock className="h-2 w-2" />
+                          </div>
+                          <span className="text-xs font-medium">Risk factor analysis locked</span>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                  {Array.from({ length: minBlurredPros }).map((_, pi) => (
-                    <div key={`pad-pro-${pi}`} className="flex items-start gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2 select-none">
-                      <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
-                      <span className="text-xs text-gray-300 dark:text-gray-600 blur-sm">Upgrade to unlock this insight</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 space-y-2">
-                  {visibleCons.map((con, ci) => (
-                    <div key={`con-${ci}`} className="flex items-start gap-2 rounded-lg bg-red-50 dark:bg-red-900/10 px-3 py-2">
-                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
-                      <span className="text-xs text-slate-700 dark:text-gray-300">{con}</span>
-                    </div>
-                  ))}
-                  {hiddenCons.map((_, ci) => (
-                    <div key={`hcon-${ci}`} className="flex items-start gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2 select-none">
-                      <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
-                      <span className="text-xs text-gray-300 dark:text-gray-600 blur-sm">Upgrade to unlock this insight</span>
-                    </div>
-                  ))}
-                  {Array.from({ length: minBlurredCons }).map((_, ci) => (
-                    <div key={`pad-con-${ci}`} className="flex items-start gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2 select-none">
-                      <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400" />
-                      <span className="text-xs text-gray-300 dark:text-gray-600 blur-sm">Upgrade to unlock this insight</span>
-                    </div>
-                  ))}
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
-        {!isPaid && (
-          <div className="mt-4 flex flex-col items-center gap-2 py-3">
-            <span className="text-xs text-gray-500 dark:text-gray-400">🔒 Full pros and cons analysis unlocked</span>
-            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
-              {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
-            </button>
-          </div>
-        )}
       </section>
 
       {/* ─── SECTION 5: RISK REPORT (always visible — rivvl differentiator) ─── */}
-      <section className="mt-8">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-          <Shield className="h-5 w-5 text-white" />
-          Property Risk Report
-        </h2>
-        <div className="mb-4 rounded-lg border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-          <p className="text-xs text-slate-600 dark:text-gray-400">
-            This information is rarely disclosed by sellers or agents. rivvl surfaces it automatically so you can make a fully informed decision.
-          </p>
-        </div>
-        {isPaid && (
-          <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
-            <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Risk Profile Comparison</h3>
-            <p className="text-[10px] text-slate-400 mb-3">Higher score = lower risk. Unknown data shown as N/A.</p>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={(() => {
-                const riskCats = ["Flood", "Superfund", "Earthquake", "Wildfire", "Air Quality", "Radon"];
-                return riskCats.map(cat => {
-                  const row: Record<string, unknown> = { category: cat };
-                  properties.forEach((p, pi) => {
-                    if (!p.riskProfile) { row[`p${pi}`] = 0; return; }
-                    const r = p.riskProfile;
-                    let score = 5;
-                    if (cat === "Flood") score = r.floodZone.isSFHA ? 2 : r.floodZone.riskLevel === "Low" ? 9 : 5;
-                    else if (cat === "Superfund") score = r.superfundSites.count1mile > 0 ? 2 : r.superfundSites.count3mile > 0 ? 5 : 9;
-                    else if (cat === "Earthquake") score = r.earthquakeRisk.riskLevel === "High" ? 2 : r.earthquakeRisk.riskLevel === "Moderate" ? 5 : 9;
-                    else if (cat === "Wildfire") score = r.wildfireRisk.riskLevel === "High" || r.wildfireRisk.riskLevel === "Very High" ? 2 : r.wildfireRisk.riskLevel === "Moderate" ? 5 : 9;
-                    else if (cat === "Air Quality") { const aq = r.airQuality.score; score = aq === null ? 0 : aq < 50 ? 2 : aq <= 70 ? 5 : 9; }
-                    else if (cat === "Radon") score = r.radonZone.zone === 1 ? 2 : r.radonZone.zone === 2 ? 5 : r.radonZone.zone === 3 ? 9 : 0;
-                    row[`p${pi}`] = score;
-                  });
-                  return row;
-                });
-              })()} layout="vertical" barCategoryGap="20%">
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
-                <XAxis type="number" domain={[0, 10]} tick={{ fontSize: 10 }} />
-                <YAxis dataKey="category" type="category" tick={{ fontSize: 11, fill: "#64748B" }} width={90} />
-                <Tooltip formatter={(value) => `${Number(value)}/10`} />
-                {properties.map((_, i) => (
-                  <Bar key={i} dataKey={`p${i}`} name={shortAddr(properties[i].address)} fill={PROPERTY_COLORS[i]} barSize={16} radius={[0, 3, 3, 0]} />
-                ))}
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </BarChart>
-            </ResponsiveContainer>
+      <section id="risk-report" data-toc-section className="mt-12 scroll-mt-24">
+        <div className="glass-morphism rounded-3xl border border-border shadow-xl overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-orange-500/10 to-transparent px-8 py-6 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-600 text-white shadow-lg shadow-orange-600/20">
+                <Shield className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Risk Exposure</h2>
+            </div>
           </div>
-        )}
-        <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+          <div className="p-8">
+            <div className="mb-8 p-4 rounded-2xl bg-orange-500/5 border border-orange-500/10 flex items-start gap-4">
+              <div className="mt-0.5 h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
+              <p className="text-[11px] font-black uppercase tracking-wide text-orange-600/80 leading-relaxed">
+                Critical Transparency: rivvl surfaces environmental and safety risks often omitted in standard listings.
+              </p>
+            </div>
+            
+            {isPaid && (
+              <div className="space-y-6">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Cross-Property Threat Comparison</h3>
+                <div className="h-[250px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={(() => {
+                      const riskCats = ["Flood", "Superfund", "Earthquake", "Wildfire", "Air", "Radon"];
+                      return riskCats.map(cat => {
+                        const row: Record<string, unknown> = { category: cat };
+                        properties.forEach((p, pi) => {
+                          if (!p.riskProfile) { row[`p${pi}`] = 0; return; }
+                          const r = p.riskProfile;
+                          let score = 5;
+                          if (cat === "Flood") score = r.floodZone.isSFHA ? 2 : r.floodZone.riskLevel === "Low" ? 9 : 5;
+                          else if (cat === "Superfund") score = r.superfundSites.count1mile > 0 ? 2 : r.superfundSites.count3mile > 0 ? 5 : 9;
+                          else if (cat === "Earthquake") score = r.earthquakeRisk.riskLevel === "High" ? 2 : r.earthquakeRisk.riskLevel === "Moderate" ? 5 : 9;
+                          else if (cat === "Wildfire") score = r.wildfireRisk.riskLevel === "High" || r.wildfireRisk.riskLevel === "Very High" ? 2 : r.wildfireRisk.riskLevel === "Moderate" ? 5 : 9;
+                          else if (cat === "Air") { const aq = r.airQuality.score; score = aq === null ? 0 : aq < 50 ? 2 : aq <= 70 ? 5 : 9; }
+                          else if (cat === "Radon") score = r.radonZone.zone === 1 ? 2 : r.radonZone.zone === 2 ? 5 : r.radonZone.zone === 3 ? 9 : 0;
+                          row[`p${pi}`] = score;
+                        });
+                        return row;
+                      });
+                    })()} layout="vertical" barCategoryGap="20%">
+                      <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.05} horizontal={false} />
+                      <XAxis type="number" domain={[0, 10]} hide />
+                      <YAxis dataKey="category" type="category" tick={{ fontSize: 9, fontWeight: 900, fill: "currentColor", opacity: 0.6 }} width={70} />
+                      <Tooltip 
+                        cursor={{ fill: 'currentColor', opacity: 0.05 }}
+                        contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--border)', fontSize: '11px', fontWeight: 900 }}
+                      />
+                      {properties.map((_, i) => (
+                        <Bar key={i} dataKey={`p${i}`} name={shortAddr(properties[i].address)} fill={PROPERTY_COLORS[i]} barSize={12} radius={[0, 4, 4, 0]} />
+                      ))}
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
           {properties.map((p, i) => {
             const yearBuilt = listings[i]?.yearBuilt ?? null;
             const riskItems = getRiskItems(p.riskProfile, yearBuilt);
@@ -1313,42 +1364,48 @@ const params = useParams();
             const hiddenItems = isPaid ? [] : riskItems.filter(item => !FREE_RISK_LABELS.includes(item.label));
 
             return (
-              <div key={i} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
+              <div key={i} className="glass-morphism rounded-3xl border border-border bg-white/30 dark:bg-background/20 p-8 transition-all hover:bg-white/50 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-8 border-b border-border/50 pb-4">
                   <div className="flex items-center gap-2">
-                    <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                    <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{p.address}</h3>
+                    <div className="h-2 w-2 rounded-full shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                    <h3 className="text-[11px] font-black uppercase tracking-widest text-foreground truncate max-w-[140px]" title={p.address}>{shortAddr(p.address)}</h3>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-slate-500">Risk Score</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground">Threat Score</span>
                     {p.riskScore !== null ? (
-                      <span className={`text-sm font-bold ${scoreColor(p.riskScore)}`}>{p.riskScore}/10</span>
+                      <span className={`text-sm font-black ${scoreColor(p.riskScore)}`}>{p.riskScore}/10</span>
                     ) : (
-                      <span className="text-sm font-bold text-gray-400 inline-flex items-center">N/A<InfoTooltip text="Risk score requires at least one environmental data point. Some properties in densely urban areas have limited government risk data available." /></span>
+                      <span className="text-sm font-black text-muted-foreground/40">N/A</span>
                     )}
                   </div>
                 </div>
-                <div className="space-y-2">
+
+                <div className="grid gap-3">
                   {visibleItems.map((item, ri) => (
-                    <div key={ri} className={`rounded-lg border-l-4 ${badgeBorderColor(item.level)} ${badgeClasses(item.level)} px-3 py-2.5`}>
-                      <div className="flex items-center gap-2">
-                        {item.icon}
-                        <span className="text-xs font-bold">{item.label}</span>
-                        <span className="ml-auto text-xs font-medium">{item.value}</span>
-                        {item.tooltip && <InfoTooltip text={item.tooltip} />}
+                    <div key={ri} className={`group relative rounded-2xl border-l-4 p-4 transition-all hover:translate-x-1 ${item.level === 'red' ? 'border-l-red-500 bg-red-50/50 dark:bg-red-900/20' : item.level === 'yellow' ? 'border-l-orange-500 bg-orange-50/50 dark:bg-orange-900/20' : 'border-l-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-3">
+                          <div className={cn("text-muted-foreground transition-colors group-hover:text-foreground", item.level === 'red' ? 'text-red-500' : item.level === 'yellow' ? 'text-orange-500' : 'text-emerald-500')}>
+                            {item.icon}
+                          </div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-foreground">{item.label}</span>
+                        </div>
+                        <span className="text-[10px] font-black text-foreground/60">{item.value}</span>
                       </div>
-                      <p className="mt-1 text-[10px] leading-relaxed opacity-80">{item.explanation}</p>
+                      <p className="text-[10px] leading-relaxed text-muted-foreground font-medium italic">&quot;{item.explanation}&quot;</p>
                     </div>
                   ))}
                   {hiddenItems.map((item, ri) => (
-                    <div key={`hidden-${ri}`} className="relative rounded-lg border-l-4 border-l-gray-300 bg-gray-100 dark:bg-gray-800 px-3 py-2.5 select-none">
-                      <div className="blur-sm flex items-center gap-2">
-                        {item.icon}
-                        <span className="text-xs font-bold text-gray-400">{item.label}</span>
-                        <span className="ml-auto text-xs font-medium text-gray-400">████</span>
+                    <div key={`hidden-${ri}`} className="group relative overflow-hidden rounded-2xl border border-border bg-muted/30 p-4 transition-all hover:bg-muted/50">
+                      <div className="blur-[4px] opacity-20 pointer-events-none flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          {item.icon}
+                          <span className="text-[10px] font-black uppercase tracking-widest">{item.label}</span>
+                        </div>
+                        <span className="text-xs font-black">███</span>
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Lock className="h-4 w-4 text-gray-400" />
+                        <Lock className="h-4 w-4 text-primary opacity-40" />
                       </div>
                     </div>
                   ))}
@@ -1357,14 +1414,6 @@ const params = useParams();
             );
           })}
         </div>
-        {!isPaid && (
-          <div className="mt-4 flex flex-col items-center gap-2 py-3">
-            <span className="text-xs text-gray-500 dark:text-gray-400">🔒 5 more risk factors in full report</span>
-            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
-              {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
-            </button>
-          </div>
-        )}
       </section>
 
       {/* ─── SECTION 6: FINANCIAL SNAPSHOT ─── */}
@@ -3119,6 +3168,7 @@ const params = useParams();
         </div>
       </section>
       </div>{/* end flex-1 main content */}
+    </div>
     </div>
   );
 }

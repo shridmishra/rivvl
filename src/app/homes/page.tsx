@@ -179,7 +179,7 @@ export default function HomesPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid w-full items-stretch gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6">
             {/* Card 1: Property Risk Report */}
-            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-border bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground">
                 <ShieldAlert className="h-4 w-4" /> Property Risk Report
               </div>
@@ -244,7 +244,7 @@ export default function HomesPage() {
             </div>
 
             {/* Card 4: 5-Year Financial Projection */}
-            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-zinc-200 bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
+            <div className="lg:col-span-2 flex flex-col rounded-3xl border border-border bg-white/40 backdrop-blur-sm shadow-sm p-8 transition-all hover:bg-white/60 dark:border-zinc-800 dark:bg-black/40 dark:hover:bg-black/60">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 <DollarSign className="h-4 w-4" /> 5-Year Financial Projection
               </div>
@@ -389,8 +389,8 @@ export default function HomesPage() {
                   key={plan.name} 
                   className={`card-hover relative flex flex-col rounded-[2.5rem] border p-10 transition-all duration-300 shadow-sm ${
                     plan.highlighted 
-                      ? "border-zinc-300 bg-white/80 backdrop-blur-md scale-105 z-10 shadow-2xl dark:border-zinc-700 dark:bg-black/80" 
-                      : "border-zinc-200 bg-white/40 backdrop-blur-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-600"
+                      ? "border-primary/20 bg-primary/5 scale-105 z-10 shadow-2xl ring-1 ring-primary/20 dark:border-primary/30 dark:bg-primary/10" 
+                      : "border-border bg-white/40 backdrop-blur-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-600"
                   }`}
                 >
                   {plan.badge && (
@@ -399,16 +399,16 @@ export default function HomesPage() {
                     </span>
                   )}
                   <div className="flex items-center gap-2">
-                    <h3 className={`text-xl font-black uppercase tracking-tighter ${plan.highlighted ? "text-background" : "text-foreground"}`}>{plan.name}</h3>
+                    <h3 className={`text-xl font-black uppercase tracking-tighter ${plan.highlighted ? "text-primary" : "text-foreground"}`}>{plan.name}</h3>
                     {plan.savingsBadge && (
-                      <span className={`rounded-full px-2 py-0.5 text-[8px] font-black leading-tight uppercase tracking-widest shadow-sm ${plan.highlighted ? "bg-background text-foreground" : "bg-foreground text-background"}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-[8px] font-black leading-tight uppercase tracking-widest shadow-sm ${plan.highlighted ? "bg-primary text-white" : "bg-foreground text-background"}`}>
                         {plan.savingsBadge}
                       </span>
                     )}
                   </div>
                   <div className="mt-6 flex items-baseline gap-2">
-                    <span className={`text-4xl font-black ${plan.highlighted ? "text-background" : "text-foreground"}`}>{plan.price}</span>
-                    <span className={`text-xs font-bold uppercase tracking-widest ${plan.highlighted ? "text-white/60 dark:text-black/60" : "text-muted-foreground"}`}>
+                    <span className={`text-4xl font-black ${plan.highlighted ? "text-primary" : "text-foreground"}`}>{plan.price}</span>
+                    <span className={`text-xs font-bold uppercase tracking-widest ${plan.highlighted ? "text-primary/60" : "text-muted-foreground"}`}>
                       {plan.period}
                     </span>
                   </div>
@@ -416,8 +416,8 @@ export default function HomesPage() {
                   <ul className="mt-10 flex-1 space-y-4">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-3 text-sm font-bold">
-                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${plan.highlighted ? "text-background" : "text-foreground"}`} />
-                        <span className={plan.highlighted ? "text-background/80" : "text-foreground"}>{f}</span>
+                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${plan.highlighted ? "text-primary" : "text-foreground"}`} />
+                        <span className={plan.highlighted ? "text-foreground" : "text-foreground"}>{f}</span>
                       </li>
                     ))}
                   </ul>
@@ -428,7 +428,7 @@ export default function HomesPage() {
                       asChild 
                       className={`mt-10 w-full h-14 rounded-full font-black uppercase tracking-widest transition-all ${
                         plan.highlighted 
-                          ? "bg-background text-foreground hover:bg-secondary" 
+                          ? "bg-primary text-white hover:bg-primary/90" 
                           : "border-border bg-secondary/50 text-foreground hover:bg-foreground hover:text-background"
                       }`}
                     >
@@ -442,7 +442,7 @@ export default function HomesPage() {
                       disabled={loadingRole !== null && !isLoading}
                       className={`mt-10 w-full h-14 rounded-full font-black uppercase tracking-widest shadow-xl transition-all ${
                         plan.highlighted 
-                          ? "bg-background text-foreground hover:bg-secondary" 
+                          ? "bg-primary text-white hover:bg-primary/90" 
                           : "bg-foreground text-background hover:opacity-90"
                       }`}
                     >

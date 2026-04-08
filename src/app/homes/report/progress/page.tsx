@@ -198,7 +198,7 @@ export default function HomesProgressPage() {
                 ) : i === step && !isComplete ? (
                   <Loader2 className="h-5 w-5 animate-spin text-black dark:text-white shrink-0" />
                 ) : (
-                  <div className="h-5 w-5 rounded-full border-2 border-zinc-200 dark:border-zinc-800 shrink-0" />
+                  <div className="h-5 w-5 rounded-full border-2 border-border dark:border-zinc-800 shrink-0" />
                 )}
                 <span className={`text-sm font-bold transition-all ${i <= step ? "text-black dark:text-white" : "text-zinc-400"}`}>
                   {i < step ? s.done : s.label}

@@ -81,7 +81,7 @@ export default function ContactPage() {
   }
 
   const inputClass =
-    "mt-1 block w-full rounded-2xl border border-zinc-200 bg-white/50 px-4 py-3 text-sm font-bold shadow-sm transition-all focus:border-zinc-950 focus:ring-4 focus:ring-zinc-950/5 focus:outline-none placeholder:text-zinc-400 dark:border-zinc-800 dark:bg-black/50 dark:focus:border-white dark:focus:ring-white/5";
+    "mt-1 block w-full rounded-2xl border border-border bg-white/50 px-4 py-3 text-sm font-bold shadow-sm transition-all focus:border-zinc-950 focus:ring-4 focus:ring-zinc-950/5 focus:outline-none placeholder:text-zinc-400 dark:border-zinc-800 dark:bg-black/50 dark:focus:border-white dark:focus:ring-white/5";
 
   return (
     <div className="min-h-screen bg-mesh-gradient py-20 px-4 sm:px-6">

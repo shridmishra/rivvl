@@ -312,8 +312,8 @@ function PricingContent() {
               key={plan.name + tab}
               className={`card-hover relative flex flex-col rounded-[2rem] border p-8 shadow-sm transition-all duration-500 ${
                 plan.highlighted 
-                  ? "border-zinc-300 ring-1 ring-zinc-200/50 scale-105 z-10 shadow-2xl bg-white/90 backdrop-blur-md dark:border-zinc-700 dark:ring-zinc-800/50 dark:bg-black/90" 
-                  : "border-zinc-200 bg-white/40 backdrop-blur-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-600"
+                  ? "border-primary/20 bg-primary/5 scale-105 z-10 shadow-2xl ring-1 ring-primary/20 dark:border-primary/30 dark:bg-primary/10" 
+                  : "border-border bg-white/40 backdrop-blur-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-black/40 dark:hover:border-zinc-600"
               }`}
             >
               {plan.badge && (
@@ -322,9 +322,9 @@ function PricingContent() {
                 </span>
               )}
               <div className={`flex items-center gap-1.5 ${plan.badge ? "mt-2" : ""}`}>
-                <h3 className="text-base font-bold text-foreground">{plan.name}</h3>
+                <h3 className={`text-base font-bold ${plan.highlighted ? "text-primary" : "text-foreground"}`}>{plan.name}</h3>
                 {plan.savingsBadge && (
-                  <span className="rounded-full bg-foreground px-2 py-0.5 text-[8px] font-black text-background leading-tight uppercase tracking-widest whitespace-nowrap">
+                  <span className={`rounded-full px-2 py-0.5 text-[8px] font-black leading-tight uppercase tracking-widest whitespace-nowrap ${plan.highlighted ? "bg-primary text-white" : "bg-foreground text-background"}`}>
                     {plan.savingsBadge}
                   </span>
                 )}
@@ -334,15 +334,15 @@ function PricingContent() {
                 {pricesLoading && plan.role ? (
                   <div className="h-9 w-20 animate-pulse rounded bg-secondary/20" />
                 ) : (
-                  <span className="text-3xl font-extrabold text-foreground">{price}</span>
+                  <span className={`text-3xl font-extrabold ${plan.highlighted ? "text-primary" : "text-foreground"}`}>{price}</span>
                 )}
-                <span className="text-sm text-muted-foreground font-bold">/{plan.period}</span>
+                <span className={`text-sm font-bold ${plan.highlighted ? "text-primary/60" : "text-muted-foreground"}`}>/{plan.period}</span>
               </div>
               <ul className="mt-6 flex-1 space-y-2.5">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-sm text-foreground/70 font-bold">
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-foreground" />
-                    {feature}
+                  <li key={feature} className="flex items-start gap-2 text-sm font-bold">
+                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${plan.highlighted ? "text-primary" : "text-foreground"}`} />
+                    <span className={plan.highlighted ? "text-foreground" : "text-foreground/70"}>{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -361,7 +361,7 @@ function PricingContent() {
                   loading={isLoading}
                   loadingText="Redirecting..."
                   disabled={loadingRole !== null && !isLoading}
-                  className="mt-6 w-full bg-black text-white dark:bg-white dark:text-black font-extrabold transition-all hover:bg-neutral-800 dark:hover:bg-neutral-100 shadow-xl"
+                  className="mt-6 w-full bg-primary text-white font-extrabold transition-all hover:bg-primary/90 shadow-xl"
                 >
                   {plan.cta}
                 </Button>
