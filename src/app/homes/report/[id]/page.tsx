@@ -333,11 +333,6 @@ interface ListingData {
 /*                         SCORE HELPERS                                 */
 /* ═══════════════════════════════════════════════════════════════════════ */
 
-function scoreColor(score: number): string {
-  if (score >= 8) return "text-green-600";
-  if (score >= 5) return "text-amber-500";
-  return "text-red-500";
-}
 
 
 function scoreRingColor(score: number): string {
