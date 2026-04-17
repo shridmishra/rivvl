@@ -312,7 +312,7 @@ interface ListingData {
 /* ═══════════════════════════════════════════════════════════════════════ */
 
 function scoreColor(score: number): string {
-  if (score >= 8) return "text-emerald-600";
+  if (score >= 8) return "text-green-600";
   if (score >= 5) return "text-amber-500";
   return "text-red-500";
 }
@@ -334,7 +334,7 @@ function badgeBorderColor(level: BadgeLevel): string {
   switch (level) {
     case "red": return "border-l-red-500";
     case "yellow": return "border-l-amber-500";
-    case "green": return "border-l-emerald-500";
+    case "green": return "border-l-green-500";
     case "gray": return "border-l-gray-400";
   }
 }
@@ -346,7 +346,7 @@ function badgeClasses(level: BadgeLevel): string {
     case "yellow":
       return "bg-amber-50 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
     case "green":
-      return "bg-emerald-50 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300";
+      return "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300";
     case "gray":
       return "bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
   }
@@ -442,7 +442,7 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
             <span className="text-[9px] font-bold text-gray-400 leading-tight text-center">Insufficient<br/>data</span>
           </div>
         </div>
-        {label && <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-gray-400 text-center">{label}</p>}
+        {label && <p className="mt-1 text-[10px] font-medium text-zinc-500 dark:text-gray-400 text-center">{label}</p>}
       </div>
     );
   }
@@ -460,13 +460,13 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="flex items-center gap-1">
-            {isWinner && <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />}
+            {isWinner && <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500" />}
             <span className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>{score}</span>
           </div>
-          <span className="text-[9px] text-slate-400">/10</span>
+          <span className="text-[9px] text-zinc-400">/10</span>
         </div>
       </div>
-      {label && <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-gray-400 text-center">{label}</p>}
+      {label && <p className="mt-1 text-[10px] font-medium text-zinc-500 dark:text-gray-400 text-center">{label}</p>}
     </div>
   );
 }
@@ -475,7 +475,7 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
 /*                       CHART COLORS                                    */
 /* ═══════════════════════════════════════════════════════════════════════ */
 
-const PROPERTY_COLORS = ["#6C5CE7", "#00D2FF", "#F59E0B"];
+const PROPERTY_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))"];
 
 /* ═══════════════════════════════════════════════════════════════════════ */
 /*                       MAIN REPORT CONTENT                             */
@@ -612,9 +612,9 @@ function ReportContent() {
   if (loading) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-[#6C5CE7]" />
+        <Loader2 className="h-8 w-8 animate-spin text-zinc-900" />
         {verifyingPayment && (
-          <p className="text-sm font-medium text-[#6C5CE7]">Unlocking your report...</p>
+          <p className="text-sm font-medium text-zinc-900">Unlocking your report...</p>
         )}
       </div>
     );
@@ -624,9 +624,9 @@ function ReportContent() {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
         <AlertTriangle className="h-12 w-12 text-red-400" />
-        <h2 className="mt-4 text-lg font-semibold text-indigo-950 dark:text-gray-100">Error Loading Report</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">{error}</p>
-        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-[#00D2FF] px-6 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]">Compare Real Estate</Link>
+        <h2 className="mt-4 text-lg font-semibold text-zinc-950 dark:text-gray-100">Error Loading Report</h2>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-gray-400">{error}</p>
+        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-zinc-500 px-6 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]">Compare Real Estate</Link>
       </div>
     );
   }
@@ -634,10 +634,10 @@ function ReportContent() {
   if (!report) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
-        <Home className="h-12 w-12 text-slate-300" />
-        <h2 className="mt-4 text-lg font-semibold text-indigo-950 dark:text-gray-100">No Report Found</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">Generate a comparison report first to view results here.</p>
-        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-[#00D2FF] px-6 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]">Compare Real Estate</Link>
+        <Home className="h-12 w-12 text-zinc-300" />
+        <h2 className="mt-4 text-lg font-semibold text-zinc-950 dark:text-gray-100">No Report Found</h2>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-gray-400">Generate a comparison report first to view results here.</p>
+        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-zinc-500 px-6 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]">Compare Real Estate</Link>
       </div>
     );
   }
@@ -720,8 +720,8 @@ function ReportContent() {
     <div className="flex flex-row gap-8 max-w-screen-xl mx-auto px-4 py-10 sm:py-14">
       {/* ═══ SIDEBAR TABLE OF CONTENTS ═══ */}
       <nav className="hidden lg:block w-56 flex-shrink-0">
-        <div className="sticky top-8 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#6C5CE7] mb-3">In This Report</p>
+        <div className="sticky top-8 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 p-4 shadow-sm">
+          <p className="text-[11px] font-semibold tracking-wide text-zinc-900 mb-3">In This Report</p>
           <ul className="space-y-0.5">
             {visibleTocItems.map((item) => {
               const isActive = activeSection === item.id;
@@ -742,8 +742,8 @@ function ReportContent() {
                       isLocked
                         ? "text-gray-400 dark:text-gray-600 cursor-default"
                         : isActive
-                          ? "bg-purple-50 dark:bg-[#6C5CE7]/10 font-semibold text-[#6C5CE7] rounded-lg"
-                          : "text-slate-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#15152A] hover:text-[#6C5CE7]"
+                          ? "bg-zinc-50 dark:bg-zinc-900/10 font-semibold text-zinc-900 rounded-lg"
+                          : "text-zinc-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-zinc-950 hover:text-zinc-900"
                     }`}
                   >
                     {item.nested && <span className="text-gray-300 dark:text-gray-600 text-[8px]">&#9679;</span>}
@@ -761,7 +761,7 @@ function ReportContent() {
       <div className="flex-1 min-w-0">
       {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
-        <Link href="/compare/homes" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-[#00D2FF] dark:text-gray-400">
+        <Link href="/compare/homes" className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-500 dark:text-gray-400">
           <ArrowLeft className="h-4 w-4" />
           New Comparison
         </Link>
@@ -771,7 +771,7 @@ function ReportContent() {
             loading={pdfLoading}
             loadingText="Generating..."
             variant="outline"
-            className="inline-flex items-center gap-2 rounded-xl border border-[#00D2FF]/30 bg-white dark:bg-[#1A1A2E] px-4 py-2 text-sm font-semibold text-[#00D2FF] transition-all hover:bg-[#00D2FF]/10"
+            className="inline-flex items-center gap-2 rounded-xl border border-zinc-500/30 bg-white dark:bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-500 transition-all hover:bg-zinc-500/10"
           >
             {!pdfLoading && <Download className="h-4 w-4" />}
             Download PDF
@@ -780,52 +780,52 @@ function ReportContent() {
       </div>
 
       {/* ─── SECTION 1: REPORT HEADER + EXECUTIVE SUMMARY ─── */}
-      <div id="executive-summary" data-toc-section className="scroll-mt-20 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-sm">
-        <h1 className="text-2xl font-bold text-indigo-950 dark:text-gray-100 sm:text-3xl">
-          <span className="bg-gradient-to-r from-[#00D2FF] to-[#6C5CE7] bg-clip-text text-transparent">Real Estate Comparison Report</span>
+      <div id="executive-summary" data-toc-section className="scroll-mt-20 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 p-6 shadow-sm">
+        <h1 className="text-2xl font-bold text-zinc-950 dark:text-gray-100 sm:text-3xl">
+          <span className="bg-gradient-to-r from-zinc-500 to-zinc-900 bg-clip-text text-transparent">Real Estate Comparison Report</span>
         </h1>
         <div className="mt-3 flex flex-wrap gap-2">
           {properties.map((p, i) => (
-            <span key={i} className="inline-flex items-center gap-1.5 rounded-full border border-[#00D2FF]/30 bg-[#00D2FF]/5 px-3 py-1 text-xs font-medium text-[#00D2FF]">
+            <span key={i} className="inline-flex items-center gap-1.5 rounded-full border border-zinc-500/30 bg-zinc-500/5 px-3 py-1 text-xs font-medium text-zinc-500">
               <Home className="h-3 w-3" />
               {p.address}
             </span>
           ))}
         </div>
-        <p className="mt-2 text-xs text-slate-400 dark:text-gray-500">
+        <p className="mt-2 text-xs text-zinc-400 dark:text-gray-500">
           Generated on {new Date(report.generatedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
         </p>
         {isPaid && report.property1Summary && report.property2Summary ? (
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border-l-[3px] border-l-[#6C5CE7] bg-[#f3f0ff] dark:bg-[#6C5CE7]/10 p-4">
+            <div className="rounded-lg border-l-[3px] border-l-zinc-900 bg-zinc-100 dark:bg-zinc-900/10 p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Home className="h-4 w-4 text-[#6C5CE7]" />
-                <h4 className="text-sm font-bold text-[#6C5CE7]">{properties[0]?.address}</h4>
+                <Home className="h-4 w-4 text-zinc-900" />
+                <h4 className="text-sm font-bold text-zinc-900">{properties[0]?.address}</h4>
               </div>
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.property1Summary}</p>
+              <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">{report.property1Summary}</p>
             </div>
-            <div className="rounded-lg border-l-[3px] border-l-[#00D2FF] bg-[#e8fbff] dark:bg-[#00D2FF]/10 p-4">
+            <div className="rounded-lg border-l-[3px] border-l-zinc-500 bg-zinc-100 dark:bg-zinc-500/10 p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Home className="h-4 w-4 text-[#00D2FF]" />
-                <h4 className="text-sm font-bold text-[#00D2FF]">{properties[1]?.address}</h4>
+                <Home className="h-4 w-4 text-zinc-500" />
+                <h4 className="text-sm font-bold text-zinc-500">{properties[1]?.address}</h4>
               </div>
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.property2Summary}</p>
+              <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">{report.property2Summary}</p>
             </div>
           </div>
         ) : (
-          <div className="mt-4 rounded-lg bg-gradient-to-r from-[#6C5CE7]/5 to-[#00D2FF]/5 p-4">
+          <div className="mt-4 rounded-lg bg-gradient-to-r from-zinc-900/5 to-zinc-500/5 p-4">
             {isPaid ? (
-              <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.summary}</p>
+              <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">{report.summary}</p>
             ) : (
               <div className="relative">
-                <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
+                <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">
                   {report.summary.split(/(?<=[.!?])\s+/).slice(0, 1).join(" ")}...
                 </p>
                 <div className="mt-3 flex flex-col items-start gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1 text-[11px] text-gray-500 dark:text-gray-400">
                     🔒 Full analysis unlocked in paid report
                   </span>
-                  <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
+                  <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-950">
                     {upgradeLoading ? "Redirecting..." : `Get Full Report: ${upgradePrice} →`}
                   </button>
                 </div>
@@ -836,14 +836,14 @@ function ReportContent() {
       </div>
 
       {/* ─── SECTION 2: SCORE DASHBOARD (Stacked: Bar Chart on top, Ring Grid below) ─── */}
-      <section id="score-dashboard" data-toc-section className="mt-8 scroll-mt-20 bg-white dark:bg-[#1A1A2E] rounded-2xl border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
-        <div className="bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4">
+      <section id="score-dashboard" data-toc-section className="mt-8 scroll-mt-20 bg-white dark:bg-zinc-900 rounded-2xl border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
+        <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4">
           <h2 className="text-xl font-bold text-white tracking-tight">Score Dashboard</h2>
         </div>
         <div className="mt-4 space-y-4">
           {/* A) Full-width horizontal bar comparison chart */}
-          <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Score Comparison</h3>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-lg font-semibold text-zinc-900 border-b border-gray-200 pb-2 mb-4">Score Comparison</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={barChartData} layout="vertical" barCategoryGap="20%">
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
@@ -859,15 +859,15 @@ function ReportContent() {
           </div>
 
           {/* B) Full-width detailed score ring grid */}
-          <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Detailed Scores</h3>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-lg font-semibold text-zinc-900 border-b border-gray-200 pb-2 mb-4">Detailed Scores</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-indigo-950 dark:text-gray-100">Property</th>
+                    <th className="px-3 py-2 text-left text-xs font-bold text-zinc-950 dark:text-gray-100">Property</th>
                     {categories.map((cat) => (
-                      <th key={cat} className="px-3 py-2 text-center text-xs font-bold text-indigo-950 dark:text-gray-100">{cat}</th>
+                      <th key={cat} className="px-3 py-2 text-center text-xs font-bold text-zinc-950 dark:text-gray-100">{cat}</th>
                     ))}
                   </tr>
                 </thead>
@@ -875,11 +875,11 @@ function ReportContent() {
                   {properties.map((p, pi) => {
                     const scores = [p.overallScore, p.priceScore, p.locationScore, p.valueScore, p.riskScore];
                     return (
-                      <tr key={pi} className={pi % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-[#f9fafb] dark:bg-[#15152A]"}>
+                      <tr key={pi} className={pi % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-[#f9fafb] dark:bg-zinc-950"}>
                         <td className="px-3 py-3">
                           <div className="flex items-center gap-2">
                             <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                            <span className="text-xs font-medium text-slate-700 dark:text-gray-300 truncate max-w-[180px] block" title={p.address} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.address}</span>
+                            <span className="text-xs font-medium text-zinc-700 dark:text-gray-300 truncate max-w-[180px] block" title={p.address} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.address}</span>
                           </div>
                         </td>
                         {scores.map((s, si) => {
@@ -907,14 +907,14 @@ function ReportContent() {
 
           {/* C) Score Breakdown — moved from standalone section into Score Dashboard */}
           {isPaid && report.scoreAnalysis && Object.keys(report.scoreAnalysis).length > 0 && (
-            <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Why These Scores?</h3>
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-lg font-semibold text-zinc-900 border-b border-gray-200 pb-2 mb-4">Why These Scores?</h3>
               <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                 {properties.map((p, pi) => (
                   <div key={pi}>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                      <h4 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{p.address}</h4>
+                      <h4 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{p.address}</h4>
                     </div>
                     <div className="space-y-3">
                       {["price", "location", "value", "risk"].map((cat) => {
@@ -938,9 +938,9 @@ function ReportContent() {
                         }
                         if (!text) return null;
                         return (
-                          <div key={cat} className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">{cat} Score</p>
-                            <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{text}</p>
+                          <div key={cat} className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                            <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">{cat} Score</p>
+                            <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">{text}</p>
                           </div>
                         );
                       })}
@@ -957,21 +957,21 @@ function ReportContent() {
       {report.redFlags && report.redFlags.length > 0 ? (
         isPaid ? (
           <section id="red-flags" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
               <AlertTriangle className="h-5 w-5 text-white" />
               Red Flags in This Listing
             </h2>
             <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
               {report.redFlags.map((rf, ri) => (
-                <div key={ri} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div key={ri} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ri] }} />
-                    <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[ri]?.address ?? `Property ${ri + 1}`}</h3>
+                    <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[ri]?.address ?? `Property ${ri + 1}`}</h3>
                   </div>
                   {rf.noFlagsDetected ? (
-                    <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/10 px-3 py-3">
-                      <Check className="h-4 w-4 text-emerald-500" />
-                      <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">No major red flags detected</span>
+                    <div className="flex items-center gap-2 rounded-lg bg-green-50 dark:bg-green-900/10 px-3 py-3">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span className="text-xs font-medium text-green-700 dark:text-green-300">No major red flags detected</span>
                     </div>
                   ) : (
                     <div className="space-y-2">
@@ -993,11 +993,11 @@ function ReportContent() {
           </section>
         ) : (
           <section id="red-flags" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
               <AlertTriangle className="h-5 w-5 text-white" />
               Red Flags in This Listing
             </h2>
-            <div className="mt-4 relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+            <div className="mt-4 relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
               <div className="blur-sm select-none pointer-events-none p-5 space-y-3">
                 {[1, 2, 3].map(n => (
                   <div key={n} className="rounded-lg border-l-4 border-l-amber-400 bg-amber-50 dark:bg-amber-900/10 px-3 py-2.5">
@@ -1005,12 +1005,12 @@ function ReportContent() {
                   </div>
                 ))}
               </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-[#1A1A2E]/60 gap-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-[#6C5CE7]">
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-zinc-900/60 gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-zinc-900">
                   <Lock className="h-4 w-4" />
                   Unlock red flag analysis for these properties
                 </div>
-                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
+                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-950">
                   {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice}`}
                 </button>
               </div>
@@ -1021,21 +1021,21 @@ function ReportContent() {
 
       {/* ─── SECTION 3: KEY FACTS TABLE ─── */}
       <section id="key-facts" data-toc-section className="mt-8 scroll-mt-20">
-        <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">Key Facts Comparison</h2>
-        <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+        <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">Key Facts Comparison</h2>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#6C5CE7]">
-                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Feature</th>
+              <tr className="bg-zinc-900">
+                <th className="px-4 py-3 text-left text-xs font-bold tracking-wider text-white">Feature</th>
                 {properties.map((p, i) => (
-                  <th key={i} className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
+                  <th key={i} className="px-4 py-3 text-center text-xs font-bold tracking-wider text-white">
                     <div className="flex items-center justify-center gap-1.5">
                       <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
                       {shortAddr(p.address)}
                     </div>
                   </th>
                 ))}
-                <th className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Winner</th>
+                <th className="px-4 py-3 text-center text-xs font-bold tracking-wider text-white">Winner</th>
               </tr>
             </thead>
             <tbody>
@@ -1045,26 +1045,26 @@ function ReportContent() {
                 return allRows.map((row, ri) => {
                   const isFreeVisible = isPaid || FREE_ROW_LABELS.includes(row.label);
                   return (
-                    <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                      <td className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-gray-400">
-                        {!isFreeVisible && <Lock className="inline h-3 w-3 mr-1 text-slate-400" />}
+                    <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}`}>
+                      <td className="px-4 py-2.5 text-xs font-medium text-zinc-600 dark:text-gray-400">
+                        {!isFreeVisible && <Lock className="inline h-3 w-3 mr-1 text-zinc-400" />}
                         {row.label}
                       </td>
                       {row.values.map((val, vi) => {
                         const isHoaWarning = row.label === "HOA Fee" && val.includes("Not listed");
                         return (
-                          <td key={vi} className={`px-4 py-2.5 text-center text-xs font-medium ${!isFreeVisible ? "text-slate-300 dark:text-gray-600 select-none blur-sm" : isHoaWarning ? "text-amber-600 dark:text-amber-400" : row.bestIndex === vi ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400 font-bold" : "text-slate-700 dark:text-gray-300"}`}>
+                          <td key={vi} className={`px-4 py-2.5 text-center text-xs font-medium ${!isFreeVisible ? "text-zinc-300 dark:text-gray-600 select-none blur-sm" : isHoaWarning ? "text-amber-600 dark:text-amber-400" : row.bestIndex === vi ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 font-bold" : "text-zinc-700 dark:text-gray-300"}`}>
                             {val}
                           </td>
                         );
                       })}
                       <td className="px-4 py-2.5 text-center">
                         {!isFreeVisible ? (
-                          <Lock className="mx-auto h-3 w-3 text-slate-300" />
+                          <Lock className="mx-auto h-3 w-3 text-zinc-300" />
                         ) : row.bestIndex !== null ? (
-                          <Check className="mx-auto h-3.5 w-3.5 text-emerald-500" />
+                          <Check className="mx-auto h-3.5 w-3.5 text-green-500" />
                         ) : (
-                          <span className="text-[10px] text-slate-400">Tie</span>
+                          <span className="text-[10px] text-zinc-400">Tie</span>
                         )}
                       </td>
                     </tr>
@@ -1077,7 +1077,7 @@ function ReportContent() {
         {!isPaid && (
           <div className="mt-3 flex flex-col items-center gap-2 py-3">
             <span className="text-xs text-gray-500 dark:text-gray-400">🔒 +6 more data points in full report</span>
-            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
+            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-950">
               {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
             </button>
           </div>
@@ -1086,9 +1086,9 @@ function ReportContent() {
 
       {/* ─── SECTION 4: PROS AND CONS ─── */}
       <section id="pros-cons" data-toc-section className="mt-8 scroll-mt-20">
-        <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">Pros and Cons</h2>
-        <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
-          <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Overall Comparison at a Glance</h3>
+        <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">Pros and Cons</h2>
+        <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
+          <h3 className="text-lg font-semibold text-zinc-900 border-b border-gray-200 pb-2 mb-4">Overall Comparison at a Glance</h3>
           <ResponsiveContainer width="100%" height={Math.max(120, properties.length * 50)}>
             <BarChart data={properties.map((p, i) => ({ name: shortAddr(p.address), score: p.overallScore, fill: PROPERTY_COLORS[i] }))} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
@@ -1112,16 +1112,16 @@ function ReportContent() {
             const minBlurredPros = isPaid ? 0 : Math.max(0, 3 - hiddenPros.length);
             const minBlurredCons = isPaid ? 0 : Math.max(0, 2 - hiddenCons.length);
             return (
-              <div key={i} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div key={i} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                  <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{p.address}</h3>
+                  <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{p.address}</h3>
                 </div>
                 <div className="space-y-2">
                   {visiblePros.map((pro, pi) => (
-                    <div key={`pro-${pi}`} className="flex items-start gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/10 px-3 py-2">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-500" />
-                      <span className="text-xs text-slate-700 dark:text-gray-300">{pro}</span>
+                    <div key={`pro-${pi}`} className="flex items-start gap-2 rounded-lg bg-green-50 dark:bg-green-900/10 px-3 py-2">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-500" />
+                      <span className="text-xs text-zinc-700 dark:text-gray-300">{pro}</span>
                     </div>
                   ))}
                   {hiddenPros.map((_, pi) => (
@@ -1141,7 +1141,7 @@ function ReportContent() {
                   {visibleCons.map((con, ci) => (
                     <div key={`con-${ci}`} className="flex items-start gap-2 rounded-lg bg-red-50 dark:bg-red-900/10 px-3 py-2">
                       <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
-                      <span className="text-xs text-slate-700 dark:text-gray-300">{con}</span>
+                      <span className="text-xs text-zinc-700 dark:text-gray-300">{con}</span>
                     </div>
                   ))}
                   {hiddenCons.map((_, ci) => (
@@ -1164,7 +1164,7 @@ function ReportContent() {
         {!isPaid && (
           <div className="mt-4 flex flex-col items-center gap-2 py-3">
             <span className="text-xs text-gray-500 dark:text-gray-400">🔒 Full pros and cons analysis unlocked</span>
-            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
+            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-950">
               {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
             </button>
           </div>
@@ -1173,19 +1173,19 @@ function ReportContent() {
 
       {/* ─── SECTION 5: RISK REPORT (always visible — rivvl differentiator) ─── */}
       <section className="mt-8">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
           <Shield className="h-5 w-5 text-white" />
           Property Risk Report
         </h2>
-        <div className="mb-4 rounded-lg border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-          <p className="text-xs text-slate-600 dark:text-gray-400">
+        <div className="mb-4 rounded-lg border border-zinc-900/20 bg-zinc-900/5 px-4 py-3">
+          <p className="text-xs text-zinc-600 dark:text-gray-400">
             This information is rarely disclosed by sellers or agents. rivvl surfaces it automatically so you can make a fully informed decision.
           </p>
         </div>
         {isPaid && (
-          <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
-            <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Risk Profile Comparison</h3>
-            <p className="text-[10px] text-slate-400 mb-3">Higher score = lower risk. Unknown data shown as N/A.</p>
+          <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
+            <h3 className="text-lg font-semibold text-zinc-900 border-b border-gray-200 pb-2 mb-4">Risk Profile Comparison</h3>
+            <p className="text-[10px] text-zinc-400 mb-3">Higher score = lower risk. Unknown data shown as N/A.</p>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={(() => {
                 const riskCats = ["Flood", "Superfund", "Earthquake", "Wildfire", "Air Quality", "Radon"];
@@ -1227,14 +1227,14 @@ function ReportContent() {
             const hiddenItems = isPaid ? [] : riskItems.filter(item => !FREE_RISK_LABELS.includes(item.label));
 
             return (
-              <div key={i} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div key={i} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                    <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{p.address}</h3>
+                    <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{p.address}</h3>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-slate-500">Risk Score</span>
+                    <span className="text-[10px] text-zinc-500">Risk Score</span>
                     {p.riskScore !== null ? (
                       <span className={`text-sm font-bold ${scoreColor(p.riskScore)}`}>{p.riskScore}/10</span>
                     ) : (
@@ -1274,7 +1274,7 @@ function ReportContent() {
         {!isPaid && (
           <div className="mt-4 flex flex-col items-center gap-2 py-3">
             <span className="text-xs text-gray-500 dark:text-gray-400">🔒 5 more risk factors in full report</span>
-            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
+            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-950">
               {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
             </button>
           </div>
@@ -1283,49 +1283,49 @@ function ReportContent() {
 
       {/* ─── SECTION 6: FINANCIAL SNAPSHOT ─── */}
       <section id="financial-breakdown" data-toc-section className="mt-8 scroll-mt-20">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
           <DollarSign className="h-5 w-5 text-white" />
           {isPaid ? "Full Financial Analysis" : "Financial Snapshot"}
         </h2>
-        <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Estimated monthly cost of ownership (20% down, 30-year fixed at 7%)</p>
+        <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">Estimated monthly cost of ownership (20% down, 30-year fixed at 7%)</p>
 
         {!isPaid ? (
           /* Free: mortgage visible, rest blurred */
           <div className="mt-4 space-y-4">
             <div className="grid gap-4 lg:grid-cols-2">
               {financialData.map((f, i) => (
-                <div key={i} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
+                <div key={i} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 p-4 shadow-sm">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                    <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{f.shortAddr}</h4>
-                    <span className="ml-auto text-lg font-bold text-indigo-950 dark:text-gray-100">${f.mortgage.toLocaleString()}/mo</span>
+                    <h4 className="text-xs font-semibold text-zinc-950 dark:text-gray-100 truncate">{f.shortAddr}</h4>
+                    <span className="ml-auto text-lg font-bold text-zinc-950 dark:text-gray-100">${f.mortgage.toLocaleString()}/mo</span>
                   </div>
-                  <p className="text-[10px] text-slate-500">Estimated mortgage payment (principal + interest)</p>
+                  <p className="text-[10px] text-zinc-500">Estimated mortgage payment (principal + interest)</p>
                 </div>
               ))}
             </div>
             {/* Blurred teaser rows */}
-            <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+            <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
               <div className="blur-sm select-none pointer-events-none">
                 <table className="w-full text-sm">
                   <tbody>
                     {["HOA Fee", "Property Tax", "Insurance", "Total Monthly Cost", "5-Year Total Cost", "Equity After 5 Years"].map((label, ri) => (
-                      <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                        <td className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-gray-400">{label}</td>
+                      <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}`}>
+                        <td className="px-4 py-2.5 text-xs font-medium text-zinc-600 dark:text-gray-400">{label}</td>
                         {financialData.map((_, vi) => (
-                          <td key={vi} className="px-4 py-2.5 text-center text-xs font-medium text-slate-400">$X,XXX</td>
+                          <td key={vi} className="px-4 py-2.5 text-center text-xs font-medium text-zinc-400">$X,XXX</td>
                         ))}
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-[#1A1A2E]/60 gap-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-[#6C5CE7]">
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-zinc-900/60 gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-zinc-900">
                   <Lock className="h-4 w-4" />
                   Unlock closing costs, insurance estimates, loan programs, tax analysis, and more
                 </div>
-                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
+                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-950">
                   {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
                 </button>
               </div>
@@ -1334,13 +1334,13 @@ function ReportContent() {
         ) : (
           /* Paid: comprehensive 12-row financial breakdown */
           <div className="mt-4 space-y-4">
-            <div className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+            <div className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#6C5CE7]">
-                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Financial Metric</th>
+                  <tr className="bg-zinc-900">
+                    <th className="px-4 py-3 text-left text-xs font-bold tracking-wider text-white">Financial Metric</th>
                     {financialData.map((f, i) => (
-                      <th key={i} className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
+                      <th key={i} className="px-4 py-3 text-center text-xs font-bold tracking-wider text-white">
                         <div className="flex items-center justify-center gap-1.5">
                           <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
                           {f.shortAddr}
@@ -1380,10 +1380,10 @@ function ReportContent() {
                       }) },
                     ];
                     return rows.map((row, ri) => (
-                      <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${row.isBold ? "bg-purple-50 dark:bg-purple-900/20 font-bold" : ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                        <td className={`px-4 py-2.5 text-xs ${row.isBold ? "font-bold text-indigo-950 dark:text-gray-100" : "font-medium text-slate-600 dark:text-gray-400"}`}>{row.label}</td>
+                      <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${row.isBold ? "bg-zinc-50 dark:bg-zinc-900/20 font-bold" : ri % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}`}>
+                        <td className={`px-4 py-2.5 text-xs ${row.isBold ? "font-bold text-zinc-950 dark:text-gray-100" : "font-medium text-zinc-600 dark:text-gray-400"}`}>{row.label}</td>
                         {row.values.map((val, vi) => (
-                          <td key={vi} className={`px-4 py-2.5 text-center text-xs ${row.isBold ? "font-bold text-indigo-950 dark:text-gray-100" : "font-medium text-slate-700 dark:text-gray-300"}`}>{val}</td>
+                          <td key={vi} className={`px-4 py-2.5 text-center text-xs ${row.isBold ? "font-bold text-zinc-950 dark:text-gray-100" : "font-medium text-zinc-700 dark:text-gray-300"}`}>{val}</td>
                         ))}
                       </tr>
                     ));
@@ -1395,27 +1395,27 @@ function ReportContent() {
             {/* ─── CLOSING COST ESTIMATE (Sprint 1, Feature 1) ─── */}
             {report.closingCosts && report.closingCosts.some(cc => cc !== null) && (
               <div id="closing-costs" className="space-y-4 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <DollarSign className="h-4 w-4 text-[#6C5CE7]" />
+                <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-950 dark:text-gray-100 mt-2">
+                  <DollarSign className="h-4 w-4 text-zinc-900" />
                   Closing Cost Estimate
                 </h3>
                 <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.closingCosts.map((cc, ci) => {
                     if (!cc) return (
-                      <div key={ci} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={ci} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-1.5 mb-3">
                           <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
+                          <span className="text-xs font-semibold text-zinc-600 dark:text-gray-300 truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Closing cost data unavailable for this property.</p>
+                        <p className="text-xs text-zinc-500 italic">Closing cost data unavailable for this property.</p>
                       </div>
                     );
                     return (
-                    <div key={ci} className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+                    <div key={ci} className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
                       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1E1E30]">
                         <div className="flex items-center gap-1.5">
                           <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
+                          <span className="text-xs font-semibold text-zinc-600 dark:text-gray-300 truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
                         </div>
                       </div>
                       <table className="w-full text-xs">
@@ -1431,14 +1431,14 @@ function ReportContent() {
                             { label: "First Year Insurance", value: cc.firstYearInsurance },
                             { label: "Escrow Setup (2 mo. insurance + 2 mo. tax)", value: cc.escrowSetup },
                           ].map((row, ri) => (
-                            <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                              <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">{row.label}</td>
-                              <td className="px-4 py-2 text-right font-medium text-slate-700 dark:text-gray-300">${row.value.toLocaleString()}</td>
+                            <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}`}>
+                              <td className="px-4 py-2 font-medium text-zinc-600 dark:text-gray-400">{row.label}</td>
+                              <td className="px-4 py-2 text-right font-medium text-zinc-700 dark:text-gray-300">${row.value.toLocaleString()}</td>
                             </tr>
                           ))}
-                          <tr className="bg-indigo-50/50 dark:bg-indigo-900/10">
-                            <td className="px-4 py-2.5 font-bold text-indigo-950 dark:text-gray-100">Total Cash Needed to Close</td>
-                            <td className="px-4 py-2.5 text-right font-bold text-indigo-950 dark:text-gray-100">${cc.totalCashToClose.toLocaleString()}</td>
+                          <tr className="bg-zinc-50/50 dark:bg-zinc-900/10">
+                            <td className="px-4 py-2.5 font-bold text-zinc-950 dark:text-gray-100">Total Cash Needed to Close</td>
+                            <td className="px-4 py-2.5 text-right font-bold text-zinc-950 dark:text-gray-100">${cc.totalCashToClose.toLocaleString()}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -1446,43 +1446,43 @@ function ReportContent() {
                     );
                   })}
                 </div>
-                <p className="text-[9px] text-slate-400 italic">Closing cost estimates are approximations based on national averages. Your actual costs will vary. Consult your lender for a Loan Estimate.</p>
+                <p className="text-[9px] text-zinc-400 italic">Closing cost estimates are approximations based on national averages. Your actual costs will vary. Consult your lender for a Loan Estimate.</p>
               </div>
             )}
 
             {/* ─── INSURANCE COST ESTIMATE (Sprint 1, Feature 2) ─── */}
             {report.insuranceEstimate && report.insuranceEstimate.some(ins => ins !== null) && (
               <div id="insurance-estimate" className="space-y-4 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <Shield className="h-4 w-4 text-[#6C5CE7]" />
+                <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-950 dark:text-gray-100 mt-2">
+                  <Shield className="h-4 w-4 text-zinc-900" />
                   Insurance Cost Estimate
                 </h3>
                 <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.insuranceEstimate.map((ins, ii) => {
                     if (!ins) return (
-                      <div key={ii} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={ii} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-2 mb-4">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ii] }} />
-                          <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</h4>
+                          <h4 className="text-xs font-semibold text-zinc-950 dark:text-gray-100 truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</h4>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Insurance estimate data unavailable for this property.</p>
+                        <p className="text-xs text-zinc-500 italic">Insurance estimate data unavailable for this property.</p>
                       </div>
                     );
                     return (
-                    <div key={ii} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={ii} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ii] }} />
-                        <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</h4>
+                        <h4 className="text-xs font-semibold text-zinc-950 dark:text-gray-100 truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</h4>
                       </div>
                       <div className="space-y-3">
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Estimated Annual Homeowners Insurance</p>
-                          <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">${ins.annualRangeLow.toLocaleString()} to ${ins.annualRangeHigh.toLocaleString()} per year</p>
-                          <p className="text-[10px] text-slate-400 mt-1">${ins.monthlyEstimate.toLocaleString()} per month (estimated)</p>
+                        <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Estimated Annual Homeowners Insurance</p>
+                          <p className="text-sm font-bold text-zinc-950 dark:text-gray-100">${ins.annualRangeLow.toLocaleString()} to ${ins.annualRangeHigh.toLocaleString()} per year</p>
+                          <p className="text-[10px] text-zinc-400 mt-1">${ins.monthlyEstimate.toLocaleString()} per month (estimated)</p>
                         </div>
                         {ins.multipliers.length > 0 && (
                           <div className="rounded-lg bg-amber-50 dark:bg-amber-900/10 p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600 mb-1">Adjustment Factors</p>
+                            <p className="text-[10px] font-bold tracking-wide text-amber-600 mb-1">Adjustment Factors</p>
                             <ul className="space-y-1">
                               {ins.multipliers.map((m, mi) => (
                                 <li key={mi} className="text-[10px] text-amber-700 dark:text-amber-300 flex items-start gap-1.5">
@@ -1496,46 +1496,46 @@ function ReportContent() {
                         {/* Flood Insurance (Feature 7) inline */}
                         {ins.floodInsuranceRequired && ins.floodInsuranceEstimateLow && ins.floodInsuranceEstimateHigh && (
                           <div className="rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700/30 p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600 mb-1">Flood Insurance Required (NFIP Estimate)</p>
+                            <p className="text-[10px] font-bold tracking-wide text-amber-600 mb-1">Flood Insurance Required (NFIP Estimate)</p>
                             <p className="text-sm font-bold text-amber-700 dark:text-amber-300">${ins.floodInsuranceEstimateLow.toLocaleString()} to ${ins.floodInsuranceEstimateHigh.toLocaleString()} per year</p>
                           </div>
                         )}
-                        <div className="rounded-lg bg-indigo-50 dark:bg-indigo-900/10 p-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-indigo-600 mb-1">Total Estimated Annual Insurance</p>
-                          <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">${ins.totalAnnualInsuranceLow.toLocaleString()} to ${ins.totalAnnualInsuranceHigh.toLocaleString()} per year</p>
+                        <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/10 p-3">
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-600 mb-1">Total Estimated Annual Insurance</p>
+                          <p className="text-sm font-bold text-zinc-950 dark:text-gray-100">${ins.totalAnnualInsuranceLow.toLocaleString()} to ${ins.totalAnnualInsuranceHigh.toLocaleString()} per year</p>
                         </div>
                       </div>
                     </div>
                     );
                   })}
                 </div>
-                <p className="text-[9px] text-slate-400 italic">Insurance estimates are approximations. Actual premiums depend on your coverage choices, insurer, and property inspection. Get quotes from at least 3 insurers.</p>
+                <p className="text-[9px] text-zinc-400 italic">Insurance estimates are approximations. Actual premiums depend on your coverage choices, insurer, and property inspection. Get quotes from at least 3 insurers.</p>
               </div>
             )}
 
             {/* ─── FLOOD INSURANCE DETAIL (Sprint 1, Feature 7) ─── */}
             {report.floodInsurance && report.floodInsurance.length > 0 && report.floodInsurance.some(fi => fi.required || fi.floodZone === "D") && (
               <div className="space-y-3">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <Droplets className="h-4 w-4 text-[#00D2FF]" />
+                <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-950 dark:text-gray-100 mt-2">
+                  <Droplets className="h-4 w-4 text-zinc-500" />
                   Flood Insurance Detail
                 </h3>
                 <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.floodInsurance.map((fi, fii) => (
-                    <div key={fii} className={`rounded-xl border p-4 shadow-sm ${fi.required ? "border-amber-300 dark:border-amber-700/40 bg-amber-50/50 dark:bg-amber-900/10" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A2E]"}`}>
+                    <div key={fii} className={`rounded-xl border p-4 shadow-sm ${fi.required ? "border-amber-300 dark:border-amber-700/40 bg-amber-50/50 dark:bg-amber-900/10" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-900"}`}>
                       <div className="flex items-center gap-2 mb-2">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[fii] }} />
-                        <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[fii]?.address ?? `Property ${fii + 1}`)}</span>
-                        <span className={`ml-auto inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${fi.required ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"}`}>
+                        <span className="text-xs font-semibold text-zinc-950 dark:text-gray-100 truncate">{shortAddr(properties[fii]?.address ?? `Property ${fii + 1}`)}</span>
+                        <span className={`ml-auto inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${fi.required ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"}`}>
                           Zone {fi.floodZone || "Unknown"}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-700 dark:text-gray-300">{fi.note}</p>
+                      <p className="text-xs text-zinc-700 dark:text-gray-300">{fi.note}</p>
                       {fi.estimateLow && fi.estimateHigh && fi.required && (
                         <p className="mt-2 text-xs font-semibold text-amber-700 dark:text-amber-300">Estimated: ${fi.estimateLow.toLocaleString()} to ${fi.estimateHigh.toLocaleString()} per year</p>
                       )}
                       {fi.nfipCoverageNote && (
-                        <p className="mt-2 text-[10px] text-slate-500 dark:text-gray-400">{fi.nfipCoverageNote}</p>
+                        <p className="mt-2 text-[10px] text-zinc-500 dark:text-gray-400">{fi.nfipCoverageNote}</p>
                       )}
                     </div>
                   ))}
@@ -1546,102 +1546,102 @@ function ReportContent() {
             {/* ─── FIRST-TIME BUYER LOAN PROGRAMS (Sprint 1, Feature 6) ─── */}
             {report.loanPrograms && report.loanPrograms.some(lp => lp !== null) && (
               <div id="loan-programs" className="space-y-4 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <Home className="h-4 w-4 text-[#6C5CE7]" />
+                <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-950 dark:text-gray-100 mt-2">
+                  <Home className="h-4 w-4 text-zinc-900" />
                   First-Time Buyer Loan Programs
                 </h3>
                 <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.loanPrograms.map((lp, li) => {
                     if (!lp) return (
-                      <div key={li} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={li} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-1.5 mb-3">
                           <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[li] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
+                          <span className="text-xs font-semibold text-zinc-600 dark:text-gray-300 truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Loan program data unavailable for this property.</p>
+                        <p className="text-xs text-zinc-500 italic">Loan program data unavailable for this property.</p>
                       </div>
                     );
                     return (
-                    <div key={li} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm overflow-hidden">
+                    <div key={li} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
                       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1E1E30]">
                         <div className="flex items-center gap-1.5">
                           <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[li] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
+                          <span className="text-xs font-semibold text-zinc-600 dark:text-gray-300 truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
                         </div>
                       </div>
                       <table className="w-full text-xs">
                         <thead>
-                          <tr className="bg-[#6C5CE7]">
-                            <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Program</th>
-                            <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Min Down</th>
-                            <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Est. Monthly</th>
+                          <tr className="bg-zinc-900">
+                            <th className="px-4 py-3 text-left font-bold text-white tracking-wider">Program</th>
+                            <th className="px-4 py-3 text-center font-bold text-white tracking-wider">Min Down</th>
+                            <th className="px-4 py-3 text-center font-bold text-white tracking-wider">Est. Monthly</th>
                           </tr>
                         </thead>
                         <tbody>
                           {lp.programs.map((prog, pi) => (
-                            <tr key={pi} className={`border-b border-gray-300 dark:border-gray-600/50 ${pi % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
+                            <tr key={pi} className={`border-b border-gray-300 dark:border-gray-600/50 ${pi % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}`}>
                               <td className="px-3 py-2">
-                                <p className="font-semibold text-slate-700 dark:text-gray-300">{prog.name}</p>
-                                <p className="text-[10px] text-slate-400 mt-0.5">{prog.keyRequirement}</p>
+                                <p className="font-semibold text-zinc-700 dark:text-gray-300">{prog.name}</p>
+                                <p className="text-[10px] text-zinc-400 mt-0.5">{prog.keyRequirement}</p>
                               </td>
-                              <td className="px-3 py-2 text-center font-medium text-slate-700 dark:text-gray-300">{prog.minDownPayment}</td>
-                              <td className="px-3 py-2 text-center font-medium text-slate-700 dark:text-gray-300">{prog.estimatedMonthlyPayment}</td>
+                              <td className="px-3 py-2 text-center font-medium text-zinc-700 dark:text-gray-300">{prog.minDownPayment}</td>
+                              <td className="px-3 py-2 text-center font-medium text-zinc-700 dark:text-gray-300">{prog.estimatedMonthlyPayment}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
-                      <div className="px-4 py-3 bg-indigo-50/50 dark:bg-indigo-900/10 border-t border-gray-200 dark:border-gray-700">
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-indigo-600 mb-1">State Program ({lp.state})</p>
-                        <p className="text-[10px] text-slate-600 dark:text-gray-400">{lp.stateProgram}</p>
+                      <div className="px-4 py-3 bg-zinc-50/50 dark:bg-zinc-900/10 border-t border-gray-200 dark:border-gray-700">
+                        <p className="text-[10px] font-bold tracking-wide text-zinc-600 mb-1">State Program ({lp.state})</p>
+                        <p className="text-[10px] text-zinc-600 dark:text-gray-400">{lp.stateProgram}</p>
                       </div>
                     </div>
                     );
                   })}
                 </div>
-                <p className="text-[9px] text-slate-400 italic">Loan program eligibility is estimated based on purchase price and location. Income limits, credit score requirements, and program availability change frequently. Consult a HUD-approved housing counselor or licensed mortgage broker.</p>
+                <p className="text-[9px] text-zinc-400 italic">Loan program eligibility is estimated based on purchase price and location. Income limits, credit score requirements, and program availability change frequently. Consult a HUD-approved housing counselor or licensed mortgage broker.</p>
               </div>
             )}
 
             {/* ─── TAX REASSESSMENT RISK (Sprint 1, Feature 3) ─── */}
             {report.taxReassessment && report.taxReassessment.some(tr => tr !== null) && (
               <div id="tax-reassessment" className="space-y-3 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
+                <h3 className="flex items-center gap-2 text-sm font-bold text-zinc-950 dark:text-gray-100 mt-2">
                   <AlertTriangle className="h-4 w-4 text-amber-500" />
                   Property Tax Reassessment Risk
                 </h3>
                 <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.taxReassessment.map((tr, ti) => {
                     if (!tr) return (
-                      <div key={ti} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
+                      <div key={ti} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 p-4 shadow-sm">
                         <div className="flex items-center gap-2 mb-3">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ti] }} />
-                          <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
+                          <span className="text-xs font-semibold text-zinc-950 dark:text-gray-100 truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Tax reassessment data unavailable for this property.</p>
+                        <p className="text-xs text-zinc-500 italic">Tax reassessment data unavailable for this property.</p>
                       </div>
                     );
                     return (
-                    <div key={ti} className={`rounded-xl border p-4 shadow-sm ${tr.isReassessmentRisk ? "border-amber-300 dark:border-amber-700/40 bg-amber-50/30 dark:bg-amber-900/10" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A2E]"}`}>
+                    <div key={ti} className={`rounded-xl border p-4 shadow-sm ${tr.isReassessmentRisk ? "border-amber-300 dark:border-amber-700/40 bg-amber-50/30 dark:bg-amber-900/10" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-900"}`}>
                       <div className="flex items-center gap-2 mb-3">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ti] }} />
-                        <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
+                        <span className="text-xs font-semibold text-zinc-950 dark:text-gray-100 truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
                       </div>
                       {tr.isReassessmentRisk && tr.assessedValue && tr.gapPercentage !== null ? (
                         <div className="space-y-2">
                           <div className="rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700/30 p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600 mb-1">Reassessment Risk Detected</p>
+                            <p className="text-[10px] font-bold tracking-wide text-amber-600 mb-1">Reassessment Risk Detected</p>
                             <p className="text-xs text-amber-800 dark:text-amber-300">
                               This property is listed at ${tr.listingPrice.toLocaleString()}, which is {tr.gapPercentage}% above its current assessed value of ${tr.assessedValue.toLocaleString()}. After purchase, the county may reassess the property closer to the sale price.
                             </p>
                           </div>
                           <div className="grid grid-cols-2 gap-2">
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-2">
-                              <p className="text-[10px] text-slate-500">Current Annual Tax (est.)</p>
-                              <p className="text-xs font-bold text-slate-700 dark:text-gray-300">{tr.estimatedCurrentAnnualTax !== null ? `$${tr.estimatedCurrentAnnualTax.toLocaleString()}` : "Data unavailable"}</p>
+                            <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-2">
+                              <p className="text-[10px] text-zinc-500">Current Annual Tax (est.)</p>
+                              <p className="text-xs font-bold text-zinc-700 dark:text-gray-300">{tr.estimatedCurrentAnnualTax !== null ? `$${tr.estimatedCurrentAnnualTax.toLocaleString()}` : "Data unavailable"}</p>
                             </div>
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-2">
-                              <p className="text-[10px] text-slate-500">Post-Purchase Tax (est.)</p>
-                              <p className="text-xs font-bold text-slate-700 dark:text-gray-300">${tr.estimatedPostPurchaseAnnualTax.toLocaleString()}</p>
+                            <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-2">
+                              <p className="text-[10px] text-zinc-500">Post-Purchase Tax (est.)</p>
+                              <p className="text-xs font-bold text-zinc-700 dark:text-gray-300">${tr.estimatedPostPurchaseAnnualTax.toLocaleString()}</p>
                             </div>
                           </div>
                           {tr.estimatedAnnualTaxIncrease !== null && tr.estimatedAnnualTaxIncrease > 0 && (
@@ -1649,15 +1649,15 @@ function ReportContent() {
                           )}
                         </div>
                       ) : tr.assessedValue ? (
-                        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/10 p-3">
-                          <p className="text-xs text-emerald-700 dark:text-emerald-300">Assessed value is close to listing price. Low reassessment risk.</p>
+                        <div className="rounded-lg bg-green-50 dark:bg-green-900/10 p-3">
+                          <p className="text-xs text-green-700 dark:text-green-300">Assessed value is close to listing price. Low reassessment risk.</p>
                         </div>
                       ) : (
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3 space-y-2">
-                          <p className="text-xs text-slate-700 dark:text-gray-300">
+                        <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3 space-y-2">
+                          <p className="text-xs text-zinc-700 dark:text-gray-300">
                             Assessed value not available from public records. Based on the purchase price of {`$${tr.listingPrice.toLocaleString()}`} and the average effective property tax rate of 1.1%, estimated annual property taxes are approximately {`$${Math.round(tr.listingPrice * 0.011).toLocaleString()}`} ({`$${Math.round((tr.listingPrice * 0.011) / 12).toLocaleString()}`}/month).
                           </p>
-                          <p className="text-[10px] text-slate-500 dark:text-gray-400">
+                          <p className="text-[10px] text-zinc-500 dark:text-gray-400">
                             Virginia property taxes are reassessed periodically. After purchase, your assessed value will likely adjust toward the sale price over the next 1 to 3 years. Request the actual tax bill from the seller or agent to confirm.
                           </p>
                         </div>
@@ -1670,8 +1670,8 @@ function ReportContent() {
             )}
 
             {/* Total monthly cost comparison bar chart */}
-            <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 mb-4">Total Estimated Monthly Cost Comparison</h4>
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+              <h4 className="text-xs font-semibold text-zinc-950 dark:text-gray-100 mb-4">Total Estimated Monthly Cost Comparison</h4>
               <ResponsiveContainer width="100%" height={Math.max(150, financialData.length * 60)}>
                 <BarChart data={financialData.map((f, i) => ({ name: f.shortAddr, total: f.total, fill: PROPERTY_COLORS[i] }))} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
@@ -1687,42 +1687,42 @@ function ReportContent() {
               </ResponsiveContainer>
             </div>
 
-            <p className="text-[9px] text-slate-400 italic">Monthly costs are estimates for budgeting purposes. Mortgage calculated at 7% fixed rate with 20% down payment. Property tax estimate uses 1.1% annual rate (US average). Insurance estimate based on property size. Actual figures will vary. Consult a mortgage lender for personalized quotes.</p>
+            <p className="text-[9px] text-zinc-400 italic">Monthly costs are estimates for budgeting purposes. Mortgage calculated at 7% fixed rate with 20% down payment. Property tax estimate uses 1.1% annual rate (US average). Insurance estimate based on property size. Actual figures will vary. Consult a mortgage lender for personalized quotes.</p>
 
             {/* FIX 4: How We Calculate This (expandable) */}
-            <div className="rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#15152A] shadow-sm">
+            <div className="rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-zinc-950 shadow-sm">
               <button
                 type="button"
                 onClick={() => setShowFinancialMethodology(!showFinancialMethodology)}
                 className="flex w-full items-center justify-between px-5 py-3 text-left"
               >
-                <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100">How We Calculate This</span>
-                {showFinancialMethodology ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                <span className="text-xs font-semibold text-zinc-950 dark:text-gray-100">How We Calculate This</span>
+                {showFinancialMethodology ? <ChevronUp className="h-4 w-4 text-zinc-400" /> : <ChevronDown className="h-4 w-4 text-zinc-400" />}
               </button>
               {showFinancialMethodology && (
-                <div className="px-5 pb-5 space-y-3 text-xs leading-relaxed text-slate-600 dark:text-gray-400">
+                <div className="px-5 pb-5 space-y-3 text-xs leading-relaxed text-zinc-600 dark:text-gray-400">
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Monthly Mortgage</p>
+                    <p className="font-semibold text-zinc-700 dark:text-gray-300">Monthly Mortgage</p>
                     <p>Calculated using the listed purchase price, assuming 20% down payment and a 30-year fixed mortgage at 7.0% interest rate. This is a standard estimate. Actual rates vary based on your credit score, lender, and market conditions at time of purchase.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Property Tax</p>
+                    <p className="font-semibold text-zinc-700 dark:text-gray-300">Property Tax</p>
                     <p>Estimated at 1.1% of the purchase price annually (the US national average effective property tax rate). Actual property taxes vary significantly by county and municipality. Check with the local tax assessor for exact figures.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Homeowner&#39;s Insurance</p>
+                    <p className="font-semibold text-zinc-700 dark:text-gray-300">Homeowner&#39;s Insurance</p>
                     <p>Estimated at $150-$250 per month based on property size and type. Actual insurance costs vary by location, coverage level, and insurer.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">5-Year Cost of Ownership</p>
+                    <p className="font-semibold text-zinc-700 dark:text-gray-300">5-Year Cost of Ownership</p>
                     <p>Sum of all estimated monthly costs multiplied by 60 months.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Estimated Home Value in 5 Years</p>
+                    <p className="font-semibold text-zinc-700 dark:text-gray-300">Estimated Home Value in 5 Years</p>
                     <p>Calculated assuming 3% annual appreciation, which approximates the long-term US average. Actual appreciation varies significantly by location and market conditions.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Estimated Equity After 5 Years</p>
+                    <p className="font-semibold text-zinc-700 dark:text-gray-300">Estimated Equity After 5 Years</p>
                     <p>Estimated home value in 5 years minus the remaining loan balance after 5 years of payments.</p>
                   </div>
                   <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
@@ -1743,11 +1743,11 @@ function ReportContent() {
         <>
           {/* ─── HOA RISK INTELLIGENCE (Sprint 1, Feature 4) ─── */}
           <section id="hoa-risk" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
               <Building2 className="h-5 w-5 text-white" />
               HOA Risk Intelligence
             </h2>
-            <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Analysis of HOA fee adequacy and potential risks</p>
+            <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">Analysis of HOA fee adequacy and potential risks</p>
             <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
               {properties.map((prop, hi) => {
                 const hoa = report.hoaRisk?.[hi] ?? null;
@@ -1756,17 +1756,17 @@ function ReportContent() {
                 if (!hoa && hoaStatus === 'confirmed_none') {
                   // Only show "No HOA Confirmed" if the listing explicitly states no HOA
                   return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={hi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
+                        <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{prop.address}</h3>
                       </div>
-                      <div className="rounded-lg border border-emerald-300 dark:border-emerald-700/40 bg-emerald-50 dark:bg-emerald-900/10 p-4">
+                      <div className="rounded-lg border border-green-300 dark:border-green-700/40 bg-green-50 dark:bg-green-900/10 p-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <Check className="h-4 w-4 text-emerald-500" />
-                          <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">No HOA Confirmed</p>
+                          <Check className="h-4 w-4 text-green-500" />
+                          <p className="text-xs font-bold text-green-700 dark:text-green-300">No HOA Confirmed</p>
                         </div>
-                        <p className="text-xs text-emerald-800 dark:text-emerald-300 leading-relaxed">
+                        <p className="text-xs text-green-800 dark:text-green-300 leading-relaxed">
                           This property has confirmed no HOA. However, verify directly with the listing agent as some community fees may still apply.
                         </p>
                       </div>
@@ -1776,11 +1776,11 @@ function ReportContent() {
                 if (!hoa && hoaStatus !== 'confirmed_none') {
                   // HOA status is not_listed/unknown and AI didn't generate risk data — show discovery questions
                   return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={hi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
+                          <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{prop.address}</h3>
                         </div>
                         <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white bg-amber-500">
                           HOA Unknown
@@ -1796,13 +1796,13 @@ function ReportContent() {
                         </p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Discovery Questions to Ask the Listing Agent</p>
+                        <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Discovery Questions to Ask the Listing Agent</p>
                         <ol className="space-y-1.5 list-decimal list-inside">
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Does this property have an HOA? If so, what is the monthly fee?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Are there any community association fees, maintenance fees, or shared amenity costs?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Are there any upcoming assessments or neighborhood improvement fees planned?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">What are the deed restrictions or CC&Rs for this property?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Are there any required memberships (pool, recreation center, etc.) with separate fees?</li>
+                          <li className="text-xs text-zinc-700 dark:text-gray-300">Does this property have an HOA? If so, what is the monthly fee?</li>
+                          <li className="text-xs text-zinc-700 dark:text-gray-300">Are there any community association fees, maintenance fees, or shared amenity costs?</li>
+                          <li className="text-xs text-zinc-700 dark:text-gray-300">Are there any upcoming assessments or neighborhood improvement fees planned?</li>
+                          <li className="text-xs text-zinc-700 dark:text-gray-300">What are the deed restrictions or CC&Rs for this property?</li>
+                          <li className="text-xs text-zinc-700 dark:text-gray-300">Are there any required memberships (pool, recreation center, etc.) with separate fees?</li>
                         </ol>
                       </div>
                     </div>
@@ -1811,11 +1811,11 @@ function ReportContent() {
                 // Properties with not_listed HOA that have discovery questions from the AI
                 if (hoa && hoa.monthlyFee === 0 && hoaStatus !== 'confirmed') {
                   return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={hi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
+                          <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{prop.address}</h3>
                         </div>
                         <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white bg-amber-500">
                           HOA Unknown
@@ -1832,10 +1832,10 @@ function ReportContent() {
                       </div>
                       {hoa.riskObservations.length > 0 && (
                         <div className="mb-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Risk Observations</p>
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Risk Observations</p>
                           <ul className="space-y-1.5">
                             {hoa.riskObservations.map((obs, oi) => (
-                              <li key={oi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
+                              <li key={oi} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-gray-300">
                                 <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
                                 {obs}
                               </li>
@@ -1845,10 +1845,10 @@ function ReportContent() {
                       )}
                       {hoa.agentQuestions.length > 0 && (
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Discovery Questions to Ask the Listing Agent</p>
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Discovery Questions to Ask the Listing Agent</p>
                           <ol className="space-y-1.5 list-decimal list-inside">
                             {hoa.agentQuestions.map((q, qi) => (
-                              <li key={qi} className="text-xs text-slate-700 dark:text-gray-300">{q}</li>
+                              <li key={qi} className="text-xs text-zinc-700 dark:text-gray-300">{q}</li>
                             ))}
                           </ol>
                         </div>
@@ -1860,26 +1860,26 @@ function ReportContent() {
                   const riskColor = hoa.riskLevel === "high" ? "#EF4444" : hoa.riskLevel === "medium" ? "#F59E0B" : "#10B981";
                   const riskLabel = hoa.riskLevel === "high" ? "High Risk" : hoa.riskLevel === "medium" ? "Medium Risk" : "Low Risk";
                   return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={hi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[hi]?.address ?? `Property ${hi + 1}`}</h3>
+                          <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[hi]?.address ?? `Property ${hi + 1}`}</h3>
                         </div>
                         <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: riskColor }}>
                           {riskLabel}
                         </span>
                       </div>
-                      <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3 mb-3">
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Monthly HOA Fee</p>
-                        <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">${hoa.monthlyFee.toLocaleString()}/month</p>
+                      <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3 mb-3">
+                        <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Monthly HOA Fee</p>
+                        <p className="text-sm font-bold text-zinc-950 dark:text-gray-100">${hoa.monthlyFee.toLocaleString()}/month</p>
                       </div>
                       {hoa.riskObservations.length > 0 && (
                         <div className="mb-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Risk Observations</p>
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Risk Observations</p>
                           <ul className="space-y-1.5">
                             {hoa.riskObservations.map((obs, oi) => (
-                              <li key={oi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
+                              <li key={oi} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-gray-300">
                                 <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
                                 {obs}
                               </li>
@@ -1889,10 +1889,10 @@ function ReportContent() {
                       )}
                       {hoa.agentQuestions.length > 0 && (
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Questions to Ask the HOA</p>
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Questions to Ask the HOA</p>
                           <ol className="space-y-1.5 list-decimal list-inside">
                             {hoa.agentQuestions.map((q, qi) => (
-                              <li key={qi} className="text-xs text-slate-700 dark:text-gray-300">{q}</li>
+                              <li key={qi} className="text-xs text-zinc-700 dark:text-gray-300">{q}</li>
                             ))}
                           </ol>
                         </div>
@@ -1909,48 +1909,48 @@ function ReportContent() {
             if (hasNegData) {
               return (
                 <section id="negotiation-intelligence" data-toc-section className="mt-8 scroll-mt-20">
-                  <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+                  <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                     <Handshake className="h-5 w-5 text-white" />
                     Negotiation Intelligence
                   </h2>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">How much leverage do you have as a buyer?</p>
+                  <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">How much leverage do you have as a buyer?</p>
                   <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                     {report.negotiationIntelligence!.map((neg, ni) => {
                       const strengthColor = neg.negotiationStrength === "strong_buyer" ? "#10B981" : neg.negotiationStrength === "balanced" ? "#F59E0B" : "#EF4444";
                       const strengthLabel = neg.negotiationStrength === "strong_buyer" ? "Strong Buyer Position" : neg.negotiationStrength === "balanced" ? "Balanced Market" : "Seller's Market";
                       return (
-                        <div key={ni} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div key={ni} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
                               <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ni] }} />
-                              <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[ni]?.address ?? `Property ${ni + 1}`}</h3>
+                              <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[ni]?.address ?? `Property ${ni + 1}`}</h3>
                             </div>
                             <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: strengthColor }}>
                               {strengthLabel}
                             </span>
                           </div>
                           <div className="space-y-3">
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Market Position</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.marketPosition}</p>
+                            <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                              <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Market Position</p>
+                              <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">{neg.marketPosition}</p>
                             </div>
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Days on Market Analysis</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.daysOnMarketAnalysis}</p>
+                            <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                              <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Days on Market Analysis</p>
+                              <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">{neg.daysOnMarketAnalysis}</p>
                             </div>
-                            <div className="rounded-lg bg-blue-50 dark:bg-blue-900/10 p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-1">Suggested Offer Range</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.suggestedOfferRange}</p>
-                              <p className="mt-1 text-[9px] italic text-slate-400">Estimate based on available data</p>
+                            <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/10 p-3">
+                              <p className="text-[10px] font-bold tracking-wide text-zinc-600 mb-1">Suggested Offer Range</p>
+                              <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">{neg.suggestedOfferRange}</p>
+                              <p className="mt-1 text-[9px] italic text-zinc-400">Estimate based on available data</p>
                             </div>
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Concession Opportunities</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.concessionOpportunities}</p>
+                            <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                              <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Concession Opportunities</p>
+                              <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">{neg.concessionOpportunities}</p>
                             </div>
                             {neg.redFlags && neg.redFlags !== "None identified" && (
                               <div className="rounded-lg bg-red-50 dark:bg-red-900/10 p-3">
-                                <p className="text-[10px] font-bold uppercase tracking-wide text-red-600 mb-1">Red Flags</p>
-                                <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.redFlags}</p>
+                                <p className="text-[10px] font-bold tracking-wide text-red-600 mb-1">Red Flags</p>
+                                <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">{neg.redFlags}</p>
                               </div>
                             )}
                           </div>
@@ -1964,11 +1964,11 @@ function ReportContent() {
             // Fallback: generate negotiation intelligence from listing data
             return (
               <section id="negotiation-intelligence" data-toc-section className="mt-8 scroll-mt-20">
-                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                   <Handshake className="h-5 w-5 text-white" />
                   Negotiation Intelligence
                 </h2>
-                <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">How much leverage do you have as a buyer?</p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">How much leverage do you have as a buyer?</p>
                 <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {properties.map((prop, pi) => {
                     const listing = listings[pi];
@@ -1982,35 +1982,35 @@ function ReportContent() {
                     const offerHigh = dom !== null && dom > 90 ? Math.round(price * 0.97) : dom !== null && dom > 45 ? Math.round(price * 0.98) : price;
 
                     return (
-                      <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
                             <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                            <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
+                            <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{prop.address}</h3>
                           </div>
                           <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: strengthColor }}>
                             {strengthLabel}
                           </span>
                         </div>
                         <div className="space-y-3">
-                          <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Days on Market Analysis</p>
-                            <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">
+                          <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                            <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Days on Market Analysis</p>
+                            <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">
                               {dom !== null
                                 ? `This property has been on the market for ${dom} days. ${dom > 90 ? "Properties on market longer than 90 days typically have significant negotiation room — consider offering 5-8% below asking." : dom > 45 ? "At 46-90 days, buyer leverage is moderate — consider offering 3-5% below asking." : dom > 30 ? "At 15-45 days, the market position is balanced — consider offering 1-3% below asking." : "At under 14 days, the seller has a stronger position. Be prepared to offer at or near asking price."}`
                                 : "Days on market data is not available. Ask your agent about the listing history and any previous offers."}
                             </p>
                           </div>
                           {price > 0 && (
-                            <div className="rounded-lg bg-blue-50 dark:bg-blue-900/10 p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-1">Suggested Offer Range</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">${offerLow.toLocaleString()} – ${offerHigh.toLocaleString()}</p>
-                              <p className="mt-1 text-[9px] italic text-slate-400">AI Estimate based on days on market and listing data</p>
+                            <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/10 p-3">
+                              <p className="text-[10px] font-bold tracking-wide text-zinc-600 mb-1">Suggested Offer Range</p>
+                              <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">${offerLow.toLocaleString()} – ${offerHigh.toLocaleString()}</p>
+                              <p className="mt-1 text-[9px] italic text-zinc-400">AI Estimate based on days on market and listing data</p>
                             </div>
                           )}
-                          <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Concession Opportunities</p>
-                            <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">
+                          <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                            <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Concession Opportunities</p>
+                            <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">
                               {reductions.length > 0
                                 ? `This property has had ${reductions.length} price reduction(s), signaling seller flexibility. Consider asking for closing cost credits, repair credits, or appliance inclusions.`
                                 : "No price reductions detected yet. You can still ask for closing cost credits, home warranty inclusion, or repair credits based on inspection findings."}
@@ -2027,7 +2027,7 @@ function ReportContent() {
 
           {/* ─── NEIGHBORHOOD INTELLIGENCE (paid) ─── */}
           <section id="neighborhood" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
               <MapPin className="h-5 w-5 text-white" />
               Neighborhood Intelligence
             </h2>
@@ -2035,14 +2035,14 @@ function ReportContent() {
               <>
                 <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.neighborhoodIntelligenceStructured.map((data, pi) => (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
                         <h3 className="text-sm font-semibold" style={{ color: PROPERTY_COLORS[pi] }}>{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
                       </div>
                       <ul className="space-y-2">
                         {data.bullets.map((bullet, bi) => (
-                          <li key={bi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
+                          <li key={bi} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-gray-300">
                             <span className="mt-1 h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
                             {bullet}
                           </li>
@@ -2052,15 +2052,15 @@ function ReportContent() {
                   ))}
                 </div>
                 {report.neighborhoodIntelligenceStructured[0]?.verdict && (
-                  <div className="mt-3 rounded-xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-                    <p className="text-xs font-semibold text-[#6C5CE7]">Comparison Verdict</p>
-                    <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">{report.neighborhoodIntelligenceStructured[0].verdict}</p>
+                  <div className="mt-3 rounded-xl border border-zinc-900/20 bg-zinc-900/5 px-4 py-3">
+                    <p className="text-xs font-semibold text-zinc-900">Comparison Verdict</p>
+                    <p className="text-sm text-zinc-700 dark:text-gray-300 mt-1">{report.neighborhoodIntelligenceStructured[0].verdict}</p>
                   </div>
                 )}
               </>
             ) : (
-              <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
+              <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">
                   {report.neighborhoodIntelligence || (() => {
                     const cities = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[1]?.trim()).filter(Boolean)));
                     const states = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[2]?.trim()?.split(" ")[0]).filter(Boolean)));
@@ -2076,7 +2076,7 @@ function ReportContent() {
           {/* ─── NEARBY SCHOOLS (paid, real data) ─── */}
           {isPaid && paidData?.schools && paidData.schools.some(s => s.length > 0) ? (
             <section id="schools" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <GraduationCap className="h-5 w-5 text-white" />
                 Nearby Schools
               </h2>
@@ -2091,38 +2091,38 @@ function ReportContent() {
                   const displaySchools = Object.values(grouped).flat().sort((a, b) => a.distanceMiles - b.distanceMiles).slice(0, 9);
 
                   return (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
+                        <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
                       </div>
                       {displaySchools.length > 0 ? (
                         <div className="overflow-x-auto">
                           <table className="w-full text-xs">
                             <thead>
-                              <tr className="bg-[#6C5CE7]">
-                                <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">School Name</th>
-                                <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Level</th>
-                                <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Distance</th>
-                                <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">View Ratings</th>
+                              <tr className="bg-zinc-900">
+                                <th className="px-4 py-3 text-left font-bold text-white tracking-wider">School Name</th>
+                                <th className="px-4 py-3 text-center font-bold text-white tracking-wider">Level</th>
+                                <th className="px-4 py-3 text-center font-bold text-white tracking-wider">Distance</th>
+                                <th className="px-4 py-3 text-center font-bold text-white tracking-wider">View Ratings</th>
                               </tr>
                             </thead>
                             <tbody>
                               {displaySchools.map((school, si) => {
-                                const levelColor = school.level === 'Elementary' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                                  : school.level === 'Middle' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
-                                  : school.level === 'High' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
-                                  : school.level === 'Middle/High' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300'
+                                const levelColor = school.level === 'Elementary' ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300'
+                                  : school.level === 'Middle' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                                  : school.level === 'High' ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300'
+                                  : school.level === 'Middle/High' ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300'
                                   : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400';
                                 return (
-                                  <tr key={si} className={si % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}>
-                                    <td className="px-2 py-1.5 font-medium text-slate-700 dark:text-gray-300">{school.name}</td>
+                                  <tr key={si} className={si % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}>
+                                    <td className="px-2 py-1.5 font-medium text-zinc-700 dark:text-gray-300">{school.name}</td>
                                     <td className="px-2 py-1.5 text-center">
                                       <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${levelColor}`}>{school.level}</span>
                                     </td>
-                                    <td className="px-2 py-1.5 text-center text-slate-500 dark:text-gray-400">{school.distanceMiles} mi</td>
+                                    <td className="px-2 py-1.5 text-center text-zinc-500 dark:text-gray-400">{school.distanceMiles} mi</td>
                                     <td className="px-2 py-1.5 text-center">
-                                      <a href={school.greatSchoolsSearchUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md border border-purple-300 dark:border-purple-700 px-2 py-0.5 text-[10px] font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
+                                      <a href={school.greatSchoolsSearchUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md border border-zinc-300 dark:border-zinc-700 px-2 py-0.5 text-[10px] font-semibold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors">
                                         View on GreatSchools <ExternalLink className="h-2.5 w-2.5" />
                                       </a>
                                     </td>
@@ -2133,17 +2133,17 @@ function ReportContent() {
                           </table>
                         </div>
                       ) : (
-                        <p className="text-xs text-slate-500 dark:text-gray-400 italic">No public schools found within 2 miles of this address.</p>
+                        <p className="text-xs text-zinc-500 dark:text-gray-400 italic">No public schools found within 2 miles of this address.</p>
                       )}
                     </div>
                   );
                 })}
               </div>
-              <p className="mt-2 text-[9px] text-slate-400 italic">School directory data from the National Center for Education Statistics (NCES). For ratings, test scores, and parent reviews, click &apos;View on GreatSchools&apos; for each school. School attendance boundaries may differ from proximity. Confirm your assigned school with the local school district.</p>
+              <p className="mt-2 text-[9px] text-zinc-400 italic">School directory data from the National Center for Education Statistics (NCES). For ratings, test scores, and parent reviews, click &apos;View on GreatSchools&apos; for each school. School attendance boundaries may differ from proximity. Confirm your assigned school with the local school district.</p>
             </section>
           ) : isPaid && (
             <section id="schools" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <GraduationCap className="h-5 w-5 text-white" />
                 School District Context
               </h2>
@@ -2151,14 +2151,14 @@ function ReportContent() {
                 <>
                   <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                     {report.schoolDistrictContextStructured.map((data, pi) => (
-                      <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-2 mb-4">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
                           <h3 className="text-sm font-semibold" style={{ color: PROPERTY_COLORS[pi] }}>{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
                         </div>
                         <ul className="space-y-2">
                           {data.bullets.map((bullet, bi) => (
-                            <li key={bi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
+                            <li key={bi} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-gray-300">
                               <span className="mt-1 h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
                               {bullet}
                             </li>
@@ -2168,18 +2168,18 @@ function ReportContent() {
                     ))}
                   </div>
                   {report.schoolDistrictContextStructured[0]?.verdict && (
-                    <div className="mt-3 rounded-xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-                      <p className="text-xs font-semibold text-[#6C5CE7]">Comparison Verdict</p>
-                      <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">{report.schoolDistrictContextStructured[0].verdict}</p>
+                    <div className="mt-3 rounded-xl border border-zinc-900/20 bg-zinc-900/5 px-4 py-3">
+                      <p className="text-xs font-semibold text-zinc-900">Comparison Verdict</p>
+                      <p className="text-sm text-zinc-700 dark:text-gray-300 mt-1">{report.schoolDistrictContextStructured[0].verdict}</p>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
+                <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">
                     {report.schoolDistrictContext || "School district data was not available for these addresses. Visit GreatSchools.org or your county school district website to verify school assignments."}
                   </p>
-                  <p className="mt-2 text-[9px] text-slate-400 italic">School data sourced from public records. Confirm current school assignments with the local school district.</p>
+                  <p className="mt-2 text-[9px] text-zinc-400 italic">School data sourced from public records. Confirm current school assignments with the local school district.</p>
                 </div>
               )}
             </section>
@@ -2188,78 +2188,78 @@ function ReportContent() {
           {/* ─── SAFETY CONTEXT (paid, crime data) ─── */}
           {isPaid && paidData?.crimeData && paidData.crimeData.some(c => c !== null) ? (
             <section id="safety-crime" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <Shield className="h-5 w-5 text-white" />
                 Safety Context
               </h2>
               <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                 {paidData.crimeData.map((crime, ci) => (
-                  <div key={ci} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div key={ci} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
-                      <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[ci]?.address ?? `Property ${ci + 1}`}</h3>
+                      <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[ci]?.address ?? `Property ${ci + 1}`}</h3>
                     </div>
                     {crime ? (
                       <div className="space-y-3">
                         {/* Violent Crime Rate */}
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
+                        <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Violent Crime Rate</span>
-                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${crime.vsNationalViolent === 'below' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : crime.vsNationalViolent === 'above' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
+                            <span className="text-[10px] font-bold tracking-wide text-zinc-500">Violent Crime Rate</span>
+                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${crime.vsNationalViolent === 'below' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : crime.vsNationalViolent === 'above' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
                               {crime.vsNationalViolent === 'below' ? 'Below Average' : crime.vsNationalViolent === 'above' ? 'Above Average' : 'Average'}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-700 dark:text-gray-300">{crime.violentCrimeRate.toLocaleString()} per 100,000 residents</p>
+                          <p className="text-xs text-zinc-700 dark:text-gray-300">{crime.violentCrimeRate.toLocaleString()} per 100,000 residents</p>
                           <div className="mt-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
                             <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${Math.min(100, (crime.violentCrimeRate / 800) * 100)}%`, backgroundColor: crime.vsNationalViolent === 'below' ? '#10B981' : crime.vsNationalViolent === 'above' ? '#EF4444' : '#F59E0B' }} />
-                            <div className="absolute top-0 h-full w-0.5 bg-slate-500" style={{ left: `${(380 / 800) * 100}%` }} title="National average: 380" />
+                            <div className="absolute top-0 h-full w-0.5 bg-zinc-500" style={{ left: `${(380 / 800) * 100}%` }} title="National average: 380" />
                           </div>
-                          <p className="mt-1 text-[9px] text-slate-400">National average: ~380 per 100,000</p>
+                          <p className="mt-1 text-[9px] text-zinc-400">National average: ~380 per 100,000</p>
                         </div>
                         {/* Property Crime Rate */}
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
+                        <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Property Crime Rate</span>
-                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${crime.vsNationalProperty === 'below' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : crime.vsNationalProperty === 'above' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
+                            <span className="text-[10px] font-bold tracking-wide text-zinc-500">Property Crime Rate</span>
+                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${crime.vsNationalProperty === 'below' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : crime.vsNationalProperty === 'above' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
                               {crime.vsNationalProperty === 'below' ? 'Below Average' : crime.vsNationalProperty === 'above' ? 'Above Average' : 'Average'}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-700 dark:text-gray-300">{crime.propertyCrimeRate.toLocaleString()} per 100,000 residents</p>
+                          <p className="text-xs text-zinc-700 dark:text-gray-300">{crime.propertyCrimeRate.toLocaleString()} per 100,000 residents</p>
                           <div className="mt-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
                             <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${Math.min(100, (crime.propertyCrimeRate / 4000) * 100)}%`, backgroundColor: crime.vsNationalProperty === 'below' ? '#10B981' : crime.vsNationalProperty === 'above' ? '#EF4444' : '#F59E0B' }} />
-                            <div className="absolute top-0 h-full w-0.5 bg-slate-500" style={{ left: `${(2100 / 4000) * 100}%` }} title="National average: 2100" />
+                            <div className="absolute top-0 h-full w-0.5 bg-zinc-500" style={{ left: `${(2100 / 4000) * 100}%` }} title="National average: 2100" />
                           </div>
-                          <p className="mt-1 text-[9px] text-slate-400">National average: ~2,100 per 100,000</p>
+                          <p className="mt-1 text-[9px] text-zinc-400">National average: ~2,100 per 100,000</p>
                         </div>
-                        <p className="text-[9px] text-slate-400 italic">{crime.dataNote}</p>
+                        <p className="text-[9px] text-zinc-400 italic">{crime.dataNote}</p>
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500 dark:text-gray-400 italic">Crime data not available for this jurisdiction.</p>
+                      <p className="text-xs text-zinc-500 dark:text-gray-400 italic">Crime data not available for this jurisdiction.</p>
                     )}
                   </div>
                 ))}
               </div>
-              <p className="mt-2 text-[9px] text-slate-400 italic">Crime statistics from FBI Uniform Crime Reporting. These are city/jurisdiction-level figures, not neighborhood or street-level data. They reflect reported crimes only.</p>
+              <p className="mt-2 text-[9px] text-zinc-400 italic">Crime statistics from FBI Uniform Crime Reporting. These are city/jurisdiction-level figures, not neighborhood or street-level data. They reflect reported crimes only.</p>
             </section>
           ) : isPaid && (
             <section id="safety-crime" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <Shield className="h-5 w-5 text-white" />
                 Safety and Crime Context
               </h2>
-              <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div className="space-y-3">
                   {(() => {
                     const cities = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[1]?.trim()).filter(Boolean)));
                     const cityStr = cities.length > 0 ? cities.join(" and ") : "this area";
                     return (
                       <>
-                        <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
+                        <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">
                           Crime statistics for {cityStr} could not be retrieved from the FBI Uniform Crime Reporting database at the time of report generation.
                         </p>
-                        <div className="rounded-lg bg-blue-50 dark:bg-blue-900/10 p-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-1">What To Do</p>
-                          <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">
+                        <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900/10 p-3">
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-600 mb-1">What To Do</p>
+                          <p className="text-xs leading-relaxed text-zinc-700 dark:text-gray-300">
                             Neighborhood-level crime data is not available for this area from federal databases. Search &quot;{cityStr} crime statistics&quot; or contact the local police department&apos;s public records office for current data.
                           </p>
                         </div>
@@ -2267,7 +2267,7 @@ function ReportContent() {
                     );
                   })()}
                 </div>
-                <p className="mt-2 text-[9px] text-slate-400 italic">State-level crime data from FBI UCR public records. Always verify current crime statistics with local law enforcement for neighborhood-level accuracy.</p>
+                <p className="mt-2 text-[9px] text-zinc-400 italic">State-level crime data from FBI UCR public records. Always verify current crime statistics with local law enforcement for neighborhood-level accuracy.</p>
               </div>
             </section>
           )}
@@ -2306,19 +2306,19 @@ function ReportContent() {
 
             return (
             <section id="price-history" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <History className="h-5 w-5 text-white" />
                 Price History
               </h2>
 
               {/* Side-by-side comparison table */}
-              <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+              <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
                 <table className="w-full text-xs">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="px-4 py-2.5 text-left font-semibold text-slate-600 dark:text-gray-400"></th>
+                      <th className="px-4 py-2.5 text-left font-semibold text-zinc-600 dark:text-gray-400"></th>
                       {propertyStats.map((ps, idx) => (
-                        <th key={idx} className="px-4 py-2.5 text-left font-semibold text-slate-700 dark:text-gray-200">
+                        <th key={idx} className="px-4 py-2.5 text-left font-semibold text-zinc-700 dark:text-gray-200">
                           <div className="flex items-center gap-1.5">
                             <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[idx] }} />
                             <span className="truncate max-w-[200px]">{ps.address.length > 35 ? ps.address.slice(0, 35) + '...' : ps.address}</span>
@@ -2329,32 +2329,32 @@ function ReportContent() {
                   </thead>
                   <tbody>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Last Sale Price</td>
+                      <td className="px-4 py-2 font-medium text-zinc-600 dark:text-gray-400">Last Sale Price</td>
                       {propertyStats.map((ps, idx) => {
                         const best = propertyStats.every(other => ps.lastSalePrice == null || other.lastSalePrice == null || ps.lastSalePrice <= (other.lastSalePrice ?? Infinity));
                         return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best && ps.lastSalePrice != null ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
+                          <td key={idx} className={`px-4 py-2 text-zinc-700 dark:text-gray-300 ${best && ps.lastSalePrice != null ? 'bg-green-50 dark:bg-green-900/20' : ''}`}>
                             {ps.lastSalePrice != null ? `$${ps.lastSalePrice.toLocaleString()}` : 'Not available'}
                           </td>
                         );
                       })}
                     </tr>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Last Sale Date</td>
+                      <td className="px-4 py-2 font-medium text-zinc-600 dark:text-gray-400">Last Sale Date</td>
                       {propertyStats.map((ps, idx) => (
-                        <td key={idx} className="px-4 py-2 text-slate-700 dark:text-gray-300">
+                        <td key={idx} className="px-4 py-2 text-zinc-700 dark:text-gray-300">
                           {ps.lastSaleDate ? (() => { try { return new Date(ps.lastSaleDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }); } catch { return ps.lastSaleDate; } })() : '\u2014'}
                         </td>
                       ))}
                     </tr>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Total Appreciation</td>
+                      <td className="px-4 py-2 font-medium text-zinc-600 dark:text-gray-400">Total Appreciation</td>
                       {propertyStats.map((ps, idx) => {
                         const best = propertyStats.every(other => other.appreciationPct == null || (ps.appreciationPct != null && ps.appreciationPct >= (other.appreciationPct ?? -Infinity)));
                         return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best && ps.appreciation != null ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
+                          <td key={idx} className={`px-4 py-2 text-zinc-700 dark:text-gray-300 ${best && ps.appreciation != null ? 'bg-green-50 dark:bg-green-900/20' : ''}`}>
                             {ps.appreciation != null && ps.appreciationPct != null
-                              ? <span className={ps.appreciation >= 0 ? 'text-emerald-600' : 'text-red-600'}>
+                              ? <span className={ps.appreciation >= 0 ? 'text-green-600' : 'text-red-600'}>
                                   {ps.appreciation >= 0 ? '+' : ''}${Math.abs(ps.appreciation).toLocaleString()} ({ps.appreciation >= 0 ? '+' : ''}{ps.appreciationPct.toFixed(1)}%)
                                 </span>
                               : '\u2014'}
@@ -2363,11 +2363,11 @@ function ReportContent() {
                       })}
                     </tr>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Price Reductions</td>
+                      <td className="px-4 py-2 font-medium text-zinc-600 dark:text-gray-400">Price Reductions</td>
                       {propertyStats.map((ps, idx) => {
                         const best = ps.reductionCount === 0 && ps.events.length > 0;
                         return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
+                          <td key={idx} className={`px-4 py-2 text-zinc-700 dark:text-gray-300 ${best ? 'bg-green-50 dark:bg-green-900/20' : ''}`}>
                             {ps.events.length > 0
                               ? (ps.reductionCount > 0
                                 ? `${ps.reductionCount} reduction${ps.reductionCount > 1 ? 's' : ''} (-$${ps.totalReduction.toLocaleString()})`
@@ -2378,11 +2378,11 @@ function ReportContent() {
                       })}
                     </tr>
                     <tr>
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Days on Market</td>
+                      <td className="px-4 py-2 font-medium text-zinc-600 dark:text-gray-400">Days on Market</td>
                       {propertyStats.map((ps, idx) => {
                         const best = propertyStats.every(other => other.daysOnMarket == null || (ps.daysOnMarket != null && ps.daysOnMarket <= (other.daysOnMarket ?? Infinity)));
                         return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best && ps.daysOnMarket != null ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
+                          <td key={idx} className={`px-4 py-2 text-zinc-700 dark:text-gray-300 ${best && ps.daysOnMarket != null ? 'bg-green-50 dark:bg-green-900/20' : ''}`}>
                             {ps.daysOnMarket != null ? `${ps.daysOnMarket} days` : 'Unknown'}
                           </td>
                         );
@@ -2394,8 +2394,8 @@ function ReportContent() {
 
               {/* AI narrative comparison */}
               {report.priceHistoryComparison && (
-                <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.priceHistoryComparison}</p>
+                <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">{report.priceHistoryComparison}</p>
                 </div>
               )}
 
@@ -2410,41 +2410,41 @@ function ReportContent() {
                   const lastSaleDate = listing?.lastSaleDate ?? ph?.lastSaleDate ?? null;
 
                   return (
-                    <div key={idx} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={idx} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[idx] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
+                        <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{prop.address}</h3>
                       </div>
 
                       {/* Sales History Table */}
                       {events.length > 0 ? (
                         <div className="mb-4">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Sales History</p>
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Sales History</p>
                           <div className="overflow-x-auto">
                             <table className="w-full text-xs">
                               <thead>
                                 <tr className="border-b border-gray-200 dark:border-gray-700">
-                                  <th className="px-2 py-1.5 text-left font-semibold text-slate-600 dark:text-gray-400">Date</th>
-                                  <th className="px-2 py-1.5 text-left font-semibold text-slate-600 dark:text-gray-400">Event</th>
-                                  <th className="px-2 py-1.5 text-right font-semibold text-slate-600 dark:text-gray-400">Price</th>
-                                  <th className="px-2 py-1.5 text-right font-semibold text-slate-600 dark:text-gray-400">Change</th>
+                                  <th className="px-2 py-1.5 text-left font-semibold text-zinc-600 dark:text-gray-400">Date</th>
+                                  <th className="px-2 py-1.5 text-left font-semibold text-zinc-600 dark:text-gray-400">Event</th>
+                                  <th className="px-2 py-1.5 text-right font-semibold text-zinc-600 dark:text-gray-400">Price</th>
+                                  <th className="px-2 py-1.5 text-right font-semibold text-zinc-600 dark:text-gray-400">Change</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 {events.map((ev, evi) => {
                                   const rowBg = ev.event === "Sold" ? ''
-                                    : ev.event === "Listed" || ev.event === "Relisted" ? 'bg-blue-50 dark:bg-blue-900/10'
+                                    : ev.event === "Listed" || ev.event === "Relisted" ? 'bg-zinc-50 dark:bg-zinc-900/10'
                                     : ev.event === "Price Reduced" ? 'bg-red-50 dark:bg-red-900/10'
                                     : ev.event === "Price Increased" ? 'bg-orange-50 dark:bg-orange-900/10'
                                     : '';
                                   return (
                                     <tr key={evi} className={`border-b border-gray-100 dark:border-gray-800 ${rowBg}`}>
-                                      <td className="px-2 py-1.5 text-slate-700 dark:text-gray-300">{ev.date || '\u2014'}</td>
-                                      <td className="px-2 py-1.5 text-slate-700 dark:text-gray-300 font-medium">{ev.event}</td>
-                                      <td className="px-2 py-1.5 text-right text-slate-700 dark:text-gray-300">
+                                      <td className="px-2 py-1.5 text-zinc-700 dark:text-gray-300">{ev.date || '\u2014'}</td>
+                                      <td className="px-2 py-1.5 text-zinc-700 dark:text-gray-300 font-medium">{ev.event}</td>
+                                      <td className="px-2 py-1.5 text-right text-zinc-700 dark:text-gray-300">
                                         {ev.price != null ? `$${ev.price.toLocaleString()}` : '\u2014'}
                                       </td>
-                                      <td className={`px-2 py-1.5 text-right ${ev.event === 'Price Reduced' ? 'text-red-600' : 'text-slate-700 dark:text-gray-300'}`}>
+                                      <td className={`px-2 py-1.5 text-right ${ev.event === 'Price Reduced' ? 'text-red-600' : 'text-zinc-700 dark:text-gray-300'}`}>
                                         {ev.priceChange != null ? `${ev.priceChange >= 0 ? '+' : ''}$${ev.priceChange.toLocaleString()}` : '\u2014'}
                                       </td>
                                     </tr>
@@ -2456,23 +2456,23 @@ function ReportContent() {
                         </div>
                       ) : lastSalePrice != null ? (
                         <div className="mb-4">
-                          <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Last Sold</p>
-                            <p className="text-xs text-slate-700 dark:text-gray-300">
+                          <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3">
+                            <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Last Sold</p>
+                            <p className="text-xs text-zinc-700 dark:text-gray-300">
                               {lastSaleDate ? (() => { try { return new Date(lastSaleDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }); } catch { return lastSaleDate; } })() : 'Date unknown'} for ${lastSalePrice.toLocaleString()}
                             </p>
                           </div>
                         </div>
                       ) : (
-                        <p className="text-xs text-slate-500 italic mb-4">Price history could not be retrieved for this property. The property may not have recent sale records in public databases, or this may be a new construction. We recommend requesting the seller&apos;s disclosure for ownership history.</p>
+                        <p className="text-xs text-zinc-500 italic mb-4">Price history could not be retrieved for this property. The property may not have recent sale records in public databases, or this may be a new construction. We recommend requesting the seller&apos;s disclosure for ownership history.</p>
                       )}
 
                       {/* Appreciation from paidData if available */}
                       {ph && ph.appreciationAmount !== null && ph.appreciationPercent !== null && (
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3 mb-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Appreciation</p>
-                          <p className="text-xs text-slate-700 dark:text-gray-300">
-                            <span className={ph.appreciationAmount >= 0 ? 'text-emerald-600' : 'text-red-600'}>
+                        <div className="rounded-lg bg-gray-50 dark:bg-zinc-950 p-3 mb-3">
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-1">Appreciation</p>
+                          <p className="text-xs text-zinc-700 dark:text-gray-300">
+                            <span className={ph.appreciationAmount >= 0 ? 'text-green-600' : 'text-red-600'}>
                               {ph.appreciationAmount >= 0 ? '+' : ''}${Math.abs(ph.appreciationAmount).toLocaleString()} ({ph.appreciationAmount >= 0 ? '+' : ''}{ph.appreciationPercent}%)
                             </span> since purchase
                           </p>
@@ -2482,11 +2482,11 @@ function ReportContent() {
                       {/* Key Insights */}
                       {insights.length > 0 && (
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Key Insights</p>
+                          <p className="text-[10px] font-bold tracking-wide text-zinc-500 mb-2">Key Insights</p>
                           <ul className="space-y-1.5">
                             {insights.map((insight, ii) => (
-                              <li key={ii} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                                <div className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                              <li key={ii} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-gray-300">
+                                <div className="mt-1 h-1.5 w-1.5 rounded-full bg-green-500 shrink-0" />
                                 {insight}
                               </li>
                             ))}
@@ -2504,46 +2504,46 @@ function ReportContent() {
           {/* ─── MAINTENANCE AND AGE ANALYSIS (paid) ─── */}
           {report.maintenanceAnalysis && report.maintenanceAnalysis.length > 0 && (
             <section id="maintenance-analysis" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <Wrench className="h-5 w-5 text-white" />
                 Maintenance and Age Analysis
               </h2>
-              <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Based on year built, which systems may need attention?</p>
+              <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">Based on year built, which systems may need attention?</p>
               <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                 {report.maintenanceAnalysis.map((propItems, pi) => {
                   const totalRisk = propItems.filter(item => item.riskLevel === "red" || item.riskLevel === "yellow").length;
                   return (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex items-center gap-2 mb-4">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
+                        <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
                       </div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-xs">
                           <thead>
-                            <tr className="bg-[#6C5CE7]">
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">System</th>
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Lifespan</th>
-                              <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Risk</th>
-                              <th className="px-4 py-3 text-right font-bold text-white uppercase tracking-wider">Est. Cost</th>
+                            <tr className="bg-zinc-900">
+                              <th className="px-4 py-3 text-left font-bold text-white tracking-wider">System</th>
+                              <th className="px-4 py-3 text-left font-bold text-white tracking-wider">Lifespan</th>
+                              <th className="px-4 py-3 text-center font-bold text-white tracking-wider">Risk</th>
+                              <th className="px-4 py-3 text-right font-bold text-white tracking-wider">Est. Cost</th>
                             </tr>
                           </thead>
                           <tbody>
                             {propItems.map((item, ii) => (
-                              <tr key={ii} className={`border-b border-gray-300 dark:border-gray-600 ${ii % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50 dark:bg-[#15152A]"}`}>
-                                <td className="px-4 py-3 font-semibold text-slate-800 dark:text-gray-200 bg-gray-50 dark:bg-[#15152A]">{item.system}</td>
-                                <td className="px-4 py-3 text-slate-600 dark:text-gray-400">{item.typicalLifespan}</td>
+                              <tr key={ii} className={`border-b border-gray-300 dark:border-gray-600 ${ii % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50 dark:bg-zinc-950"}`}>
+                                <td className="px-4 py-3 font-semibold text-zinc-800 dark:text-gray-200 bg-gray-50 dark:bg-zinc-950">{item.system}</td>
+                                <td className="px-4 py-3 text-zinc-600 dark:text-gray-400">{item.typicalLifespan}</td>
                                 <td className="px-4 py-3 text-center">
-                                  <span className={`inline-block h-2.5 w-2.5 rounded-full ${item.riskLevel === "green" ? "bg-emerald-500" : item.riskLevel === "yellow" ? "bg-amber-500" : "bg-red-500"}`} />
+                                  <span className={`inline-block h-2.5 w-2.5 rounded-full ${item.riskLevel === "green" ? "bg-green-500" : item.riskLevel === "yellow" ? "bg-amber-500" : "bg-red-500"}`} />
                                 </td>
-                                <td className="px-4 py-3 text-right text-slate-600 dark:text-gray-400">{item.estimatedCost}</td>
+                                <td className="px-4 py-3 text-right text-zinc-600 dark:text-gray-400">{item.estimatedCost}</td>
                               </tr>
                             ))}
                           </tbody>
                         </table>
                       </div>
                       <div className="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <p className="text-[10px] text-slate-500">
+                        <p className="text-[10px] text-zinc-500">
                           {totalRisk === 0
                             ? "No major maintenance concerns identified for the next 5 years."
                             : `${totalRisk} system${totalRisk > 1 ? "s" : ""} may need attention in the next 5 years.`}
@@ -2553,14 +2553,14 @@ function ReportContent() {
                   );
                 })}
               </div>
-              <p className="mt-2 text-[9px] text-slate-400 italic">Cost estimates are industry standard ranges, not property-specific quotes. Always get professional inspections before purchasing.</p>
+              <p className="mt-2 text-[9px] text-zinc-400 italic">Cost estimates are industry standard ranges, not property-specific quotes. Always get professional inspections before purchasing.</p>
             </section>
           )}
 
           {/* ─── INVESTMENT OUTLOOK (paid) ─── */}
           {(report.investmentOutlook || report.investmentPerspective || report.investmentOutlookStructured) && (
             <section id="investment-outlook" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                 <TrendingUp className="h-5 w-5 text-white" />
                 Investment Outlook
               </h2>
@@ -2568,14 +2568,14 @@ function ReportContent() {
                 <>
                   <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                     {report.investmentOutlookStructured.map((data, pi) => (
-                      <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-2 mb-4">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
                           <h3 className="text-sm font-semibold" style={{ color: PROPERTY_COLORS[pi] }}>{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
                         </div>
                         <ul className="space-y-2">
                           {data.bullets.map((bullet, bi) => (
-                            <li key={bi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
+                            <li key={bi} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-gray-300">
                               <span className="mt-1 h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
                               {bullet}
                             </li>
@@ -2585,15 +2585,15 @@ function ReportContent() {
                     ))}
                   </div>
                   {report.investmentOutlookStructured[0]?.verdict && (
-                    <div className="mt-3 rounded-xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-                      <p className="text-xs font-semibold text-[#6C5CE7]">Comparison Verdict</p>
-                      <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">{report.investmentOutlookStructured[0].verdict}</p>
+                    <div className="mt-3 rounded-xl border border-zinc-900/20 bg-zinc-900/5 px-4 py-3">
+                      <p className="text-xs font-semibold text-zinc-900">Comparison Verdict</p>
+                      <p className="text-sm text-zinc-700 dark:text-gray-300 mt-1">{report.investmentOutlookStructured[0].verdict}</p>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.investmentOutlook || report.investmentPerspective}</p>
+                <div className="mt-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <p className="text-sm leading-relaxed text-zinc-700 dark:text-gray-300">{report.investmentOutlook || report.investmentPerspective}</p>
                 </div>
               )}
             </section>
@@ -2602,14 +2602,14 @@ function ReportContent() {
           {/* ─── DETAILED SIDE-BY-SIDE COMPARISON (paid) ─── */}
           {report.detailedComparison && report.detailedComparison.length > 0 && (
             <section id="side-by-side" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">Detailed Side-by-Side Comparison</h2>
-              <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
+              <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">Detailed Side-by-Side Comparison</h2>
+              <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 shadow-sm">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-[#6C5CE7]">
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Category</th>
+                    <tr className="bg-zinc-900">
+                      <th className="px-4 py-3 text-left text-xs font-bold tracking-wider text-white">Category</th>
                       {properties.map((p, i) => (
-                        <th key={i} className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
+                        <th key={i} className="px-4 py-3 text-center text-xs font-bold tracking-wider text-white">
                           <div className="flex items-center justify-center gap-1.5">
                             <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
                             {shortAddr(p.address)}
@@ -2620,10 +2620,10 @@ function ReportContent() {
                   </thead>
                   <tbody>
                     {report.detailedComparison.map((row, ri) => (
-                      <tr key={ri} className={`border-b border-gray-100 dark:border-gray-700 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                        <td className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-gray-400">{row.label}</td>
+                      <tr key={ri} className={`border-b border-gray-100 dark:border-gray-700 ${ri % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50/50 dark:bg-zinc-950"}`}>
+                        <td className="px-4 py-2.5 text-xs font-medium text-zinc-600 dark:text-gray-400">{row.label}</td>
                         {row.values.map((val, vi) => (
-                          <td key={vi} className="px-4 py-2.5 text-center text-xs font-medium text-slate-700 dark:text-gray-300">{val}</td>
+                          <td key={vi} className="px-4 py-2.5 text-center text-xs font-medium text-zinc-700 dark:text-gray-300">{val}</td>
                         ))}
                       </tr>
                     ))}
@@ -2653,35 +2653,35 @@ function ReportContent() {
 
             return (
               <section id="buyer-checklist" data-toc-section className="mt-8 scroll-mt-20">
-                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                   <Shield className="h-5 w-5 text-white" />
                   Buyer Protection Checklist
                 </h2>
-                <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">{isDefault ? "Essential items to verify before making an offer on any property." : "Things to verify before making an offer, personalized to these properties."}</p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">{isDefault ? "Essential items to verify before making an offer on any property." : "Things to verify before making an offer, personalized to these properties."}</p>
                 <div className={`mt-4 ${isDefault ? "" : `grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}`}>
                   {checklistData.map((items, pi) => (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div key={pi} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
                       {!isDefault && (
                         <div className="flex items-center gap-2 mb-4">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
+                          <h3 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
                         </div>
                       )}
                       <div className="overflow-x-auto">
                         <table className="w-full text-xs">
                           <thead>
-                            <tr className="bg-[#6C5CE7]">
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Item to Verify</th>
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Why It Matters</th>
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">How to Find Out</th>
+                            <tr className="bg-zinc-900">
+                              <th className="px-4 py-3 text-left font-bold text-white tracking-wider">Item to Verify</th>
+                              <th className="px-4 py-3 text-left font-bold text-white tracking-wider">Why It Matters</th>
+                              <th className="px-4 py-3 text-left font-bold text-white tracking-wider">How to Find Out</th>
                             </tr>
                           </thead>
                           <tbody>
                             {items.map((item, ii) => (
-                              <tr key={ii} className={`border-b border-gray-300 dark:border-gray-600 ${ii % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50 dark:bg-[#15152A]"}`}>
-                                <td className="px-4 py-3 font-semibold text-slate-800 dark:text-gray-200 bg-gray-50 dark:bg-[#15152A]">{item.item}</td>
-                                <td className="px-4 py-3 text-slate-600 dark:text-gray-400">{item.why}</td>
-                                <td className="px-4 py-3 text-slate-600 dark:text-gray-400">{item.howToFind}</td>
+                              <tr key={ii} className={`border-b border-gray-300 dark:border-gray-600 ${ii % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-gray-50 dark:bg-zinc-950"}`}>
+                                <td className="px-4 py-3 font-semibold text-zinc-800 dark:text-gray-200 bg-gray-50 dark:bg-zinc-950">{item.item}</td>
+                                <td className="px-4 py-3 text-zinc-600 dark:text-gray-400">{item.why}</td>
+                                <td className="px-4 py-3 text-zinc-600 dark:text-gray-400">{item.howToFind}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -2697,13 +2697,13 @@ function ReportContent() {
           {/* ─── QUESTIONS TO ASK YOUR AGENT (paid) ─── */}
           {(() => {
             const categoryColors: Record<string, string> = {
-              'Financial': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+              'Financial': 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300',
               'Condition': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-              'HOA': 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+              'HOA': 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300',
               'Legal': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-              'Neighborhood': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+              'Neighborhood': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
               'Disclosure': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
-              'Negotiation': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+              'Negotiation': 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300',
             };
 
             type QuestionItem = { property: string; category: string; question: string; whyItMatters: string };
@@ -2819,21 +2819,21 @@ function ReportContent() {
 
             return (
               <section id="questions-to-ask" data-toc-section className="mt-8 scroll-mt-20">
-                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
                   <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
                   Smart Questions to Ask Your Agent
                 </h2>
-                <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Based on the data we gathered for these properties, here are the most important questions a buyer should ask before making an offer.</p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-gray-400">Based on the data we gathered for these properties, here are the most important questions a buyer should ask before making an offer.</p>
                 <div className="mt-4 space-y-4">
                   {Object.entries(grouped).map(([propName, qs]) => (
                     <div key={propName}>
-                      <h4 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 mb-2">{propName}</h4>
+                      <h4 className="text-sm font-semibold text-zinc-950 dark:text-gray-100 mb-2">{propName}</h4>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {qs.map((q, qi) => (
-                          <div key={qi} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
+                          <div key={qi} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-900 p-4 shadow-sm">
                             <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold mb-2 ${categoryColors[q.category] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}>{q.category}</span>
-                            <p className="text-xs font-semibold text-slate-700 dark:text-gray-300">{q.question}</p>
-                            <p className="mt-1.5 text-[10px] text-slate-400">Why it matters: {q.whyItMatters}</p>
+                            <p className="text-xs font-semibold text-zinc-700 dark:text-gray-300">{q.question}</p>
+                            <p className="mt-1.5 text-[10px] text-zinc-400">Why it matters: {q.whyItMatters}</p>
                           </div>
                         ))}
                       </div>
@@ -2847,21 +2847,21 @@ function ReportContent() {
           {/* ─── OUR RECOMMENDATION (combined Our Pick + Final Verdict) ─── */}
           <section id="our-pick" data-toc-section className="mt-8 scroll-mt-20">
             {report.ourPick ? (
-              <div className="bg-gradient-to-br from-[#6C5CE7] to-[#4834D4] rounded-2xl p-8 text-white shadow-xl">
+              <div className="bg-gradient-to-br from-zinc-900 to-zinc-900 rounded-2xl p-8 text-white shadow-xl">
                 <div className="flex flex-col items-center text-center">
                   <Trophy className="h-12 w-12 text-amber-300" />
-                  <p className="mt-3 text-sm font-bold uppercase tracking-widest text-purple-200">Our Pick</p>
+                  <p className="mt-3 text-sm font-bold tracking-wide text-zinc-200">Our Pick</p>
                   <p className="mt-2 text-2xl font-black text-white">
                       {report.ourPick.address || properties[report.ourPick.winner - 1]?.address || `Property ${report.ourPick.winner}`}
                     </p>
                 </div>
                 <div className="mt-6 border-t border-white/20 pt-6 text-left">
-                  <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Why We Chose This</p>
+                  <p className="text-xs font-bold tracking-wide text-zinc-200 mb-3">Why We Chose This</p>
                   {report.ourPick.bullets && report.ourPick.bullets.length > 0 ? (
                     <ul className="space-y-1.5">
                       {report.ourPick.bullets.map((b, bi) => (
                         <li key={bi} className="flex items-start gap-2 text-sm text-white/90">
-                          <Check className="mt-0.5 h-4 w-4 text-emerald-300 shrink-0" />
+                          <Check className="mt-0.5 h-4 w-4 text-green-300 shrink-0" />
                           {b}
                         </li>
                       ))}
@@ -2869,37 +2869,37 @@ function ReportContent() {
                   ) : null}
                 </div>
                 <div className="mt-6">
-                  <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Our Analysis</p>
-                  <p className="text-sm leading-relaxed text-purple-100">
+                  <p className="text-xs font-bold tracking-wide text-zinc-200 mb-3">Our Analysis</p>
+                  <p className="text-sm leading-relaxed text-zinc-100">
                     {report.ourPick.narrative || report.ourPick.reasoning}
                   </p>
                 </div>
                 {report.ourPick.caveat && (
                   <div className="mt-4 rounded-xl bg-white/10 p-4">
-                    <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-1">One Thing to Watch</p>
+                    <p className="text-xs font-bold tracking-wide text-zinc-200 mb-1">One Thing to Watch</p>
                     <p className="text-sm text-white/90">{report.ourPick.caveat}</p>
                   </div>
                 )}
                 {report.finalVerdict && (
                   <div className="mt-6 border-t border-white/20 pt-6">
-                    <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Final Verdict</p>
-                    <p className="text-sm leading-relaxed text-purple-100">
+                    <p className="text-xs font-bold tracking-wide text-zinc-200 mb-3">Final Verdict</p>
+                    <p className="text-sm leading-relaxed text-zinc-100">
                       {report.finalVerdict}
                     </p>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="bg-gradient-to-br from-[#6C5CE7]/80 to-[#4834D4]/80 rounded-2xl p-8 text-white shadow-xl text-center">
+              <div className="bg-gradient-to-br from-zinc-900/80 to-zinc-900/80 rounded-2xl p-8 text-white shadow-xl text-center">
                 <Trophy className="mx-auto h-12 w-12 text-amber-300/50" />
-                <p className="mt-3 text-sm font-bold uppercase tracking-widest text-purple-200">Our Pick</p>
-                <p className="mt-4 text-sm text-purple-100">Analysis is being generated. Please refresh in a moment.</p>
+                <p className="mt-3 text-sm font-bold tracking-wide text-zinc-200">Our Pick</p>
+                <p className="mt-4 text-sm text-zinc-100">Analysis is being generated. Please refresh in a moment.</p>
               </div>
             )}
             {!report.ourPick && report.finalVerdict && (
-              <div className="mt-4 bg-gradient-to-br from-[#6C5CE7] to-[#4834D4] rounded-2xl p-6 text-white shadow-xl">
-                <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Final Verdict</p>
-                <p className="text-sm leading-relaxed text-purple-100">
+              <div className="mt-4 bg-gradient-to-br from-zinc-900 to-zinc-900 rounded-2xl p-6 text-white shadow-xl">
+                <p className="text-xs font-bold tracking-wide text-zinc-200 mb-3">Final Verdict</p>
+                <p className="text-sm leading-relaxed text-zinc-100">
                   {report.finalVerdict}
                 </p>
               </div>
@@ -2910,23 +2910,23 @@ function ReportContent() {
         /* ─── BLURRED OUR PICK + UPGRADE CTA for free users ─── */
         <>
         <section id="our-pick" data-toc-section className="mt-8 scroll-mt-20 relative">
-          <div className="bg-gradient-to-br from-[#6C5CE7] to-[#4834D4] rounded-2xl p-8 text-white shadow-xl blur-sm select-none pointer-events-none" aria-hidden="true">
+          <div className="bg-gradient-to-br from-zinc-900 to-zinc-900 rounded-2xl p-8 text-white shadow-xl blur-sm select-none pointer-events-none" aria-hidden="true">
             <div className="flex flex-col items-center text-center">
               <Trophy className="h-12 w-12 text-amber-300" />
-              <p className="mt-3 text-sm font-bold uppercase tracking-widest text-purple-200">Our Pick</p>
+              <p className="mt-3 text-sm font-bold tracking-wide text-zinc-200">Our Pick</p>
               <p className="mt-2 text-2xl font-black text-white">Upgrade to see our recommendation</p>
             </div>
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <Lock className="h-8 w-8 text-[#6C5CE7]" />
-            <p className="mt-2 text-sm font-semibold text-indigo-950 dark:text-gray-100">Upgrade to unlock Our Pick</p>
+            <Lock className="h-8 w-8 text-zinc-900" />
+            <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-gray-100">Upgrade to unlock Our Pick</p>
           </div>
         </section>
         <section className="mt-8">
-          <div className="rounded-2xl border-l-4 border-l-[#6C5CE7] bg-gray-50 dark:bg-[#15152A] p-8 shadow-sm text-center">
-            <Lock className="mx-auto h-10 w-10 text-[#6C5CE7]" />
-            <h3 className="mt-4 text-xl font-bold text-indigo-950 dark:text-gray-100">Upgrade to Full Report: {upgradePrice}</h3>
-            <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">Unlock everything you need to make a confident decision:</p>
+          <div className="rounded-2xl border-l-4 border-l-zinc-900 bg-gray-50 dark:bg-zinc-950 p-8 shadow-sm text-center">
+            <Lock className="mx-auto h-10 w-10 text-zinc-900" />
+            <h3 className="mt-4 text-xl font-bold text-zinc-950 dark:text-gray-100">Upgrade to Full Report: {upgradePrice}</h3>
+            <p className="mt-2 text-sm text-zinc-500 dark:text-gray-400">Unlock everything you need to make a confident decision:</p>
             <div className="mt-4 mx-auto max-w-md text-left space-y-2">
               {[
                 "Red flag analysis for each property",
@@ -2940,8 +2940,8 @@ function ReportContent() {
                 "All 8 property risk factors",
                 "Our Pick recommendation with full reasoning",
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-slate-700 dark:text-gray-300">
-                  <Check className="h-4 w-4 shrink-0 text-emerald-500" />
+                <div key={i} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-gray-300">
+                  <Check className="h-4 w-4 shrink-0 text-green-500" />
                   {item}
                 </div>
               ))}
@@ -2949,7 +2949,7 @@ function ReportContent() {
             <button
               onClick={handleUpgradeCheckout}
               disabled={upgradeLoading}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#6C5CE7] to-[#00D2FF] px-8 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-500 px-8 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
             >
               {upgradeLoading ? (
                 <><Loader2 className="h-4 w-4 animate-spin" /> Redirecting...</>
@@ -2966,7 +2966,7 @@ function ReportContent() {
       {/* ─── LISTING INFORMATION (paid, always show for all properties) ─── */}
       {isPaid && (
         <section id="listing-agent" data-toc-section className="mt-8 scroll-mt-20">
-          <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
+          <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-800 px-6 py-4 rounded-t-2xl">
             <Building2 className="h-5 w-5 text-white" />
             Listing Information
           </h2>
@@ -2975,47 +2975,47 @@ function ReportContent() {
               const bi = paidData?.brokerageInfo?.[bii];
               const hasData = bi && (bi.agentName || bi.brokerageName);
               return (
-                <div key={bii} className="rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#15152A] p-4">
+                <div key={bii} className="rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-zinc-950 p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[bii] }} />
-                    <span className="text-[10px] font-medium text-slate-500 dark:text-gray-400 truncate">{prop.address}</span>
+                    <span className="text-[10px] font-medium text-zinc-500 dark:text-gray-400 truncate">{prop.address}</span>
                   </div>
                   {hasData ? (
                     <>
-                      {bi.agentName && <p className="text-xs text-slate-700 dark:text-gray-300">Listed by: {getBrokerageName(bi.agentName)}</p>}
-                      {bi.brokerageName && <p className="text-xs text-slate-700 dark:text-gray-300 mt-1">Brokerage: {getBrokerageName(bi.brokerageName)}</p>}
+                      {bi.agentName && <p className="text-xs text-zinc-700 dark:text-gray-300">Listed by: {getBrokerageName(bi.agentName)}</p>}
+                      {bi.brokerageName && <p className="text-xs text-zinc-700 dark:text-gray-300 mt-1">Brokerage: {getBrokerageName(bi.brokerageName)}</p>}
                   {bi && bi.googleRating && (
                     <div className="mt-2 flex items-center gap-1">
                       <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                      <span className="text-xs font-semibold text-slate-700 dark:text-gray-300">{bi.googleRating}</span>
-                      <span className="text-[10px] text-slate-400">({bi.googleReviewCount} brokerage reviews)</span>
+                      <span className="text-xs font-semibold text-zinc-700 dark:text-gray-300">{bi.googleRating}</span>
+                      <span className="text-[10px] text-zinc-400">({bi.googleReviewCount} brokerage reviews)</span>
                     </div>
                   )}
-                      <p className="mt-2 text-[10px] text-slate-400 dark:text-gray-500">
+                      <p className="mt-2 text-[10px] text-zinc-400 dark:text-gray-500">
                         Verify this agent&apos;s license at your state&apos;s real estate commission (e.g.,{" "}
-                        <a href="https://www.dpor.virginia.gov/LicenseLookup/" target="_blank" rel="noopener noreferrer" className="text-[#00D2FF] hover:underline">VA DPOR</a>).
+                        <a href="https://www.dpor.virginia.gov/LicenseLookup/" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:underline">Va Dpor</a>).
                       </p>
                     </>
                   ) : (
-                    <p className="text-xs text-slate-500 dark:text-gray-400 italic">Listing agent information not available from this listing. Verify agent details on the listing platform or your state&apos;s real estate commission website.</p>
+                    <p className="text-xs text-zinc-500 dark:text-gray-400 italic">Listing agent information not available from this listing. Verify agent details on the listing platform or your state&apos;s real estate commission website.</p>
                   )}
                 </div>
               );
             })}
           </div>
-          <p className="mt-2 text-[9px] text-slate-400 italic">Brokerage ratings from Google Reviews. Individual agent reviews and license verification are available through your state&apos;s real estate commission.</p>
+          <p className="mt-2 text-[9px] text-zinc-400 italic">Brokerage ratings from Google Reviews. Individual agent reviews and license verification are available through your state&apos;s real estate commission.</p>
         </section>
       )}
 
       {/* ─── LEGAL DISCLAIMER ─── */}
-      <section className="mt-10 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#15152A] p-6 shadow-sm">
+      <section className="mt-10 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-zinc-950 p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700 text-zinc-500 dark:text-gray-400">
             <AlertTriangle className="h-5 w-5" />
           </div>
-          <h2 className="text-base font-bold text-slate-600 dark:text-gray-400">Important Disclaimer</h2>
+          <h2 className="text-base font-bold text-zinc-600 dark:text-gray-400">Important Disclaimer</h2>
         </div>
-        <div className="space-y-3 text-xs leading-relaxed text-slate-500 dark:text-gray-400">
+        <div className="space-y-3 text-xs leading-relaxed text-zinc-500 dark:text-gray-400">
           <p>This report is generated by rivvl.ai for informational and educational purposes only. It does not constitute real estate advice, financial advice, legal advice, or a professional property appraisal.</p>
           <p>rivvl.ai is a technology platform that aggregates and analyzes publicly available data. We are not licensed real estate agents, brokers, appraisers, attorneys, or financial advisors. Nothing in this report should be interpreted as a recommendation to buy, sell, or avoid any specific property.</p>
           <p>Property scores and ratings are generated by automated analysis and reflect our interpretation of available data. They may not account for all factors relevant to your specific situation. Data accuracy depends on third-party sources including public records, government databases, and listing platforms, which may contain errors or outdated information.</p>
@@ -3024,10 +3024,10 @@ function ReportContent() {
           <p>By downloading or using this report, you acknowledge that you have read and understood this disclaimer.</p>
         </div>
         <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-          <p className="text-[10px] text-slate-400 dark:text-gray-500">
+          <p className="text-[10px] text-zinc-400 dark:text-gray-500">
             Data sourced from: FEMA, EPA, USGS, US Forest Service, OpenStreetMap, Rentcast
           </p>
-          <p className="mt-2 text-[10px] font-medium text-slate-400 dark:text-gray-600">
+          <p className="mt-2 text-[10px] font-medium text-zinc-400 dark:text-gray-600">
             rivvl.ai. Before you choose, Rivvl.
           </p>
         </div>
@@ -3125,7 +3125,7 @@ export default function HomeReportPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[#00D2FF]" />
+          <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
         </div>
       }
     >

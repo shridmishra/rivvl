@@ -50,7 +50,7 @@ import {
   Radar,
   Legend,
 } from "recharts";
-import Image from "next/image";
+// import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import type { StoredReport, AIAnalysisReport } from "@/types";
 import {
@@ -140,7 +140,7 @@ function ScoreGauge({
         <div
           className="absolute inset-0 flex flex-col items-center justify-center"
         >
-          <span className="text-2xl font-bold text-slate-900 dark:text-gray-100">{score}</span>
+          <span className="text-2xl font-bold text-zinc-900 dark:text-gray-100">{score}</span>
           <span className="text-xs text-muted-foreground dark:text-gray-500">/{max}</span>
         </div>
       </div>
@@ -165,7 +165,7 @@ function Stars({ rating, size = 16 }: { rating: number | null | undefined; size?
 
   const starColor = (i: number) => {
     if (i >= rating) return "fill-gray-200 text-gray-200";
-    if (rating >= 5) return "fill-emerald-400 text-emerald-400";
+    if (rating >= 5) return "fill-green-400 text-green-400";
     if (rating >= 4) return "fill-lime-400 text-lime-400";
     if (rating >= 3) return "fill-amber-400 text-amber-400";
     if (rating >= 2) return "fill-orange-400 text-orange-400";
@@ -189,25 +189,25 @@ function LockedSection({ title, icon, teaser, onUpgrade }: { title: string; icon
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border glass-morphism">
       <div className="flex items-center gap-3 px-6 py-4 border-b border-border/50">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-900/10 text-zinc-600">
           {icon}
         </div>
         <h2 className="text-lg font-black text-foreground/70">{title}</h2>
-        <Lock className="ml-auto h-4 w-4 text-primary" />
+        <Lock className="ml-auto h-4 w-4 text-zinc-600" />
       </div>
       <div className="relative px-6 pb-6">
         {/* Blurred preview - tantalizing content */}
         <div className="pointer-events-none select-none blur-[8px] opacity-40">
           <div className="grid grid-cols-2 gap-4">
-            <div className="h-28 rounded-lg bg-gradient-to-br from-primary/10 to-violet-500/10 p-4">
-              <div className="h-3 w-2/3 rounded bg-primary/20" />
-              <div className="mt-3 h-6 w-1/2 rounded bg-primary/30" />
-              <div className="mt-2 h-3 w-3/4 rounded bg-primary/20" />
+            <div className="h-28 rounded-lg bg-gradient-to-br from-zinc-800/10 to-zinc-500/10 p-4">
+              <div className="h-3 w-2/3 rounded bg-zinc-900/20" />
+              <div className="mt-3 h-6 w-1/2 rounded bg-zinc-900/30" />
+              <div className="mt-2 h-3 w-3/4 rounded bg-zinc-900/20" />
             </div>
-            <div className="h-28 rounded-lg bg-gradient-to-br from-violet-500/10 to-primary/10 p-4">
-              <div className="h-3 w-2/3 rounded bg-violet-500/20" />
-              <div className="mt-3 h-6 w-1/2 rounded bg-violet-500/30" />
-              <div className="mt-2 h-3 w-3/4 rounded bg-violet-500/20" />
+            <div className="h-28 rounded-lg bg-gradient-to-br from-zinc-500/10 to-zinc-950/10 p-4">
+              <div className="h-3 w-2/3 rounded bg-zinc-500/20" />
+              <div className="mt-3 h-6 w-1/2 rounded bg-zinc-500/30" />
+              <div className="mt-2 h-3 w-3/4 rounded bg-zinc-500/20" />
             </div>
           </div>
           <div className="mt-3 h-4 w-full rounded bg-muted/50" />
@@ -215,7 +215,7 @@ function LockedSection({ title, icon, teaser, onUpgrade }: { title: string; icon
         </div>
         {/* Upgrade overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/40 backdrop-blur-[4px]">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-xl shadow-primary/20 mb-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 text-white shadow-xl shadow-primary/20 mb-4">
             <Lock className="h-7 w-7" />
           </div>
           <p className="text-base font-black text-foreground tracking-tight">
@@ -223,7 +223,7 @@ function LockedSection({ title, icon, teaser, onUpgrade }: { title: string; icon
           </p>
           <Button
             onClick={onUpgrade}
-            className="mt-4 rounded-xl bg-primary px-8 py-6 text-base font-black text-white shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all"
+            className="mt-4 rounded-xl bg-zinc-900 px-8 py-6 text-base font-black text-white shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all"
           >
             Unlock Full Report
           </Button>
@@ -282,10 +282,10 @@ function GeneratingView({
     return (
       <div className="flex min-h-[80vh] items-center justify-center px-4">
         <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#1A1A2E] p-8 shadow-2xl text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl gradient-bg shadow-lg shadow-indigo-200 dark:shadow-indigo-900/50">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50">
             <Lock className="h-7 w-7 text-white" />
           </div>
-          <h2 className="mt-4 text-xl font-bold text-indigo-950 dark:text-gray-100">
+          <h2 className="mt-4 text-xl font-bold text-zinc-950 dark:text-gray-100">
             Report Limit Reached
           </h2>
           <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400">
@@ -295,13 +295,13 @@ function GeneratingView({
           <div className="mt-6 space-y-3">
             <a
               href="/pricing"
-              className="gradient-bg-hover flex w-full items-center justify-center rounded-xl py-3 text-sm font-semibold text-white"
+              className="bg-zinc-900-hover flex w-full items-center justify-center rounded-xl py-3 text-sm font-semibold text-white"
             >
               View Plans &amp; Upgrade
             </a>
             <button
               onClick={() => router.push("/compare")}
-              className="w-full rounded-xl border border-border dark:border-gray-600 py-3 text-sm font-semibold text-muted-foreground dark:text-gray-400 transition-colors hover:bg-muted/30 dark:hover:bg-primary/10"
+              className="w-full rounded-xl border border-border dark:border-gray-600 py-3 text-sm font-semibold text-muted-foreground dark:text-gray-400 transition-colors hover:bg-muted/30 dark:hover:bg-zinc-900/10"
             >
               Back to Compare
             </button>
@@ -335,7 +335,7 @@ function GeneratingView({
                 } catch { /* ignore */ }
                 router.push("/compare");
               }}
-              className="mt-6 inline-flex items-center gap-2 rounded-lg gradient-bg px-6 py-2.5 text-sm font-semibold text-white"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white"
             >
               <ArrowLeft className="h-4 w-4" /> Try Again
             </button>
@@ -379,12 +379,12 @@ function GeneratingView({
             {GENERATION_STEPS.map((s, i) => (
               <div key={i} className="flex items-center gap-3">
                 {i < step ? (
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100">
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
                   </div>
                 ) : i === step && !isComplete ? (
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-                    <Loader2 className="h-5 w-5 animate-spin text-indigo-600" />
+                    <Loader2 className="h-5 w-5 animate-spin text-zinc-600" />
                   </div>
                 ) : (
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center">
@@ -394,9 +394,9 @@ function GeneratingView({
                 <span
                   className={`text-sm transition-colors duration-300 ${
                     i < step
-                      ? "font-medium text-emerald-700"
+                      ? "font-medium text-green-700"
                       : i === step && !isComplete
-                        ? "font-medium text-indigo-950 dark:text-gray-100"
+                        ? "font-medium text-zinc-950 dark:text-gray-100"
                         : "text-muted-foreground dark:text-gray-500"
                   }`}
                 >
@@ -410,7 +410,7 @@ function GeneratingView({
           <div className="mt-6 h-2 overflow-hidden rounded-full bg-muted/50 dark:bg-gray-700">
             <div
               className={`h-full rounded-full transition-all duration-1000 ease-out ${
-                isComplete ? "bg-emerald-500" : "gradient-bg"
+                isComplete ? "bg-green-500" : "bg-zinc-900"
               }`}
               style={{
                 width: `${Math.min(
@@ -533,10 +533,10 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 mx-4 w-full max-w-sm animate-in fade-in zoom-in rounded-2xl border border-indigo-200 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-2xl">
+      <div className="relative z-10 mx-4 w-full max-w-sm animate-in fade-in zoom-in rounded-2xl border border-zinc-200 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-6 shadow-2xl">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-indigo-950 dark:text-gray-100">Share Report</h3>
-          <button onClick={onClose} className="rounded-lg p-1.5 text-muted-foreground dark:text-gray-500 hover:bg-muted/50 dark:hover:bg-primary/10">
+          <h3 className="text-lg font-bold text-zinc-950 dark:text-gray-100">Share Report</h3>
+          <button onClick={onClose} className="rounded-lg p-1.5 text-muted-foreground dark:text-gray-500 hover:bg-muted/50 dark:hover:bg-zinc-900/10">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -544,13 +544,13 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
         <div className="mt-5 space-y-2.5">
           <button
             onClick={copyLink}
-            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-zinc-300 dark:hover:border-gray-500 hover:bg-zinc-900/5 dark:hover:bg-zinc-900/10"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-100 text-zinc-600">
               <Link2 className="h-4 w-4" />
             </div>
             {copied ? (
-              <span className="font-semibold text-emerald-600">Copied!</span>
+              <span className="font-semibold text-green-600">Copied!</span>
             ) : (
               "Copy Link"
             )}
@@ -558,7 +558,7 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareEmail}
-            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-zinc-300 dark:hover:border-gray-500 hover:bg-zinc-900/5 dark:hover:bg-zinc-900/10"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
@@ -568,9 +568,9 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareTwitter}
-            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-zinc-300 dark:hover:border-gray-500 hover:bg-zinc-900/5 dark:hover:bg-zinc-900/10"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-100 text-sky-600">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-100 text-zinc-600">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
             </div>
             Twitter / X
@@ -578,9 +578,9 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareFacebook}
-            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-zinc-300 dark:hover:border-gray-500 hover:bg-zinc-900/5 dark:hover:bg-zinc-900/10"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-100 text-zinc-600">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
             </div>
             Facebook
@@ -588,9 +588,9 @@ function ShareModal({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <button
             onClick={shareWhatsApp}
-            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-indigo-300 dark:hover:border-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10"
+            className="flex w-full items-center gap-3 rounded-xl border border-border dark:border-gray-600 px-4 py-3 text-left text-sm font-medium text-foreground dark:text-gray-300 transition-all hover:border-zinc-300 dark:hover:border-gray-500 hover:bg-zinc-900/5 dark:hover:bg-zinc-900/10"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-100 text-green-600">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
             </div>
             WhatsApp
@@ -1012,7 +1012,7 @@ export default function ReportPage() {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center">
-          <Loader2 className="mx-auto h-10 w-10 animate-spin text-indigo-600" />
+          <Loader2 className="mx-auto h-10 w-10 animate-spin text-zinc-600" />
           <p className="mt-4 text-sm text-muted-foreground dark:text-gray-400">Loading your report...</p>
         </div>
       </div>
@@ -1033,7 +1033,7 @@ export default function ReportPage() {
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <button
               onClick={() => router.push("/dashboard")}
-              className="inline-flex items-center gap-2 rounded-lg gradient-bg px-6 py-2.5 text-sm font-semibold text-white"
+              className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white"
             >
               Go to Dashboard
             </button>
@@ -1106,15 +1106,15 @@ export default function ReportPage() {
 
       {/* ═══ SIDEBAR ═══ */}
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-full w-64 flex-col glass-morphism transition-transform duration-300 lg:sticky lg:top-0 lg:z-0 lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed left-0 top-0 z-50 flex h-full w-64 flex-col glass-morphism transition-transform duration-300 lg:sticky lg:top-0 lg:z-0 lg:tranzinc-x-0 ${
+          sidebarOpen ? "tranzinc-x-0" : "-tranzinc-x-full"
         }`}
       >
         {/* Sidebar header */}
         <div className="border-b border-border px-5 py-5">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="absolute right-3 top-3 rounded-lg p-1.5 text-muted-foreground dark:text-gray-500 hover:bg-muted/50 dark:hover:bg-primary/10 lg:hidden"
+            className="absolute right-3 top-3 rounded-lg p-1.5 text-muted-foreground dark:text-gray-500 hover:bg-muted/50 dark:hover:bg-zinc-900/10 lg:hidden"
           >
             <X className="h-5 w-5" />
           </button>
@@ -1154,11 +1154,11 @@ export default function ReportPage() {
                 onClick={() => scrollTo(item.id)}
                 className={`flex w-full items-center gap-3 px-5 py-2.5 text-left text-sm transition-all ${
                   isActive
-                    ? "border-l-[3px] border-primary bg-primary/5 font-bold text-primary"
-                    : "border-l-[3px] border-transparent text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                    ? "border-l-[3px] border-primary bg-zinc-900/5 font-bold text-zinc-600"
+                    : "border-l-[3px] border-transparent text-muted-foreground hover:bg-zinc-900/5 hover:text-zinc-600"
                 } ${isLocked ? "opacity-50" : ""}`}
               >
-                <span className={isActive ? "text-primary" : "text-muted-foreground"}>
+                <span className={isActive ? "text-zinc-600" : "text-muted-foreground"}>
                   {item.icon}
                 </span>
                 <span className="flex-1 truncate">{item.label}</span>
@@ -1173,7 +1173,7 @@ export default function ReportPage() {
           <Button
             variant="ghost"
             onClick={() => router.push("/compare")}
-            className="flex w-full items-center gap-2 text-xs text-muted-foreground hover:text-primary"
+            className="flex w-full items-center gap-2 text-xs text-muted-foreground hover:text-zinc-600"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> New Comparison
           </Button>
@@ -1186,14 +1186,14 @@ export default function ReportPage() {
         <div className="sticky top-0 z-30 flex items-center gap-3 border-b border-border glass-morphism px-4 py-3 sm:px-6">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="rounded-lg p-2 text-muted-foreground hover:bg-primary/5 lg:hidden"
+            className="rounded-lg p-2 text-muted-foreground hover:bg-zinc-900/5 lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
           <div className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider ${
             isFree
               ? "bg-muted/50 dark:bg-gray-700 text-muted-foreground dark:text-gray-300"
-              : "gradient-bg text-white"
+              : "bg-zinc-900 text-white"
           }`}>
             {isFree ? "Free Report" : a.reportType === "pro" ? "Pro Report" : "Full Report"}
           </div>
@@ -1209,7 +1209,7 @@ export default function ReportPage() {
               onClick={handleDownloadPdf}
               loading={pdfLoading}
               loadingText="Generating..."
-              className="hidden sm:inline-flex items-center gap-2 rounded-lg gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
             >
               {!pdfLoading && <Download className="h-4 w-4" />}
               Download PDF
@@ -1219,21 +1219,21 @@ export default function ReportPage() {
               loading={pdfLoading}
               loadingText=""
               variant="ghost"
-              className="sm:hidden rounded-lg p-2 text-muted-foreground dark:text-gray-500 hover:bg-primary/5 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary transition-colors"
+              className="sm:hidden rounded-lg p-2 text-muted-foreground dark:text-gray-500 hover:bg-zinc-900/5 dark:hover:bg-zinc-900/10 hover:text-zinc-600 dark:hover:text-zinc-600 transition-colors"
             >
               {!pdfLoading && <Download className="h-4 w-4" />}
             </Button>
             <button
               onClick={() => window.print()}
               title="Print report"
-              className="rounded-lg p-2 text-muted-foreground dark:text-gray-500 hover:bg-muted/30 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary transition-all border border-transparent hover:border-border dark:hover:border-primary/50"
+              className="rounded-lg p-2 text-muted-foreground dark:text-gray-500 hover:bg-muted/30 dark:hover:bg-zinc-900/10 hover:text-zinc-600 dark:hover:text-zinc-600 transition-all border border-transparent hover:border-border dark:hover:border-primary/50"
             >
               <Printer className="h-4 w-4" />
             </button>
             <button
               onClick={() => setShareOpen(true)}
               title="Share report"
-              className="rounded-lg p-2 text-muted-foreground dark:text-gray-400 hover:bg-muted/30 dark:hover:bg-primary/10 hover:text-primary dark:hover:text-primary transition-all border border-transparent hover:border-border dark:hover:border-primary/50"
+              className="rounded-lg p-2 text-muted-foreground dark:text-gray-400 hover:bg-muted/30 dark:hover:bg-zinc-900/10 hover:text-zinc-600 dark:hover:text-zinc-600 transition-all border border-transparent hover:border-border dark:hover:border-primary/50"
             >
               <Share2 className="h-4 w-4" />
             </button>
@@ -1242,7 +1242,7 @@ export default function ReportPage() {
 
         {/* Payment success banner */}
         {paymentSuccess && !isFree && (
-          <div className="no-print border-b border-emerald-200 dark:border-emerald-700/40 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2 text-center text-xs text-emerald-700 dark:text-emerald-300">
+          <div className="no-print border-b border-green-200 dark:border-green-700/40 bg-green-50 dark:bg-green-900/20 px-4 py-2 text-center text-xs text-green-700 dark:text-green-300">
             <CheckCircle2 className="inline h-3.5 w-3.5 mr-1" />
             Payment successful! Your full report is now unlocked.
           </div>
@@ -1250,7 +1250,7 @@ export default function ReportPage() {
 
         {/* Payment processing banner — payment went through but unlock is still pending */}
         {paymentSuccess && isFree && (
-          <div className="no-print border-b border-indigo-200 dark:border-indigo-700/40 bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 text-center text-xs text-indigo-700 dark:text-indigo-300">
+          <div className="no-print border-b border-zinc-200 dark:border-zinc-700/40 bg-zinc-50 dark:bg-zinc-900/20 px-4 py-2 text-center text-xs text-zinc-700 dark:text-zinc-300">
             <Loader2 className="inline h-3.5 w-3.5 mr-1 animate-spin" />
             Payment received! Your report is being unlocked.{" "}
             <button onClick={() => window.location.reload()} className="font-bold underline">Refresh</button> if sections don&apos;t appear shortly.
@@ -1424,9 +1424,9 @@ export default function ReportPage() {
 
           {/* ──────── FREE UPSELL ──────── */}
           {isFree && (
-            <div className="no-print rounded-2xl border-2 border-dashed border-indigo-300 dark:border-indigo-700 bg-gradient-to-br from-indigo-50 via-white to-violet-50 dark:from-[#1A1A2E] dark:via-[#1A1A2E] dark:to-[#1E1E30] p-8 text-center">
-              <Lock className="mx-auto h-8 w-8 text-indigo-400" />
-              <h3 className="mt-3 text-xl font-bold text-indigo-950 dark:text-gray-100">
+            <div className="no-print rounded-2xl border-2 border-dashed border-zinc-300 dark:border-zinc-700 bg-gradient-to-br from-zinc-50 via-white to-zinc-50 dark:from-[#1A1A2E] dark:via-[#1A1A2E] dark:to-[#1E1E30] p-8 text-center">
+              <Lock className="mx-auto h-8 w-8 text-zinc-400" />
+              <h3 className="mt-3 text-xl font-bold text-zinc-950 dark:text-gray-100">
                 Want the Full Picture?
               </h3>
               <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400 max-w-md mx-auto">
@@ -1437,7 +1437,7 @@ export default function ReportPage() {
                 {NAV_ITEMS.filter((n) => n.paidOnly).map((n) => (
                   <span
                     key={n.id}
-                    className="inline-flex items-center gap-1 rounded-full border border-indigo-200 dark:border-gray-600 bg-white dark:bg-[#1E1E30] px-3 py-1 text-xs text-indigo-700 dark:text-indigo-300"
+                    className="inline-flex items-center gap-1 rounded-full border border-zinc-200 dark:border-gray-600 bg-white dark:bg-[#1E1E30] px-3 py-1 text-xs text-zinc-700 dark:text-zinc-300"
                   >
                     {n.icon} {n.label}
                   </span>
@@ -1445,7 +1445,7 @@ export default function ReportPage() {
               </div>
               <button
                 onClick={openUpgradeModal}
-                className="mt-6 inline-flex items-center rounded-xl gradient-bg px-8 py-3 text-sm font-bold text-white shadow-lg"
+                className="mt-6 inline-flex items-center rounded-xl bg-zinc-900 px-8 py-3 text-sm font-bold text-white shadow-lg"
               >
                 Unlock Full Report &mdash; {upgradePrice}
               </button>
@@ -1454,12 +1454,12 @@ export default function ReportPage() {
 
           {/* ──────── VEHICLE HISTORY REPORT TIP ──────── */}
           <section data-section className="scroll-mt-20">
-            <div className="bg-green-50 dark:bg-indigo-900/20 border-l-4 border-green-400 rounded-r-xl p-6 shadow-sm">
+            <div className="bg-green-50 dark:bg-zinc-900/20 border-l-4 border-green-400 rounded-r-xl p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900/30 text-zinc-600 dark:text-zinc-400">
                   <Lightbulb className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-bold text-indigo-950 dark:text-gray-100">
+                <h2 className="text-lg font-bold text-zinc-950 dark:text-gray-100">
                   Before You Buy: Get a Vehicle History Report
                 </h2>
               </div>
@@ -1475,27 +1475,27 @@ export default function ReportPage() {
               </p>
               <ul className="space-y-1.5 text-sm text-foreground dark:text-gray-300 ml-1">
                 <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-500" />
                   Previous accidents and damage reports
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-500" />
                   Title issues (salvage, rebuilt, flood damage)
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-500" />
                   Odometer rollback or discrepancies
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-500" />
                   Number of previous owners
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-500" />
                   Service and maintenance records
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-indigo-500" />
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-zinc-500" />
                   Recall history and completion status
                 </li>
               </ul>
@@ -1547,10 +1547,10 @@ export default function ReportPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#1A1A2E] p-8 shadow-2xl">
             <div className="text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl gradient-bg shadow-lg shadow-indigo-200 dark:shadow-indigo-900/50">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 shadow-lg shadow-zinc-200 dark:shadow-zinc-900/50">
                 <Zap className="h-7 w-7 text-white" />
               </div>
-              <h3 className="mt-4 text-xl font-bold text-indigo-950 dark:text-gray-100">
+              <h3 className="mt-4 text-xl font-bold text-zinc-950 dark:text-gray-100">
                 Unlock All 11 Sections
               </h3>
               <p className="mt-2 text-sm text-muted-foreground dark:text-gray-400">
@@ -1558,19 +1558,19 @@ export default function ReportPage() {
               </p>
             </div>
 
-            <div className="mt-6 rounded-xl border border-indigo-200 dark:border-gray-600 bg-indigo-50/50 dark:bg-[#1E1E30] p-5">
+            <div className="mt-6 rounded-xl border border-zinc-200 dark:border-gray-600 bg-zinc-50/50 dark:bg-[#1E1E30] p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-indigo-950 dark:text-gray-100">{upgradePlanLabel}</p>
+                  <p className="font-bold text-zinc-950 dark:text-gray-100">{upgradePlanLabel}</p>
                   <p className="text-xs text-muted-foreground dark:text-gray-400">One-time payment</p>
                 </div>
-                <p className="text-2xl font-bold text-indigo-600">{upgradePrice}</p>
+                <p className="text-2xl font-bold text-zinc-600">{upgradePrice}</p>
               </div>
               <ul className="mt-4 space-y-1.5 text-xs text-muted-foreground dark:text-gray-400">
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> All 11 report sections</li>
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> Charts, tables & scoring</li>
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> Intelligent recommendation</li>
-                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-emerald-500" /> Downloadable PDF</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-green-500" /> All 11 report sections</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-green-500" /> Charts, tables & scoring</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-green-500" /> Intelligent recommendation</li>
+                <li className="flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3 text-green-500" /> Downloadable PDF</li>
               </ul>
             </div>
 
@@ -1585,7 +1585,7 @@ export default function ReportPage() {
               <button
                 onClick={handleUpgradeCheckout}
                 disabled={upgradeLoading}
-                className="gradient-bg-hover flex w-full items-center justify-center rounded-xl py-3 text-sm font-semibold text-white disabled:opacity-50"
+                className="bg-zinc-900-hover flex w-full items-center justify-center rounded-xl py-3 text-sm font-semibold text-white disabled:opacity-50"
               >
                 {upgradeLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -1594,7 +1594,7 @@ export default function ReportPage() {
               </button>
               <button
                 onClick={() => { setShowUpgradeModal(false); setUpgradeError(null); }}
-                className="w-full rounded-xl border border-border dark:border-gray-600 py-3 text-sm font-semibold text-muted-foreground dark:text-gray-400 transition-colors hover:bg-muted/30 dark:hover:bg-primary/10"
+                className="w-full rounded-xl border border-border dark:border-gray-600 py-3 text-sm font-semibold text-muted-foreground dark:text-gray-400 transition-colors hover:bg-muted/30 dark:hover:bg-zinc-900/10"
               >
                 Maybe Later
               </button>
@@ -1602,7 +1602,7 @@ export default function ReportPage() {
 
             <p className="mt-4 text-center text-[11px] text-muted-foreground dark:text-gray-500">
               Need to compare more cars?{" "}
-              <a href="/compare" className="font-medium text-indigo-600 hover:underline">
+              <a href="/compare" className="font-medium text-zinc-600 hover:underline">
                 Start a new comparison with a Pro plan.
               </a>
             </p>
@@ -1628,12 +1628,12 @@ function SectionCard({
 }) {
   return (
     <div className="glass-morphism rounded-3xl shadow-sm border border-border overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-primary/20">
-      <div className="bg-gradient-to-r from-violet-500/10 to-transparent rounded-t-lg px-6 py-5 border-b border-border/50">
+      <div className="bg-gradient-to-r from-zinc-500/10 to-transparent rounded-t-lg px-6 py-5 border-b border-border/50">
         <div className="flex items-center gap-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white shadow-lg shadow-violet-600/20">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-600 text-white shadow-lg shadow-zinc-600/20">
             {icon}
           </div>
-          <h2 className="text-xl font-black text-foreground tracking-tight border-l-4 border-violet-600 pl-4 uppercase">{title}</h2>
+          <h2 className="text-xl font-black text-foreground tracking-tight border-l-4 border-zinc-600 pl-4 uppercase">{title}</h2>
         </div>
       </div>
       <div className="px-6 py-8">{children}</div>
@@ -1662,14 +1662,14 @@ function ExecutiveSummary({
     <div className="glass-morphism rounded-3xl shadow-xl border border-border p-8">
       {/* Report type badge */}
       <div className="flex items-center gap-3 mb-6">
-        <span className="rounded-full px-5 py-1.5 bg-violet-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-violet-600/20">
+        <span className="rounded-full px-5 py-1.5 bg-zinc-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-zinc-600/20">
           Comparison Report
         </span>
       </div>
       {/* Winner banner — only show for multi-car comparisons */}
       {cars.length >= 2 && (
         <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-5 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-600">
+          <span className="inline-flex items-center gap-2 rounded-full bg-green-500/10 border border-green-500/20 px-5 py-2 text-[10px] font-black uppercase tracking-widest text-green-600">
             <Trophy className="h-4 w-4" /> Our Pick
           </span>
           <h1 className="mt-4 text-3xl font-black text-foreground sm:text-4xl lg:text-5xl tracking-tight">
@@ -1686,7 +1686,7 @@ function ExecutiveSummary({
           const isWinner = cars.length >= 2 && name === verdict.winner;
           const color = isWinner ? "#10B981" : (CAR_COLORS[i] || CAR_COLORS[0]);
           const bg = isWinner ? "#ECFDF5" : (CAR_LIGHT_COLORS[i] || CAR_LIGHT_COLORS[0]);
-          const borderClass = isWinner ? "border-emerald-400 border-2 shadow-lg shadow-emerald-100" : (CAR_BORDER_CLASSES[i] || CAR_BORDER_CLASSES[0]);
+          const borderClass = isWinner ? "border-green-400 border-2 shadow-lg shadow-green-100" : (CAR_BORDER_CLASSES[i] || CAR_BORDER_CLASSES[0]);
           return (
             <div
               key={i}
@@ -1694,15 +1694,15 @@ function ExecutiveSummary({
               style={{ backgroundColor: bg }}
             >
               {isWinner && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-bold text-white shadow-md">
+                <div className="absolute -top-3 left-1/2 -tranzinc-x-1/2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-green-500 px-3 py-1 text-[11px] font-bold text-white shadow-md">
                     <Trophy className="h-3 w-3" /> WINNER
                   </span>
                 </div>
               )}
               <div>
                 <Car className="mx-auto h-10 w-10" style={{ color }} />
-                <h3 className="mt-2 text-sm font-bold text-indigo-950 dark:text-gray-100">{name}</h3>
+                <h3 className="mt-2 text-sm font-bold text-zinc-950 dark:text-gray-100">{name}</h3>
                 {car?.price && (
                   <p className="mt-1 text-lg font-bold" style={{ color }}>
                     ${car.price.toLocaleString()}
@@ -1723,8 +1723,8 @@ function ExecutiveSummary({
       </div>
 
       {/* Quick verdict */}
-      <div className="mt-5 rounded-lg border border-indigo-200 dark:border-gray-600 bg-white dark:bg-[#1E1E30] px-5 py-3">
-        <p className="text-sm font-bold text-indigo-900 dark:text-gray-200 leading-relaxed">
+      <div className="mt-5 rounded-lg border border-zinc-200 dark:border-gray-600 bg-white dark:bg-[#1E1E30] px-5 py-3">
+        <p className="text-sm font-bold text-zinc-900 dark:text-gray-200 leading-relaxed">
           {summary.quickVerdict}
         </p>
       </div>
@@ -1733,13 +1733,13 @@ function ExecutiveSummary({
       {!isFree && summary.confidenceScore != null && (
         <div className="mt-4 flex items-center gap-3">
           <span className="text-xs text-muted-foreground dark:text-gray-400 dark:text-gray-400">Confidence</span>
-          <div className="flex-1 h-2 rounded-full bg-slate-200 dark:bg-gray-700">
+          <div className="flex-1 h-2 rounded-full bg-zinc-200 dark:bg-gray-700">
             <div
-              className="h-2 rounded-full gradient-bg transition-all duration-700"
+              className="h-2 rounded-full bg-zinc-900 transition-all duration-700"
               style={{ width: `${summary.confidenceScore}%` }}
             />
           </div>
-          <span className="text-xs font-bold text-indigo-700">{summary.confidenceScore}%</span>
+          <span className="text-xs font-bold text-zinc-700">{summary.confidenceScore}%</span>
         </div>
       )}
 
@@ -1794,7 +1794,7 @@ function SpecsTable({
                 {shortCarNames.map((_, ci) => {
                   const isWinner = row.advantage === `car${ci + 1}`;
                   return (
-                    <td key={ci} className={`px-4 py-3 text-sm ${isWinner ? "rounded-md bg-green-50 dark:bg-emerald-900/20 font-semibold text-emerald-700 dark:text-emerald-400" : "text-gray-700 dark:text-gray-400"}`}>
+                    <td key={ci} className={`px-4 py-3 text-sm ${isWinner ? "rounded-md bg-green-50 dark:bg-green-900/20 font-semibold text-green-700 dark:text-green-400" : "text-gray-700 dark:text-gray-400"}`}>
                       {values[ci] || "-"}
                     </td>
                   );
@@ -1827,7 +1827,7 @@ function PriceSection({
   }));
 
   const verdictColor = (v: string) => {
-    if (v === "Good deal" || v === "Great deal") return "bg-emerald-100 text-emerald-700";
+    if (v === "Good deal" || v === "Great deal") return "bg-green-100 text-green-700";
     if (v === "Overpriced") return "bg-red-100 text-red-700";
     return "bg-amber-100 text-amber-700";
   };
@@ -1858,9 +1858,9 @@ function PriceSection({
           return (
             <div key={i} className={`rounded-xl border p-4 flex flex-col justify-between ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}>
               <div>
-                <h4 className="text-sm font-bold text-indigo-950 dark:text-gray-100">{car.name}</h4>
+                <h4 className="text-sm font-bold text-zinc-950 dark:text-gray-100">{car.name}</h4>
                 <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-indigo-950 dark:text-gray-100">
+                  <span className="text-2xl font-bold text-zinc-950 dark:text-gray-100">
                     {hasListed ? `$${car.listedPrice.toLocaleString()}` : "Price not listed"}
                   </span>
                   <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${verdictColor(car.priceVerdict)}`}>
@@ -1930,13 +1930,13 @@ function CostSection({
       <div className={`mt-4 grid gap-3 ${numCars > 2 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2"}`}>
         {data.fiveYear.cars.map((c, i) => (
           <div key={i} className={`rounded-lg border p-4 text-center ${
-            i === cheaperIdx ? "border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20" : "border-border dark:border-gray-600 bg-muted/30 dark:bg-[#1E1E30]"
+            i === cheaperIdx ? "border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20" : "border-border dark:border-gray-600 bg-muted/30 dark:bg-[#1E1E30]"
           }`}>
             {numCars >= 2 && i === cheaperIdx && (
-              <span className="rounded-full bg-emerald-500 px-2.5 py-0.5 text-[11px] font-bold text-white">Cheapest</span>
+              <span className="rounded-full bg-green-500 px-2.5 py-0.5 text-[11px] font-bold text-white">Cheapest</span>
             )}
             <p className="mt-1 text-xs text-muted-foreground dark:text-gray-400">{c.name}: 5-Year Total</p>
-            <p className={`text-2xl font-bold ${i === cheaperIdx ? "text-emerald-700 dark:text-emerald-400" : "text-foreground dark:text-gray-300"}`}>
+            <p className={`text-2xl font-bold ${i === cheaperIdx ? "text-green-700 dark:text-green-400" : "text-foreground dark:text-gray-300"}`}>
               ${c.total.toLocaleString()}
             </p>
           </div>
@@ -2017,7 +2017,7 @@ function SafetyVisual({
             key={i}
             className={`rounded-xl border p-5 ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}
           >
-            <h4 className="text-sm font-bold text-indigo-950 dark:text-gray-100">{car.name}</h4>
+            <h4 className="text-sm font-bold text-zinc-950 dark:text-gray-100">{car.name}</h4>
 
             <div className="mt-3">
               <Stars rating={car.overallRating} size={20} />
@@ -2039,7 +2039,7 @@ function SafetyVisual({
 
             <div className="mt-3 flex gap-2">
               <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                car.recallCount === 0 ? "bg-emerald-100 text-emerald-700" : car.recallCount <= 3 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
+                car.recallCount === 0 ? "bg-green-100 text-green-700" : car.recallCount <= 3 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
               }`}>
                 {car.recallCount} Recalls
               </span>
@@ -2049,7 +2049,7 @@ function SafetyVisual({
               <div className="mt-3">
                 <button
                   onClick={() => setExpandedRecalls(expandedRecalls === i ? null : i)}
-                  className="flex items-center gap-1 text-xs text-indigo-600 hover:underline"
+                  className="flex items-center gap-1 text-xs text-zinc-600 hover:underline"
                 >
                   <ChevronDown className={`h-3 w-3 transition-transform ${expandedRecalls === i ? "rotate-180" : ""}`} />
                   {expandedRecalls === i ? "Hide" : "View"} recall details
@@ -2069,7 +2069,7 @@ function SafetyVisual({
             {car.safetyFeatures.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1">
                 {car.safetyFeatures.map((f, fi) => (
-                  <span key={fi} className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                  <span key={fi} className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
                     {f}
                   </span>
                 ))}
@@ -2174,10 +2174,10 @@ function FuelVisual({
           const hasCO2 = isValidNumeric(car.co2Emissions);
           return (
             <div key={i} className={`rounded-xl border p-4 flex flex-col ${CAR_BORDER_CLASSES[i] || "border-border dark:border-gray-600"} ${CAR_BG_CLASSES[i] || "bg-muted/30 dark:bg-[#1E1E30]"}`}>
-              <h4 className="text-sm font-bold text-indigo-950 dark:text-gray-100">{car.name}</h4>
+              <h4 className="text-sm font-bold text-zinc-950 dark:text-gray-100">{car.name}</h4>
               <div className="mt-2 grid grid-cols-3 gap-2 text-center flex-1 items-start">
                 <div>
-                  <p className="text-2xl font-bold text-emerald-600">{hasCombined ? car.combinedMPG : "N/A"}</p>
+                  <p className="text-2xl font-bold text-green-600">{hasCombined ? car.combinedMPG : "N/A"}</p>
                   <p className="text-xs text-muted-foreground dark:text-gray-400">Combined MPG</p>
                   {!hasCombined && <p className="text-[10px] text-muted-foreground">EPA data unavailable</p>}
                 </div>
@@ -2188,7 +2188,7 @@ function FuelVisual({
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="flex items-center gap-1">
-                    <Leaf className="h-3.5 w-3.5 text-emerald-500" />
+                    <Leaf className="h-3.5 w-3.5 text-green-500" />
                     <span className="text-lg font-bold text-foreground dark:text-gray-300">{hasCO2 ? car.co2Emissions : "N/A"}</span>
                   </div>
                   <p className="text-xs text-muted-foreground dark:text-gray-400">g/mi CO2</p>
@@ -2344,7 +2344,7 @@ function FeaturesGrid({
   const categorize = (feature: string): string => {
     const f = feature.toLowerCase();
     if (f.includes("camera") || f.includes("parking") || f.includes("blind") || f.includes("collision") || f.includes("lane") || f.includes("cruise") || f.includes("brake") || f.includes("airbag") || f.includes("safety")) return "Safety & Driver Assist";
-    if (f.includes("screen") || f.includes("apple") || f.includes("android") || f.includes("bluetooth") || f.includes("usb") || f.includes("wireless") || f.includes("navigation") || f.includes("audio") || f.includes("speaker") || f.includes("carplay")) return "Technology & Connectivity";
+    if (f.includes("screen") || f.includes("apple") || f.includes("android") || f.includes("zinctooth") || f.includes("usb") || f.includes("wireless") || f.includes("navigation") || f.includes("audio") || f.includes("speaker") || f.includes("carplay")) return "Technology & Connectivity";
     if (f.includes("leather") || f.includes("heated") || f.includes("ventilated") || f.includes("seat") || f.includes("climate") || f.includes("sunroof") || f.includes("moonroof") || f.includes("panoramic")) return "Comfort & Interior";
     if (f.includes("wheel") || f.includes("suspension") || f.includes("engine") || f.includes("turbo") || f.includes("awd") || f.includes("4wd") || f.includes("sport") || f.includes("performance")) return "Performance";
     if (f.includes("keyless") || f.includes("remote") || f.includes("start") || f.includes("power") || f.includes("automatic") || f.includes("light") || f.includes("led") || f.includes("mirror")) return "Convenience";
@@ -2389,7 +2389,7 @@ function FeaturesGrid({
               <Fragment key={category}>
                 <tr>
                   <td colSpan={1 + numCars} className="pt-4 pb-2 px-0">
-                    <span className="text-xs font-bold uppercase tracking-wider text-indigo-500">{category}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">{category}</span>
                   </td>
                 </tr>
                 {grouped[category].map((row, ri) => (
@@ -2401,11 +2401,11 @@ function FeaturesGrid({
                         <td key={ci} className="px-2 py-2.5 text-center">
                           {val === "ai_enriched" ? (
                             <span title="Likely standard equipment. Estimate, not verified from this listing.">
-                              <Info className="mx-auto h-5 w-5 text-blue-400" />
+                              <Info className="mx-auto h-5 w-5 text-zinc-400" />
                             </span>
                           ) : val === "yes" ? (
                             <span title="Confirmed available">
-                              <CheckCircle2 className="mx-auto h-5 w-5 text-emerald-500" />
+                              <CheckCircle2 className="mx-auto h-5 w-5 text-green-500" />
                             </span>
                           ) : val === "no" ? (
                             <span title="Not available">
@@ -2428,10 +2428,10 @@ function FeaturesGrid({
       </div>
       {/* Feature legend */}
       <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground dark:text-gray-400">
-        <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Confirmed</span>
+        <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-green-500" /> Confirmed</span>
         <span className="flex items-center gap-1.5"><XCircle className="h-4 w-4 text-red-400" /> Not Available</span>
         <span className="flex items-center gap-1.5"><HelpCircle className="h-4 w-4 text-amber-400" /> Unverified</span>
-        <span className="flex items-center gap-1.5"><Info className="h-4 w-4 text-blue-400" /> Estimate (standard equipment)</span>
+        <span className="flex items-center gap-1.5"><Info className="h-4 w-4 text-zinc-400" /> Estimate (standard equipment)</span>
       </div>
       <p className="mt-3 text-[15px] text-muted-foreground dark:text-gray-400 leading-relaxed">{data.summary}</p>
     </div>
@@ -2531,12 +2531,12 @@ function FinalVerdictVisual({
 }) {
   return (
     <div className="glass-morphism rounded-3xl shadow-2xl border border-border overflow-hidden">
-      <div className="bg-gradient-to-r from-violet-500/10 to-transparent px-6 py-6 border-b border-border/50">
+      <div className="bg-gradient-to-r from-zinc-500/10 to-transparent px-6 py-6 border-b border-border/50">
         <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-xl shadow-violet-600/20">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-600 text-white shadow-xl shadow-zinc-600/20">
             <Trophy className="h-6 w-6" />
           </div>
-          <h2 className="text-2xl font-black text-foreground border-l-4 border-violet-600 pl-4 uppercase tracking-tight">Final Verdict</h2>
+          <h2 className="text-2xl font-black text-foreground border-l-4 border-zinc-600 pl-4 uppercase tracking-tight">Final Verdict</h2>
         </div>
       </div>
       <div className="p-8">
@@ -2544,10 +2544,10 @@ function FinalVerdictVisual({
         {/* Winner — only show for multi-car comparisons */}
         {numCars >= 2 && (
           <div className="mb-8 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-6 py-2 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-emerald-500/20">
+            <span className="inline-flex items-center gap-2 rounded-full bg-green-500 px-6 py-2 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-green-500/20">
               <Trophy className="h-4 w-4" /> Winner
             </span>
-            <h3 className="mt-4 text-3xl font-black text-emerald-600 lg:text-4xl tracking-tight">{verdict.winner}</h3>
+            <h3 className="mt-4 text-3xl font-black text-green-600 lg:text-4xl tracking-tight">{verdict.winner}</h3>
           </div>
         )}
 
@@ -2556,10 +2556,10 @@ function FinalVerdictVisual({
           {verdict.scores.map((sc, i) => {
             const isWinner = numCars >= 2 && sc.name === verdict.winner;
             return (
-            <div key={i} className={`text-center relative rounded-2xl p-6 transition-all duration-300 ${isWinner ? "bg-emerald-500/5 ring-2 ring-emerald-500/20 shadow-2xl shadow-emerald-500/10 scale-110 z-10" : "bg-muted/30"}`}>
+            <div key={i} className={`text-center relative rounded-2xl p-6 transition-all duration-300 ${isWinner ? "bg-green-500/5 ring-2 ring-green-500/20 shadow-2xl shadow-green-500/10 scale-110 z-10" : "bg-muted/30"}`}>
               {isWinner && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 text-[9px] font-black tracking-widest text-white shadow-lg">
+                <div className="absolute -top-3 left-1/2 -tranzinc-x-1/2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-green-500 px-3 py-1 text-[9px] font-black tracking-widest text-white shadow-lg">
                     <Trophy className="h-3 w-3" /> WINNER
                   </span>
                 </div>
@@ -2571,7 +2571,7 @@ function FinalVerdictVisual({
                 strokeWidth={8}
                 color={isWinner ? "#10B981" : "#94A3B8"}
               />
-              <p className={`mt-3 text-sm font-black uppercase tracking-wider ${isWinner ? "text-emerald-600" : "text-foreground/60"}`}>{sc.name}</p>
+              <p className={`mt-3 text-sm font-black uppercase tracking-wider ${isWinner ? "text-green-600" : "text-foreground/60"}`}>{sc.name}</p>
             </div>
             );
           })}
@@ -2586,7 +2586,7 @@ function FinalVerdictVisual({
                 className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-2 text-xs shadow-sm transition-all hover:border-primary/30"
               >
                 <span className="text-muted-foreground font-medium uppercase tracking-wider text-[10px]">{s.scenario}:</span>
-                <span className="font-black text-primary">{s.winner}</span>
+                <span className="font-black text-zinc-600">{s.winner}</span>
               </span>
             ))}
           </div>
@@ -2607,7 +2607,7 @@ function FinalVerdictVisual({
           </button>
           <button
             onClick={onShare}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+            className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-8 py-3 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-primary/20 hover:scale-105 transition-all active:scale-95"
           >
             <Share2 className="h-4 w-4" /> Share
           </button>

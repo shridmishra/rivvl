@@ -32,6 +32,15 @@ import {
   ExternalLink,
   History,
   ShieldCheck,
+  ShieldAlert,
+  Activity,
+  AlertCircle,
+  Award,
+  BarChart3,
+  HelpCircle,
+  LayoutGrid,
+  Quote,
+  Target,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,7 +51,7 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
+  // Legend,
   Cell,
 } from "recharts";
 import { cn } from "@/lib/utils";
@@ -133,6 +142,18 @@ interface ComparisonReport {
   buyerProtectionChecklist?: { item: string; why: string; howToFind: string }[][];
   generatedAt: string;
   dataQuality: string;
+  property1OverallScore?: number | null;
+  property2OverallScore?: number | null;
+  property1FinancialScore?: number | null;
+  property2FinancialScore?: number | null;
+  property1LocationScore?: number | null;
+  property2LocationScore?: number | null;
+  property1StructuralScore?: number | null;
+  property2StructuralScore?: number | null;
+  property1LifestyleScore?: number | null;
+  property2LifestyleScore?: number | null;
+  property1RiskScore?: number | null;
+  property2RiskScore?: number | null;
   isPremium?: boolean;
   // Paid sections
   scoreAnalysis?: Record<string, string>;
@@ -313,7 +334,7 @@ interface ListingData {
 /* ═══════════════════════════════════════════════════════════════════════ */
 
 function scoreColor(score: number): string {
-  if (score >= 8) return "text-emerald-600";
+  if (score >= 8) return "text-green-600";
   if (score >= 5) return "text-amber-500";
   return "text-red-500";
 }
@@ -406,8 +427,8 @@ function estimatePropertyTax(price: number): number {
 /*                   SCORE GAUGE COMPONENT (SVG)                         */
 /* ═══════════════════════════════════════════════════════════════════════ */
 
-function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false }: { score: number | null; label: string; size?: number; isNull?: boolean; isWinner?: boolean }) {
-  const strokeWidth = 7;
+function ScoreGauge({ score, label, size = 100, isNull = false, isWinner = false }: { score: number | null; label: string; size?: number; isNull?: boolean; isWinner?: boolean }) {
+  const strokeWidth = 9;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
@@ -415,14 +436,14 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
     return (
       <div className="flex flex-col items-center">
         <div className="relative" style={{ width: size, height: size }}>
-          <svg width={size} height={size} className="-rotate-90">
-            <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#e5e7eb" strokeWidth={strokeWidth} />
+          <svg width={size} height={size} className="-rotate-90 text-zinc-200 dark:text-zinc-800">
+            <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="currentColor" strokeWidth={strokeWidth} />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[9px] font-bold text-gray-400 leading-tight text-center">Insufficient<br/>data</span>
+            <span className="text-xs font-bold text-zinc-400 leading-tight text-center">Insufficient<br/>data</span>
           </div>
         </div>
-        {label && <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-gray-400 text-center">{label}</p>}
+        {label && <p className="mt-2 text-xs font-medium text-zinc-500 dark:text-zinc-400 text-center uppercase tracking-wider">{label}</p>}
       </div>
     );
   }
@@ -435,18 +456,18 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
     <div className="flex flex-col items-center">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="currentColor" strokeOpacity={0.1} strokeWidth={strokeWidth} />
+          <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="currentColor" strokeOpacity={0.05} strokeWidth={strokeWidth} className="text-zinc-900 dark:text-white" />
           <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} className="transition-all duration-700 ease-out" />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="flex items-center gap-1">
-            {isWinner && <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />}
-            <span className="text-3xl font-black tracking-tighter text-foreground">{score}</span>
+            {isWinner && <span className="inline-block h-2 w-2 rounded-full bg-green-500 shadow-sm shadow-green-500/50" />}
+            <span className="text-4xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 leading-none">{score}</span>
           </div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Score</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 opacity-60">Score</span>
         </div>
       </div>
-      {label && <p className="mt-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] text-center">{label}</p>}
+      {label && <p className="mt-4 text-xs font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest text-center">{label}</p>}
     </div>
   );
 }
@@ -455,7 +476,7 @@ function ScoreGauge({ score, label, size = 90, isNull = false, isWinner = false 
 /*                       CHART COLORS                                    */
 /* ═══════════════════════════════════════════════════════════════════════ */
 
-const PROPERTY_COLORS = ["#6C5CE7", "#00D2FF", "#F59E0B"];
+const PROPERTY_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))"];
 
 /* ═══════════════════════════════════════════════════════════════════════ */
 /*                       MAIN REPORT CONTENT                             */
@@ -673,9 +694,9 @@ const params = useParams();
   if (loading) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-[#6C5CE7]" />
+        <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
         {verifyingPayment && (
-          <p className="text-sm font-medium text-[#6C5CE7]">Unlocking your report...</p>
+          <p className="text-sm font-medium text-zinc-500">Unlocking your report...</p>
         )}
       </div>
     );
@@ -684,10 +705,10 @@ const params = useParams();
   if (error) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
-        <AlertTriangle className="h-12 w-12 text-red-400" />
-        <h2 className="mt-4 text-lg font-semibold text-indigo-950 dark:text-gray-100">Error Loading Report</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">{error}</p>
-        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-[#00D2FF] px-6 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]">Compare Real Estate</Link>
+        <AlertTriangle className="h-12 w-12 text-red-500" />
+        <h2 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-gray-100">Error Loading Report</h2>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-gray-400">{error}</p>
+        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-zinc-800">Compare Real Estate</Link>
       </div>
     );
   }
@@ -695,10 +716,10 @@ const params = useParams();
   if (!report) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
-        <Home className="h-12 w-12 text-slate-300" />
-        <h2 className="mt-4 text-lg font-semibold text-indigo-950 dark:text-gray-100">No Report Found</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">Generate a comparison report first to view results here.</p>
-        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-[#00D2FF] px-6 py-3 text-sm font-semibold text-[#0F0F1A] transition-all hover:bg-[#00B8E0]">Compare Real Estate</Link>
+        <Home className="h-12 w-12 text-zinc-300" />
+        <h2 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-gray-100">No Report Found</h2>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-gray-400">Generate a comparison report first to view results here.</p>
+        <Link href="/compare/homes" className="mt-6 inline-flex items-center rounded-xl bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-zinc-800">Compare Real Estate</Link>
       </div>
     );
   }
@@ -714,7 +735,8 @@ const params = useParams();
   // ─── Score bar chart data ───
   const categories = ["Overall", "Price", "Location", "Value", "Risk"];
   const scoreKeys: (keyof PropertyAnalysis)[] = ["overallScore", "priceScore", "locationScore", "valueScore", "riskScore"];
-  const barChartData = categories.map((cat, ci) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _barChartData = categories.map((cat, ci) => {
     const row: Record<string, unknown> = { category: cat };
     properties.forEach((p, pi) => {
       const val = p[scoreKeys[ci]];
@@ -783,7 +805,7 @@ const params = useParams();
       {/* ═══ SIDEBAR TABLE OF CONTENTS ═══ */}
       <nav className="hidden lg:block w-64 flex-shrink-0">
         <div className="sticky top-24 glass-morphism rounded-3xl p-6 shadow-xl border border-border">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400 mb-6 px-2">Analysis Index</p>
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-600 dark:text-zinc-400 mb-6 px-2">Analysis Index</p>
           <ul className="space-y-0.5">
             {visibleTocItems.map((item) => {
               const isActive = activeSection === item.id;
@@ -798,7 +820,7 @@ const params = useParams();
                       const el = document.getElementById(item.id);
                       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
                     }}
-                    className={`block rounded-xl py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-3 transition-all duration-300 ${
+                    className={`block rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition-all flex items-center gap-3 transition-all duration-300 ${
                       item.nested ? "pl-6 pr-2.5" : "px-3"
                     } ${
                       isLocked
@@ -832,7 +854,7 @@ const params = useParams();
             onClick={handleDownloadPdf}
             loading={pdfLoading}
             loadingText="Generating..."
-            className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20"
+            className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-2 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20"
           >
             {!pdfLoading && <Download className="h-4 w-4" />}
             Download PDF
@@ -841,76 +863,76 @@ const params = useParams();
       </div>
 
       {/* ─── SECTION 1: REPORT HEADER + EXECUTIVE SUMMARY ─── */}
-      <div id="executive-summary" data-toc-section className="scroll-mt-24 glass-morphism rounded-3xl border border-border p-10 shadow-xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
+      <div id="executive-summary" data-toc-section className="scroll-mt-24 report-card p-10 shadow-2xl overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl -mr-40 -mt-40" />
         
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Comprehensive Analysis</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-xs font-black uppercase tracking-widest text-primary">Comprehensive Analysis</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter uppercase leading-none">
-                Real Estate <span className="text-primary italic">Intelligence</span>
+              <h1 className="text-5xl md:text-6xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter uppercase leading-[0.9]">
+                Real Estate <br /><span className="text-primary italic">Intelligence</span>
               </h1>
-              <p className="text-xs text-muted-foreground font-medium opacity-60 uppercase tracking-widest">
+              <p className="text-sm text-zinc-500 font-medium opacity-60 uppercase tracking-widest">
                 Generated Signature • {new Date(report.generatedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
               </p>
             </div>
             
-            <div className="flex flex-wrap gap-2 max-w-md">
+            <div className="flex flex-wrap gap-3 max-w-md">
               {properties.map((p, i) => (
-                <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 dark:bg-background/40 border border-border shadow-sm backdrop-blur-sm">
-                  <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground truncate max-w-[120px]">{p.address}</span>
+                <div key={i} className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 shadow-sm backdrop-blur-sm">
+                  <div className="h-2.5 w-2.5 rounded-full shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                  <span className="text-xs font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100 truncate max-w-[150px]">{p.address}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="h-px w-full bg-gradient-to-r from-border/50 via-border to-border/50 mb-10" />
+          <div className="h-px w-full bg-gradient-to-r from-zinc-200/0 via-zinc-200 to-zinc-200/0 dark:via-zinc-800 mb-10" />
 
           {isPaid && report.property1Summary && report.property2Summary ? (
             <div className="grid gap-8 lg:grid-cols-2">
-              <div className="group relative overflow-hidden rounded-3xl border border-border bg-white/40 dark:bg-background/20 p-8 transition-all hover:bg-white/60">
+              <div className="group relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-1 w-10 rounded-full bg-[#6C5CE7]" />
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6C5CE7]">Property Alpha</h4>
+                  <div className="h-1 w-10 rounded-full bg-zinc-900" />
+                  <h4 className="text-xs font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100">Property Alpha</h4>
                 </div>
-                <p className="text-sm leading-relaxed text-foreground/80 font-medium italic">&quot;{report.property1Summary}&quot;</p>
+                <p className="text-base leading-relaxed text-zinc-900 dark:text-zinc-200 font-medium italic">&quot;{report.property1Summary}&quot;</p>
               </div>
-              <div className="group relative overflow-hidden rounded-3xl border border-border bg-white/40 dark:bg-background/20 p-8 transition-all hover:bg-white/60">
+              <div className="group relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-1 w-10 rounded-full bg-[#00D2FF]" />
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00D2FF]">Property Beta</h4>
+                  <div className="h-1 w-10 rounded-full bg-zinc-500" />
+                  <h4 className="text-xs font-black uppercase tracking-widest text-zinc-500">Property Beta</h4>
                 </div>
-                <p className="text-sm leading-relaxed text-foreground/80 font-medium italic">&quot;{report.property2Summary}&quot;</p>
+                <p className="text-base leading-relaxed text-zinc-900 dark:text-zinc-200 font-medium italic">&quot;{report.property2Summary}&quot;</p>
               </div>
             </div>
           ) : (
-            <div className="rounded-3xl bg-primary/5 p-10 border border-primary/10">
+            <div className="rounded-2xl bg-primary/5 p-10 border border-primary/10">
               {isPaid ? (
-                <p className="text-sm leading-relaxed text-foreground dark:text-gray-300 italic font-medium text-center max-w-3xl mx-auto">&quot;{report.summary}&quot;</p>
+                <p className="text-base leading-relaxed text-zinc-900 dark:text-zinc-200 italic font-medium text-center max-w-3xl mx-auto">&quot;{report.summary}&quot;</p>
               ) : (
                 <div className="flex flex-col items-center text-center max-w-2xl mx-auto py-4">
-                  <p className="text-sm leading-relaxed text-muted-foreground mb-8">
+                  <p className="text-sm leading-relaxed text-zinc-500 mb-10">
                     {report.summary.split(/(?<=[.!?])\s+/).slice(0, 1).join(" ")}...
                   </p>
                   <div className="flex flex-col items-center gap-8">
                     <div className="flex -space-x-4">
                       {[1, 2, 3].map(i => (
-                        <div key={i} className="h-12 w-12 rounded-full bg-muted border-4 border-background flex items-center justify-center text-muted-foreground shadow-sm">
-                          <Lock className="h-5 w-5" />
+                        <div key={i} className="h-14 w-14 rounded-full bg-zinc-100 dark:bg-zinc-800 border-4 border-white dark:border-zinc-900 flex items-center justify-center text-zinc-400 shadow-lg">
+                          <Lock className="h-6 w-6" />
                         </div>
                       ))}
                     </div>
                     <div className="space-y-6">
-                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Unlock Full Investment Intelligence</p>
+                      <p className="text-xs font-black uppercase tracking-[0.3em] text-primary">Unlock Full Investment Intelligence</p>
                       <Button
                         onClick={handleUpgradeCheckout}
                         loading={upgradeLoading}
-                        className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/30 hover:shadow-primary/40 transition-all hover:-translate-y-1 active:translate-y-0"
+                        className="h-16 px-12 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/30 hover:shadow-primary/40 transition-all hover:-tranzinc-y-1 active:tranzinc-y-0"
                       >
                         {upgradeLoading ? "Preparing Intelligence..." : `Upgrade Now: ${upgradePrice}`}
                       </Button>
@@ -923,130 +945,112 @@ const params = useParams();
         </div>
       </div>
 
-      {/* ─── SECTION 2: SCORE DASHBOARD (Stacked: Bar Chart on top, Ring Grid below) ─── */}
-      <section id="score-dashboard" data-toc-section className="mt-8 scroll-mt-20 bg-white dark:bg-[#1A1A2E] rounded-2xl border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
-        <div className="bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4">
-          <h2 className="text-xl font-bold text-white tracking-tight">Score Dashboard</h2>
-        </div>
-        <div className="mt-4 space-y-4">
-          {/* A) Full-width horizontal bar comparison chart */}
-          <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Score Comparison</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={barChartData} layout="vertical" barCategoryGap="20%">
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
-                <XAxis type="number" domain={[0, 10]} tick={{ fontSize: 11 }} tickCount={6} ticks={[0, 2, 4, 5, 6, 8, 10]} />
-                <YAxis dataKey="category" type="category" tick={{ fontSize: 12, fill: "#64748B" }} width={80} />
-                <Tooltip formatter={(value) => `${Number(value)}/10`} />
-                {properties.map((_, i) => (
-                  <Bar key={i} dataKey={`p${i}`} name={properties[i].address.length > 40 ? properties[i].address.slice(0, 40) + "..." : properties[i].address} fill={PROPERTY_COLORS[i]} barSize={20} radius={[0, 4, 4, 0]} label={{ position: "right", fontSize: 10, fill: "#64748B", formatter: (v: unknown) => `${v}` }} />
-                ))}
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* B) Full-width detailed score ring grid */}
-          <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Detailed Scores</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-indigo-950 dark:text-gray-100">Property</th>
-                    {categories.map((cat) => (
-                      <th key={cat} className="px-3 py-2 text-center text-xs font-bold text-indigo-950 dark:text-gray-100">{cat}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {properties.map((p, pi) => {
-                    const scores = [p.overallScore, p.priceScore, p.locationScore, p.valueScore, p.riskScore];
-                    return (
-                      <tr key={pi} className={pi % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-[#f9fafb] dark:bg-[#15152A]"}>
-                        <td className="px-3 py-3">
-                          <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                            <span className="text-xs font-medium text-slate-700 dark:text-gray-300 truncate max-w-[180px] block" title={p.address} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.address}</span>
-                          </div>
-                        </td>
-                        {scores.map((s, si) => {
-                          const otherScores = properties.filter((_, oi) => oi !== pi).map(op => {
-                            const vals = [op.overallScore, op.priceScore, op.locationScore, op.valueScore, op.riskScore];
-                            return vals[si];
-                          });
-                          const isWinner = s !== null && otherScores.every(os => os === null || (s !== null && s > os));
-                          const isTied = s !== null && otherScores.some(os => os === s);
-                          return (
-                            <td key={si} className="px-2 py-3 text-center">
-                              <div className="flex justify-center">
-                                <ScoreGauge score={s} label="" size={80} isWinner={isWinner && !isTied} />
-                              </div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* C) Score Breakdown — moved from standalone section into Score Dashboard */}
-          {isPaid && report.scoreAnalysis && Object.keys(report.scoreAnalysis).length > 0 && (
-            <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-lg font-semibold text-[#6C5CE7] border-b border-gray-200 pb-2 mb-4">Why These Scores?</h3>
-              <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                {properties.map((p, pi) => (
-                  <div key={pi}>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                      <h4 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{p.address}</h4>
-                    </div>
-                    <div className="space-y-3">
-                      {["price", "location", "value", "risk"].map((cat) => {
-                        const key = `property${pi + 1}_${cat}`;
-                        let text = report.scoreAnalysis?.[key];
-                        // FIX 2: If risk explanation is missing or a generic fallback, build from actual riskProfile data
-                        if (cat === "risk" && (!text || /unavailable/i.test(text))) {
-                          const rp = p.riskProfile;
-                          if (rp) {
-                            const parts: string[] = [];
-                            if (rp.floodZone?.code) parts.push(`flood zone ${rp.floodZone.code} (${rp.floodZone.riskLevel})`);
-                            if (rp.radonZone?.riskLabel) parts.push(`radon: ${rp.radonZone.riskLabel}`);
-                            if (rp.wildfireRisk?.riskLevel) parts.push(`wildfire: ${rp.wildfireRisk.riskLevel}`);
-                            if (rp.earthquakeRisk?.riskLevel) parts.push(`earthquake: ${rp.earthquakeRisk.riskLevel}`);
-                            if (rp.leadPaintRisk) parts.push("lead paint risk (pre-1978)");
-                            if (rp.asbestosRisk) parts.push("asbestos risk (pre-1980)");
-                            if (parts.length > 0) {
-                              text = `Risk score based on ${parts.join(", ")}.`;
-                            }
-                          }
-                        }
-                        if (!text) return null;
-                        return (
-                          <div key={cat} className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">{cat} Score</p>
-                            <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{text}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
+      {/* ─── SECTION 2: SCORE DASHBOARD ─── */}
+      <div id="score-dashboard" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+        {/* Header (Already using gradient style) */}
+        <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 p-8 text-white relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 transition-transform duration-1000 group-hover:scale-110" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-zinc-800/50 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner">
+                <BarChart3 className="w-7 h-7" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-black uppercase tracking-tight leading-tight">Investment Performance</h3>
+                <p className="text-xs font-bold text-white/70 tracking-widest mt-1 italic font-bold text-white/70">Vanguard Metrics & Competitive Indexing</p>
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </section>
+
+        <div className="p-8 space-y-10">
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Left: Score Comparison */}
+            <div className="lg:col-span-1 report-card bg-zinc-50 dark:bg-zinc-800/20 border-zinc-100 dark:border-zinc-800 p-8 shadow-inner">
+              <div className="flex items-center gap-2 mb-8">
+                <Target className="w-5 h-5 text-primary" />
+                <h4 className="text-xs font-black uppercase tracking-widest text-zinc-900">Performance Index</h4>
+              </div>
+              <div className="flex flex-col items-center gap-12 py-4">
+                <ScoreGauge score={report.property1OverallScore ?? null} label="Property Alpha" isWinner={report.property1OverallScore! > report.property2OverallScore!} />
+                <div className="h-px w-20 bg-zinc-200 dark:bg-zinc-800" />
+                <ScoreGauge score={report.property2OverallScore ?? null} label="Property Beta" isWinner={report.property2OverallScore! > report.property1OverallScore!} />
+              </div>
+            </div>
+
+            {/* Right: Detailed Breakdown */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="report-card bg-zinc-50 dark:bg-zinc-800/20 border-zinc-100 dark:border-zinc-800 p-8">
+                <div className="flex items-center gap-2 mb-8">
+                  <Activity className="w-5 h-5 text-primary" />
+                  <h4 className="text-xs font-black uppercase tracking-widest text-zinc-600">Dimensional Analysis</h4>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-zinc-200 dark:border-zinc-800">
+                        <th className="py-4 text-left text-xs font-black uppercase tracking-widest text-zinc-500">Metric</th>
+                        <th className="py-4 px-4 text-center text-xs font-black uppercase tracking-widest text-zinc-900">Alpha</th>
+                        <th className="py-4 px-4 text-center text-xs font-black uppercase tracking-widest text-zinc-500">Beta</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                      {[
+                        { label: "Financial Robustness", p1: report.property1FinancialScore, p2: report.property2FinancialScore },
+                        { label: "Market Appreciation", p1: report.property1LocationScore, p2: report.property2LocationScore },
+                        { label: "Structural Integrity", p1: report.property1StructuralScore, p2: report.property2StructuralScore },
+                        { label: "Community & Lifestyle", p1: report.property1LifestyleScore, p2: report.property2LifestyleScore },
+                        { label: "Risk Mitigation", p1: report.property1RiskScore, p2: report.property2RiskScore },
+                      ].map((row, i) => (
+                        <tr key={i} className="group hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30 transition-colors">
+                          <td className="py-5 text-sm font-bold text-zinc-900 dark:text-zinc-200">{row.label}</td>
+                          <td className="py-5 px-4 text-center">
+                            <span className={`inline-flex items-center justify-center w-10 h-10 rounded-xl font-black text-sm border-2 ${
+                              row.p1 && row.p1 >= 8 ? "bg-green-50 text-green-600 border-green-200" :
+                              row.p1 && row.p1 >= 6 ? "bg-yellow-50 text-yellow-600 border-yellow-200" :
+                              "bg-zinc-50 text-zinc-600 border-zinc-200"
+                            }`}>
+                              {row.p1 || "—"}
+                            </span>
+                          </td>
+                          <td className="py-5 px-4 text-center">
+                            <span className={`inline-flex items-center justify-center w-10 h-10 rounded-xl font-black text-sm border-2 ${
+                              row.p2 && row.p2 >= 8 ? "bg-green-50 text-green-600 border-green-200" :
+                              row.p2 && row.p2 >= 6 ? "bg-yellow-50 text-yellow-600 border-yellow-200" :
+                              "bg-zinc-50 text-zinc-600 border-zinc-200"
+                            }`}>
+                              {row.p2 || "—"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Explanatory Note */}
+              <div className="p-8 rounded-2xl bg-zinc-900 text-white dark:bg-zinc-800 dark:border dark:border-zinc-700 shadow-xl relative overflow-hidden group">
+                <Zap className="absolute top-4 right-4 text-yellow-400 w-8 h-8 opacity-20 group-hover:scale-110 transition-transform" />
+                <h5 className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4 flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                  Algorithm Logic
+                </h5>
+                <p className="text-sm leading-relaxed text-zinc-300 font-medium italic">
+                  Scores are calculated using a proprietary 142-point vector analysis, weighting public records, market trends, and risk indices to provide a standardized investment comparison.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ─── RED FLAGS IN THIS LISTING (Sprint 1, Feature 5) ─── */}
       {report.redFlags && report.redFlags.length > 0 ? (
         isPaid ? (
           <section id="red-flags" data-toc-section className="mt-12 scroll-mt-24">
             <div className="glass-morphism rounded-3xl border border-red-500/30 shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-r from-red-500/10 to-transparent px-8 py-6 border-b border-red-500/20">
+              <div className="bg-gradient-to-r from-zinc-800/10 to-transparent px-8 py-6 border-b border-zinc-800/20">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-600/20">
                     <AlertTriangle className="h-5 w-5" />
@@ -1060,22 +1064,22 @@ const params = useParams();
                     <div key={ri} className="space-y-4">
                       <div className="flex items-center gap-2 border-b border-border/50 pb-3">
                         <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ri] }} />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-foreground truncate">{shortAddr(properties[ri]?.address ?? `Prop ${ri + 1}`)}</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-foreground truncate">{shortAddr(properties[ri]?.address ?? `Prop ${ri + 1}`)}</span>
                       </div>
                       {rf.noFlagsDetected ? (
-                        <div className="flex items-center gap-2 rounded-xl bg-emerald-50/5 dark:bg-emerald-500/5 border border-emerald-500/20 px-4 py-3">
-                          <Check className="h-4 w-4 text-emerald-500" />
-                          <span className="text-[11px] font-black uppercase tracking-wider text-emerald-600">Secure: No major flags</span>
+                        <div className="flex items-center gap-2 rounded-xl bg-green-50/5 dark:bg-green-500/5 border border-green-500/20 px-4 py-3">
+                          <Check className="h-4 w-4 text-green-500" />
+                          <span className="text-xs font-black uppercase tracking-wider text-green-600">Secure: No major flags</span>
                         </div>
                       ) : (
                         <div className="space-y-3">
                           {rf.rulesFlags.map((flag, fi) => (
-                            <div key={`rule-${fi}`} className={`group relative rounded-xl border-l-4 p-4 transition-all hover:translate-x-1 ${flag.severity === "red" ? "border-l-red-500 bg-red-50/50 dark:bg-red-900/20" : "border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/20"}`}>
+                            <div key={`rule-${fi}`} className={`group relative rounded-xl border-l-4 p-4 transition-all hover:tranzinc-x-1 ${flag.severity === "red" ? "border-l-red-500 bg-red-50/50 dark:bg-red-900/20" : "border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/20"}`}>
                               <p className={`text-xs font-black leading-relaxed ${flag.severity === "red" ? "text-red-700 dark:text-red-400" : "text-amber-700 dark:text-amber-400"}`}>{flag.text}</p>
                             </div>
                           ))}
                           {rf.aiRedFlags.map((flag, fi) => (
-                            <div key={`ai-${fi}`} className="group relative rounded-xl border-l-4 border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/20 p-4 transition-all hover:translate-x-1">
+                            <div key={`ai-${fi}`} className="group relative rounded-xl border-l-4 border-l-amber-500 bg-amber-50/50 dark:bg-amber-900/20 p-4 transition-all hover:tranzinc-x-1">
                               <p className="text-xs font-black leading-relaxed text-amber-700 dark:text-amber-400">{flag}</p>
                             </div>
                           ))}
@@ -1121,59 +1125,64 @@ const params = useParams();
       ) : null}
 
       {/* ─── SECTION 3: KEY FACTS TABLE ─── */}
-      <section id="key-facts" data-toc-section className="mt-12 scroll-mt-24">
-        <div className="glass-morphism rounded-3xl border border-border shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-primary/10 to-transparent px-8 py-6 border-b border-border/50">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-                <Building2 className="h-5 w-5" />
-              </div>
-              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Specifications Matrix</h2>
+      {/* ─── SECTION 3: KEY FACTS TABLE ─── */}
+      <section id="key-facts" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+        <div className="bg-zinc-900 p-8 text-white relative group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+              <Building2 className="w-7 h-7" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black uppercase tracking-tight leading-tight">Specifications Matrix</h2>
+              <p className="text-xs font-bold text-white/50 uppercase tracking-widest mt-1">Cross-Property Technical Audit</p>
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-muted/50">
-                  <th className="px-6 py-4 text-left text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border/50">Vector</th>
-                  {properties.map((p, i) => (
-                    <th key={i} className="px-4 py-4 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border/50">
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                        {shortAddr(p.address)}
-                      </div>
-                    </th>
-                  ))}
-                  <th className="px-4 py-4 text-center text-[10px] font-black uppercase tracking-widest text-primary border-b border-border/50">Alpha</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/30">
-                {(() => {
-                  const allRows = buildComparisonRows(properties, listings, isPaid);
-                  const FREE_ROW_LABELS = ["Price", "Bedrooms", "Bathrooms", "Square Feet"];
-                  return allRows.map((row, ri) => {
-                    const isFreeVisible = isPaid || FREE_ROW_LABELS.includes(row.label);
-                    return (
-                      <tr key={ri} className="group transition-colors hover:bg-primary/5">
-                        <td className="px-6 py-4 text-[11px] font-black uppercase tracking-wider text-muted-foreground">
-                          {!isFreeVisible && <Lock className="inline h-3 w-3 mr-2 opacity-40 text-primary" />}
-                          {row.label}
-                        </td>
-                        {row.values.map((val, vi) => {
-                          const isHoaWarning = row.label === "HOA Fee" && val.includes("Not listed");
-                          return (
-                            <td key={vi} className={`px-4 py-4 text-center text-xs font-medium ${!isFreeVisible ? "text-muted-foreground/20 select-none blur-[4px]" : isHoaWarning ? "text-amber-500" : row.bestIndex === vi ? "bg-primary/5 text-primary font-black" : "text-foreground"}`}>
-                              {val}
-                            </td>
-                          );
-                        })}
-                        <td className="px-4 py-4 text-center">
-                          {!isFreeVisible ? (
-                            <Lock className="mx-auto h-3.5 w-3.5 text-primary opacity-20" />
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-zinc-50 dark:bg-zinc-800/80 border-b border-border">
+                <th className="px-8 py-5 text-left text-xs font-black uppercase tracking-[0.1em] text-zinc-500 whitespace-nowrap">Analytical Vector</th>
+                {properties.map((p, i) => (
+                  <th key={i} className="px-6 py-5 text-center text-xs font-black uppercase tracking-[0.1em] text-zinc-500 min-w-[200px]">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                      {shortAddr(p.address)}
+                    </div>
+                  </th>
+                ))}
+                <th className="px-6 py-5 text-center text-xs font-black uppercase tracking-[0.1em] text-primary">Alpha Advantage</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+              {(() => {
+                const allRows = buildComparisonRows(properties, listings, isPaid);
+                const FREE_ROW_LABELS = ["Price", "Bedrooms", "Bathrooms", "Square Feet"];
+                return allRows.map((row, ri) => {
+                  const isFreeVisible = isPaid || FREE_ROW_LABELS.includes(row.label);
+                  return (
+                    <tr key={ri} className="group hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors">
+                      <td className="px-8 py-5 text-xs font-bold uppercase tracking-wide text-zinc-600 dark:text-zinc-400">
+                        {!isFreeVisible && <Lock className="inline h-3 w-3 mr-2 opacity-50 text-primary" />}
+                        {row.label}
+                      </td>
+                      {row.values.map((val, vi) => {
+                        const isHoaWarning = row.label === "HOA Fee" && val.includes("Not listed");
+                        const isBest = row.bestIndex === vi;
+                        return (
+                          <td key={vi} className={`px-6 py-5 text-center text-sm transition-all duration-300 ${!isFreeVisible ? "text-zinc-300 dark:text-zinc-700 select-none blur-[6px]" : isHoaWarning ? "text-amber-500 font-bold" : isBest ? "bg-primary/5 text-primary font-black scale-105" : "text-zinc-900 dark:text-zinc-100 font-medium"}`}>
+                            {val}
+                          </td>
+                        );
+                      })}
+                      <td className="px-6 py-5 text-center">
+                        {!isFreeVisible ? (
+                          <div className="flex justify-center opacity-20"><Lock className="h-4 w-4 text-zinc-400" /></div>
                         ) : row.bestIndex !== null ? (
-                          <Check className="mx-auto h-3.5 w-3.5 text-emerald-500" />
+                          <div className="flex justify-center"><Check className="h-5 w-5 text-green-500 font-black" /></div>
                         ) : (
-                          <span className="text-[10px] text-slate-400">Tie</span>
+                          <span className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Tie</span>
                         )}
                       </td>
                     </tr>
@@ -1184,40 +1193,45 @@ const params = useParams();
           </table>
         </div>
         {!isPaid && (
-          <div className="mt-3 flex flex-col items-center gap-2 py-3">
-            <span className="text-xs text-gray-500 dark:text-gray-400">🔒 +6 more data points in full report</span>
-            <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
-              {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
-            </button>
+          <div className="p-8 bg-zinc-50 dark:bg-zinc-800/40 border-t border-border flex flex-col items-center gap-4">
+            <span className="text-xs font-bold text-zinc-500 uppercase tracking-[0.15em]">🔒 +6 more data points available in full intelligence report</span>
+            <Button 
+                onClick={handleUpgradeCheckout} 
+                loading={upgradeLoading} 
+                className="h-12 px-10 rounded-xl bg-zinc-900 text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-zinc-900/20 hover:scale-[1.05] transition-all"
+            >
+              {upgradeLoading ? "Authorizing..." : `Unlock Complete Matrix: ${upgradePrice}`}
+            </Button>
           </div>
         )}
-        </div>
       </section>
 
       {/* ─── SECTION 4: PROS AND CONS ─── */}
       <section id="pros-cons" data-toc-section className="mt-12 scroll-mt-24">
-        <div className="glass-morphism rounded-3xl border border-border shadow-xl overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-violet-500/10 to-transparent px-8 py-6 border-b border-border/50">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white shadow-lg shadow-violet-600/20">
-                <ShieldCheck className="h-5 w-5" />
+        <div className="report-card overflow-hidden mb-8">
+          <div className="bg-zinc-900 px-8 py-6 text-white border-b border-border/50 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-900 text-white shadow-lg shadow-zinc-900/20">
+                <ShieldCheck className="h-6 w-6" />
               </div>
-              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Competitive Advantage</h2>
+              <div>
+                <h2 className="text-xl font-black uppercase tracking-tight">Competitive Advantage</h2>
+                <p className="text-xs font-bold text-white/50 tracking-widest mt-0.5 font-bold text-white/50">Aggregate Sentiment Intelligence</p>
+              </div>
             </div>
           </div>
-          <div className="p-8">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-6">Aggregate Sentiment Analysis</h3>
-            <div className="h-[200px] w-full">
+          <div className="p-10">
+            <div className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={properties.map((p, i) => ({ name: shortAddr(p.address), score: p.overallScore, fill: PROPERTY_COLORS[i] }))} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.05} horizontal={false} />
                   <XAxis type="number" domain={[0, 10]} hide />
-                  <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fontWeight: 900, fill: "currentColor", opacity: 0.6 }} width={100} />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fontWeight: 900, fill: "currentColor", opacity: 0.7 }} width={120} />
                   <Tooltip 
                     cursor={{ fill: 'currentColor', opacity: 0.05 }}
-                    contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--border)', fontSize: '11px', fontWeight: 900 }}
+                    contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '16px', border: '1px solid var(--border)', fontSize: '12px', fontWeight: 900, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
                   />
-                  <Bar dataKey="score" name="Overall Intelligence" barSize={16} radius={[0, 4, 4, 0]}>
+                  <Bar dataKey="score" name="Intelligence Index" barSize={24} radius={[0, 8, 8, 0]}>
                     {properties.map((_, i) => (
                       <Cell key={i} fill={PROPERTY_COLORS[i]} />
                     ))}
@@ -1228,61 +1242,67 @@ const params = useParams();
           </div>
         </div>
 
-        <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+        <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
           {properties.map((p, i) => {
             const visiblePros = isPaid ? p.pros : p.pros.slice(0, 1);
             const hiddenPros = isPaid ? [] : p.pros.slice(1);
             const visibleCons = isPaid ? p.cons : p.cons.slice(0, 1);
             const hiddenCons = isPaid ? [] : p.cons.slice(1);
             return (
-              <div key={i} className="glass-morphism rounded-3xl border border-border bg-white/30 dark:bg-background/20 p-8 transition-all hover:bg-white/50 backdrop-blur-sm">
-                <div className="flex items-center gap-2 mb-6 border-b border-border/50 pb-4">
-                  <div className="h-2 w-2 rounded-full shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                  <h3 className="text-[11px] font-black uppercase tracking-widest text-foreground truncate" title={p.address}>{shortAddr(p.address)}</h3>
+              <div key={i} className="report-card p-8 group transition-all duration-500 hover:shadow-2xl hover:-tranzinc-y-1">
+                <div className="flex items-center gap-3 mb-8 border-b border-border/50 pb-6">
+                  <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate" title={p.address}>{shortAddr(p.address)}</h3>
                 </div>
                 
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {/* Pros */}
-                  <div className="space-y-3">
-                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500">Catalysts</p>
-                    <div className="space-y-2">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs font-black uppercase tracking-[0.2em] text-green-500">Value Drivers</p>
+                      <div className="h-px flex-grow bg-green-500/10" />
+                    </div>
+                    <div className="space-y-3">
                       {visiblePros.map((pro, pi) => (
-                        <div key={pi} className="flex items-start gap-2 group">
-                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                            <Check className="h-2 w-2" />
+                        <div key={pi} className="flex items-start gap-3 group/item">
+                          <div className="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-green-50 dark:bg-green-900/20 text-green-500 border border-green-100 dark:border-green-900/30">
+                            <Check className="h-3 w-3 font-black" />
                           </div>
-                          <span className="text-xs font-medium text-foreground/80 leading-relaxed">{pro}</span>
+                          <span className="text-sm font-bold text-zinc-700 dark:text-zinc-300 leading-relaxed uppercase tracking-tight italic">{pro}</span>
                         </div>
                       ))}
                       {!isPaid && hiddenPros.length > 0 && (
-                        <div className="flex items-start gap-2 opacity-30 select-none blur-[2px]">
-                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-slate-200">
+                        <div className="flex items-start gap-3 opacity-30 select-none blur-[2px]">
+                          <div className="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-zinc-100 border border-zinc-200">
                             <Lock className="h-2 w-2" />
                           </div>
-                          <span className="text-xs font-medium">Additional insight secured</span>
+                          <span className="text-sm font-medium">Standard analytical catalyst secured</span>
                         </div>
                       )}
                     </div>
                   </div>
 
                   {/* Cons */}
-                  <div className="space-y-3">
-                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-red-500">Liabilities</p>
-                    <div className="space-y-2">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs font-black uppercase tracking-[0.2em] text-red-500">Risk Vectors</p>
+                      <div className="h-px flex-grow bg-red-500/10" />
+                    </div>
+                    <div className="space-y-3">
                       {visibleCons.map((con, ci) => (
-                        <div key={ci} className="flex items-start gap-2 group">
-                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-red-500/10 text-red-500 transition-colors group-hover:bg-red-500 group-hover:text-white">
-                            <X className="h-2 w-2" />
+                        <div key={ci} className="flex items-start gap-3 group/item">
+                          <div className="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-red-50 dark:bg-red-900/20 text-red-500 border border-red-100 dark:border-red-900/30">
+                            <X className="h-3 w-3 font-black" />
                           </div>
-                          <span className="text-xs font-medium text-foreground/80 leading-relaxed">{con}</span>
+                          <span className="text-sm font-bold text-zinc-700 dark:text-zinc-300 leading-relaxed uppercase tracking-tight italic">{con}</span>
                         </div>
                       ))}
                       {!isPaid && hiddenCons.length > 0 && (
-                        <div className="flex items-start gap-2 opacity-30 select-none blur-[2px]">
-                          <div className="mt-1 h-3.5 w-3.5 flex items-center justify-center rounded-full bg-slate-200">
+                        <div className="flex items-start gap-3 opacity-30 select-none blur-[2px]">
+                          <div className="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-zinc-100 border border-zinc-200">
                             <Lock className="h-2 w-2" />
                           </div>
-                          <span className="text-xs font-medium">Risk factor analysis locked</span>
+                          <span className="text-sm font-medium">Critical liability assessment locked</span>
                         </div>
                       )}
                     </div>
@@ -1295,67 +1315,70 @@ const params = useParams();
       </section>
 
       {/* ─── SECTION 5: RISK REPORT (always visible — rivvl differentiator) ─── */}
-      <section id="risk-report" data-toc-section className="mt-12 scroll-mt-24">
-        <div className="glass-morphism rounded-3xl border border-border shadow-xl overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-orange-500/10 to-transparent px-8 py-6 border-b border-border/50">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-600 text-white shadow-lg shadow-orange-600/20">
-                <Shield className="h-5 w-5" />
-              </div>
-              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">Risk Exposure</h2>
+      {/* ─── SECTION 5: RISK REPORT (always visible — rivvl differentiator) ─── */}
+      <section id="risk-report" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+        <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+          <div className="relative z-10 flex items-center gap-5">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-inner">
+              <Shield className="h-7 w-7" />
             </div>
-          </div>
-          <div className="p-8">
-            <div className="mb-8 p-4 rounded-2xl bg-orange-500/5 border border-orange-500/10 flex items-start gap-4">
-              <div className="mt-0.5 h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
-              <p className="text-[11px] font-black uppercase tracking-wide text-orange-600/80 leading-relaxed">
-                Critical Transparency: rivvl surfaces environmental and safety risks often omitted in standard listings.
-              </p>
+            <div>
+              <h2 className="text-2xl font-black tracking-tight leading-none uppercase">Risk Exposure</h2>
+              <p className="text-xs font-bold text-white/70 tracking-widest mt-1.5 italic">Environmental & Safety Threat Matrix</p>
             </div>
-            
-            {isPaid && (
-              <div className="space-y-6">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Cross-Property Threat Comparison</h3>
-                <div className="h-[250px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={(() => {
-                      const riskCats = ["Flood", "Superfund", "Earthquake", "Wildfire", "Air", "Radon"];
-                      return riskCats.map(cat => {
-                        const row: Record<string, unknown> = { category: cat };
-                        properties.forEach((p, pi) => {
-                          if (!p.riskProfile) { row[`p${pi}`] = 0; return; }
-                          const r = p.riskProfile;
-                          let score = 5;
-                          if (cat === "Flood") score = r.floodZone.isSFHA ? 2 : r.floodZone.riskLevel === "Low" ? 9 : 5;
-                          else if (cat === "Superfund") score = r.superfundSites.count1mile > 0 ? 2 : r.superfundSites.count3mile > 0 ? 5 : 9;
-                          else if (cat === "Earthquake") score = r.earthquakeRisk.riskLevel === "High" ? 2 : r.earthquakeRisk.riskLevel === "Moderate" ? 5 : 9;
-                          else if (cat === "Wildfire") score = r.wildfireRisk.riskLevel === "High" || r.wildfireRisk.riskLevel === "Very High" ? 2 : r.wildfireRisk.riskLevel === "Moderate" ? 5 : 9;
-                          else if (cat === "Air") { const aq = r.airQuality.score; score = aq === null ? 0 : aq < 50 ? 2 : aq <= 70 ? 5 : 9; }
-                          else if (cat === "Radon") score = r.radonZone.zone === 1 ? 2 : r.radonZone.zone === 2 ? 5 : r.radonZone.zone === 3 ? 9 : 0;
-                          row[`p${pi}`] = score;
-                        });
-                        return row;
-                      });
-                    })()} layout="vertical" barCategoryGap="20%">
-                      <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.05} horizontal={false} />
-                      <XAxis type="number" domain={[0, 10]} hide />
-                      <YAxis dataKey="category" type="category" tick={{ fontSize: 9, fontWeight: 900, fill: "currentColor", opacity: 0.6 }} width={70} />
-                      <Tooltip 
-                        cursor={{ fill: 'currentColor', opacity: 0.05 }}
-                        contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '12px', border: '1px solid var(--border)', fontSize: '11px', fontWeight: 900 }}
-                      />
-                      {properties.map((_, i) => (
-                        <Bar key={i} dataKey={`p${i}`} name={shortAddr(properties[i].address)} fill={PROPERTY_COLORS[i]} barSize={12} radius={[0, 4, 4, 0]} />
-                      ))}
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
           </div>
         </div>
+        <div className="p-10">
+          <div className="mb-10 p-5 rounded-2xl bg-orange-50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-900/20 flex items-start gap-4 shadow-sm">
+            <div className="mt-1 h-2.5 w-2.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+            <p className="text-xs font-bold tracking-wide text-orange-700 dark:text-orange-400 leading-relaxed">
+              Intelligence Summary: rivvl surfaces underlying environmental and safety risks often omitted in standard real estate listings for maximum transparency.
+            </p>
+          </div>
+          
+          {isPaid && (
+            <div className="space-y-8">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">Cross-Property Threat Comparison</h3>
+              <div className="h-[280px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={(() => {
+                    const riskCats = ["Flood", "Superfund", "Earthquake", "Wildfire", "Air", "Radon"];
+                    return riskCats.map(cat => {
+                      const row: Record<string, unknown> = { category: cat };
+                      properties.forEach((p, pi) => {
+                        if (!p.riskProfile) { row[`p${pi}`] = 0; return; }
+                        const r = p.riskProfile;
+                        let score = 5;
+                        if (cat === "Flood") score = r.floodZone.isSFHA ? 2 : r.floodZone.riskLevel === "Low" ? 9 : 5;
+                        else if (cat === "Superfund") score = r.superfundSites.count1mile > 0 ? 2 : r.superfundSites.count3mile > 0 ? 5 : 9;
+                        else if (cat === "Earthquake") score = r.earthquakeRisk.riskLevel === "High" ? 2 : r.earthquakeRisk.riskLevel === "Moderate" ? 5 : 9;
+                        else if (cat === "Wildfire") score = r.wildfireRisk.riskLevel === "High" || r.wildfireRisk.riskLevel === "Very High" ? 2 : r.wildfireRisk.riskLevel === "Moderate" ? 5 : 9;
+                        else if (cat === "Air") { const aq = r.airQuality.score; score = aq === null ? 0 : aq < 50 ? 2 : aq <= 70 ? 5 : 9; }
+                        else if (cat === "Radon") score = r.radonZone.zone === 1 ? 2 : r.radonZone.zone === 2 ? 5 : r.radonZone.zone === 3 ? 9 : 0;
+                        row[`p${pi}`] = score;
+                      });
+                      return row;
+                    });
+                  })()} layout="vertical" barCategoryGap="20%">
+                    <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.05} horizontal={false} />
+                    <XAxis type="number" domain={[0, 10]} hide />
+                    <YAxis dataKey="category" type="category" tick={{ fontSize: 11, fontWeight: 900, fill: "currentColor", opacity: 0.7 }} width={80} />
+                    <Tooltip 
+                      cursor={{ fill: 'currentColor', opacity: 0.05 }}
+                      contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '16px', border: '1px solid var(--border)', fontSize: '12px', fontWeight: 900, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
+                    />
+                    {properties.map((_, i) => (
+                      <Bar key={i} dataKey={`p${i}`} name={shortAddr(properties[i].address)} fill={PROPERTY_COLORS[i]} barSize={16} radius={[0, 4, 4, 0]} />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+        </div>
 
-        <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+        <div className={`grid gap-8 p-10 pt-0 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
           {properties.map((p, i) => {
             const yearBuilt = listings[i]?.yearBuilt ?? null;
             const riskItems = getRiskItems(p.riskProfile, yearBuilt);
@@ -1364,35 +1387,39 @@ const params = useParams();
             const hiddenItems = isPaid ? [] : riskItems.filter(item => !FREE_RISK_LABELS.includes(item.label));
 
             return (
-              <div key={i} className="glass-morphism rounded-3xl border border-border bg-white/30 dark:bg-background/20 p-8 transition-all hover:bg-white/50 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-8 border-b border-border/50 pb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                    <h3 className="text-[11px] font-black uppercase tracking-widest text-foreground truncate max-w-[140px]" title={p.address}>{shortAddr(p.address)}</h3>
-                  </div>
+              <div key={i} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
                   <div className="flex items-center gap-3">
-                    <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground">Threat Score</span>
+                    <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                    <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]" title={p.address}>{shortAddr(p.address)}</h3>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-xl border border-border shadow-sm">
+                    <span className="text-[10px] font-black uppercase tracking-tight text-zinc-400">Threat</span>
                     {p.riskScore !== null ? (
-                      <span className={`text-sm font-black ${scoreColor(p.riskScore)}`}>{p.riskScore}/10</span>
+                      <span className={`text-base font-black ${
+                        p.riskScore >= 7 ? "text-red-500" :
+                        p.riskScore >= 4 ? "text-yellow-500" :
+                        "text-green-500"
+                      }`}>{p.riskScore}/10</span>
                     ) : (
-                      <span className="text-sm font-black text-muted-foreground/40">N/A</span>
+                      <span className="text-base font-black text-zinc-300">N/A</span>
                     )}
                   </div>
                 </div>
 
-                <div className="grid gap-3">
+                <div className="grid gap-4">
                   {visibleItems.map((item, ri) => (
-                    <div key={ri} className={`group relative rounded-2xl border-l-4 p-4 transition-all hover:translate-x-1 ${item.level === 'red' ? 'border-l-red-500 bg-red-50/50 dark:bg-red-900/20' : item.level === 'yellow' ? 'border-l-orange-500 bg-orange-50/50 dark:bg-orange-900/20' : 'border-l-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20'}`}>
-                      <div className="flex items-center justify-between mb-2">
+                    <div key={ri} className={`group/item relative rounded-2xl border-l-[6px] p-5 transition-all hover:tranzinc-x-1 shadow-sm ${item.level === 'red' ? 'border-l-red-500 bg-red-50 dark:bg-red-900/10' : item.level === 'yellow' ? 'border-l-amber-500 bg-amber-50 dark:bg-amber-900/10' : 'border-l-green-500 bg-green-50 dark:bg-green-900/10'}`}>
+                      <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className={cn("text-muted-foreground transition-colors group-hover:text-foreground", item.level === 'red' ? 'text-red-500' : item.level === 'yellow' ? 'text-orange-500' : 'text-emerald-500')}>
+                          <div className={cn("transition-colors group-hover/item:scale-110 duration-300", item.level === 'red' ? 'text-red-500' : item.level === 'yellow' ? 'text-amber-500' : 'text-green-500')}>
                             {item.icon}
                           </div>
-                          <span className="text-[10px] font-black uppercase tracking-widest text-foreground">{item.label}</span>
+                          <span className="text-xs font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100">{item.label}</span>
                         </div>
-                        <span className="text-[10px] font-black text-foreground/60">{item.value}</span>
+                        <span className="text-xs font-black text-zinc-500 uppercase tracking-tighter">{item.value}</span>
                       </div>
-                      <p className="text-[10px] leading-relaxed text-muted-foreground font-medium italic">&quot;{item.explanation}&quot;</p>
+                      <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 font-bold italic tracking-tight uppercase">&quot;{item.explanation}&quot;</p>
                     </div>
                   ))}
                   {hiddenItems.map((item, ri) => (
@@ -1400,7 +1427,7 @@ const params = useParams();
                       <div className="blur-[4px] opacity-20 pointer-events-none flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {item.icon}
-                          <span className="text-[10px] font-black uppercase tracking-widest">{item.label}</span>
+                          <span className="text-xs font-black uppercase tracking-widest">{item.label}</span>
                         </div>
                         <span className="text-xs font-black">███</span>
                       </div>
@@ -1417,260 +1444,315 @@ const params = useParams();
       </section>
 
       {/* ─── SECTION 6: FINANCIAL SNAPSHOT ─── */}
-      <section id="financial-breakdown" data-toc-section className="mt-8 scroll-mt-20">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-          <DollarSign className="h-5 w-5 text-white" />
-          {isPaid ? "Full Financial Analysis" : "Financial Snapshot"}
-        </h2>
-        <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Estimated monthly cost of ownership (20% down, 30-year fixed at 7%)</p>
-
-        {!isPaid ? (
-          /* Free: mortgage visible, rest blurred */
-          <div className="mt-4 space-y-4">
-            <div className="grid gap-4 lg:grid-cols-2">
-              {financialData.map((f, i) => (
-                <div key={i} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                    <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{f.shortAddr}</h4>
-                    <span className="ml-auto text-lg font-bold text-indigo-950 dark:text-gray-100">${f.mortgage.toLocaleString()}/mo</span>
-                  </div>
-                  <p className="text-[10px] text-slate-500">Estimated mortgage payment (principal + interest)</p>
-                </div>
-              ))}
-            </div>
-            {/* Blurred teaser rows */}
-            <div className="relative overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-              <div className="blur-sm select-none pointer-events-none">
-                <table className="w-full text-sm">
-                  <tbody>
-                    {["HOA Fee", "Property Tax", "Insurance", "Total Monthly Cost", "5-Year Total Cost", "Equity After 5 Years"].map((label, ri) => (
-                      <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                        <td className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-gray-400">{label}</td>
-                        {financialData.map((_, vi) => (
-                          <td key={vi} className="px-4 py-2.5 text-center text-xs font-medium text-slate-400">$X,XXX</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+      {/* ─── SECTION 6: FINANCIAL SNAPSHOT ─── */}
+      <section id="financial-breakdown" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+        <div className="bg-zinc-900 border-b border-border/50 px-8 py-8 text-white relative group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-zinc-500/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="flex items-center gap-5">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 text-white shadow-lg shadow-zinc-900/20">
+                <DollarSign className="h-7 w-7" />
               </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-[#1A1A2E]/60 gap-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-[#6C5CE7]">
-                  <Lock className="h-4 w-4" />
-                  Unlock closing costs, insurance estimates, loan programs, tax analysis, and more
-                </div>
-                <button onClick={handleUpgradeCheckout} disabled={upgradeLoading} className="inline-flex items-center gap-1.5 rounded-lg bg-[#6C5CE7] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B4BD5]">
-                  {upgradeLoading ? "Redirecting..." : `Unlock Full Report: ${upgradePrice} →`}
-                </button>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight leading-none">
+                  {isPaid ? "Financial Intelligence" : "Financial Snapshot"}
+                </h2>
+                <p className="text-xs font-bold text-white/50 uppercase tracking-widest mt-1.5 italic">
+                  Complete ownership & liquidity analysis
+                </p>
               </div>
             </div>
           </div>
-        ) : (
-          /* Paid: comprehensive 12-row financial breakdown */
-          <div className="mt-4 space-y-4">
-            <div className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-[#6C5CE7]">
-                    <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Financial Metric</th>
-                    {financialData.map((f, i) => (
-                      <th key={i} className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
-                        <div className="flex items-center justify-center gap-1.5">
-                          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                          {f.shortAddr}
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {(() => {
-                    const rows: { label: string; values: string[]; isBold?: boolean }[] = [
-                      { label: "Purchase Price", values: financialData.map(f => f.price > 0 ? `$${f.price.toLocaleString()}` : "N/A") },
-                      { label: "Down Payment (20% assumed)", values: financialData.map(f => f.price > 0 ? `$${f.downPayment.toLocaleString()}` : "N/A") },
-                      { label: "Loan Amount", values: financialData.map(f => f.price > 0 ? `$${f.loanAmount.toLocaleString()}` : "N/A") },
-                      { label: "Monthly Mortgage (30yr fixed, 7% est.)", values: financialData.map(f => f.mortgage > 0 ? `$${f.mortgage.toLocaleString()}` : "N/A") },
-                      { label: "Monthly HOA (from listing)", values: listings.map((l) => {
-                        const status = l?.hoaStatus ?? 'not_listed';
-                        if (status === 'confirmed' && l?.hoaFee != null) return `$${l.hoaFee.toLocaleString()}`;
-                        if (status === 'confirmed_none') return "None (confirmed)";
-                        return "\u26A0 Not listed";
-                      }) },
-                      { label: "Est. Monthly Property Tax (1.1% avg)", values: financialData.map(f => f.tax > 0 ? `$${f.tax.toLocaleString()}` : "N/A") },
-                      { label: "Est. Monthly Insurance", values: financialData.map(f => f.insurance > 0 ? `$${f.insurance.toLocaleString()}` : "N/A") },
-                      { label: "TOTAL ESTIMATED MONTHLY COST", values: financialData.map(f => f.total > 0 ? `$${f.total.toLocaleString()}` : "N/A"), isBold: true },
-                      { label: "Annual Total Cost", values: financialData.map(f => f.total > 0 ? `$${(f.total * 12).toLocaleString()}` : "N/A") },
-                      { label: "5-Year Total Cost of Ownership", values: financialData.map(f => f.fiveYearCost > 0 ? `$${f.fiveYearCost.toLocaleString()}` : "N/A") },
-                      { label: "Est. Home Value in 5 Years (3% appr.)", values: financialData.map(f => f.price > 0 ? `$${Math.round(f.price * Math.pow(1.03, 5)).toLocaleString()}` : "N/A") },
-                      { label: "Est. Equity After 5 Years", values: financialData.map(f => {
-                        if (f.price <= 0) return "N/A";
-                        const futureValue = Math.round(f.price * Math.pow(1.03, 5));
-                        const monthlyRate = 0.07 / 12;
-                        const numPayments = 360;
-                        const loanAmt = f.loanAmount;
-                        const paidPayments = 60;
-                        const remainingBalance = Math.round(loanAmt * (Math.pow(1 + monthlyRate, numPayments) - Math.pow(1 + monthlyRate, paidPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1));
-                        return `$${(futureValue - remainingBalance).toLocaleString()}`;
-                      }) },
-                    ];
-                    return rows.map((row, ri) => (
-                      <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${row.isBold ? "bg-purple-50 dark:bg-purple-900/20 font-bold" : ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                        <td className={`px-4 py-2.5 text-xs ${row.isBold ? "font-bold text-indigo-950 dark:text-gray-100" : "font-medium text-slate-600 dark:text-gray-400"}`}>{row.label}</td>
-                        {row.values.map((val, vi) => (
-                          <td key={vi} className={`px-4 py-2.5 text-center text-xs ${row.isBold ? "font-bold text-indigo-950 dark:text-gray-100" : "font-medium text-slate-700 dark:text-gray-300"}`}>{val}</td>
-                        ))}
-                      </tr>
-                    ));
-                  })()}
-                </tbody>
-              </table>
+        </div>
+
+        <div className="p-8">
+          <div className="mb-8 p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 flex items-start gap-4 shadow-sm">
+            <div className="mt-1 h-2.5 w-2.5 rounded-full bg-zinc-400 animate-pulse" />
+            <p className="text-xs font-bold uppercase tracking-wide text-zinc-600 dark:text-zinc-400 leading-relaxed italic">
+              Basis: Estimated monthly cost of ownership calculated with a 20% down payment and 30-year fixed rate at 7.0%.
+            </p>
+          </div>
+
+          {!isPaid ? (
+            /* Free: mortgage visible, rest blurred */
+            <div className="space-y-6">
+              <div className="grid gap-6 lg:grid-cols-2">
+                {financialData.map((f, i) => (
+                  <div key={i} className="rounded-2xl border border-border bg-white dark:bg-zinc-900 p-6 shadow-sm transition-all hover:shadow-md group">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                      <h4 className="text-xs font-black uppercase tracking-widest text-zinc-500 truncate">{f.shortAddr}</h4>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-zinc-400 uppercase">Est. Mortgage</span>
+                      <span className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight group-hover:scale-105 transition-transform">${f.mortgage.toLocaleString()}<span className="text-xs font-bold text-zinc-400">/mo</span></span>
+                    </div>
+                    <p className="mt-4 text-xs font-medium text-zinc-400 uppercase tracking-tighter">Principal + Interest payments only</p>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Blurred teaser rows */}
+              <div className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-border bg-white dark:bg-zinc-900 shadow-xl group/teaser">
+                <div className="blur-[10px] select-none pointer-events-none opacity-40 scale-[1.01] transition-all group-hover/teaser:blur-[12px] duration-700">
+                  <table className="w-full border-collapse">
+                    <tbody>
+                      {["HOA Fee", "Property Tax", "Insurance", "Total Monthly Cost", "5-Year Total Cost", "Equity After 5 Years"].map((label, ri) => (
+                        <tr key={ri} className={`border-b border-border/30 ${ri % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-zinc-50/50 dark:bg-zinc-800/50"}`}>
+                          <td className="px-8 py-5 text-xs font-black uppercase tracking-widest text-zinc-400">{label}</td>
+                          {financialData.map((_, vi) => (
+                            <td key={vi} className="px-8 py-5 text-center text-xs font-black text-zinc-300">$X,XXX</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 dark:bg-black/60 backdrop-blur-[2px] p-10 text-center">
+                  <div className="w-16 h-16 rounded-full bg-zinc-900/10 flex items-center justify-center mb-6">
+                    <Lock className="h-8 w-8 text-zinc-900" />
+                  </div>
+                  <h3 className="text-lg font-black text-zinc-900 dark:text-white uppercase tracking-tight mb-2">Deep Financial Liquidity Analysis</h3>
+                  <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 max-w-md mx-auto mb-8">
+                    Unlock closing costs, specific insurance estimates, state-level loan programs, tax reassessment analysis, and real equity projections.
+                  </p>
+                  <Button 
+                    onClick={handleUpgradeCheckout} 
+                    loading={upgradeLoading} 
+                    className="h-14 px-12 rounded-2xl bg-zinc-900 text-white font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-zinc-900/30 hover:scale-[1.05] transition-all"
+                  >
+                    {upgradeLoading ? "Authorizing Premium..." : `Unlock Full Intelligence: ${upgradePrice}`}
+                  </Button>
+                </div>
+              </div>
             </div>
+          ) : (
+            <div className="space-y-8">
+              <div className="overflow-x-auto rounded-2xl border border-border bg-white dark:bg-zinc-900 shadow-xl">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-zinc-900 text-white">
+                      <th className="px-8 py-5 text-left text-xs font-black uppercase tracking-[0.2em]">Financial Intelligence Vector</th>
+                      {financialData.map((f, i) => (
+                        <th key={i} className="px-6 py-5 text-center text-xs font-black uppercase tracking-[0.2em] border-l border-white/5">
+                          <div className="flex items-center justify-center gap-2">
+                            <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                            {f.shortAddr}
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
+                    {(() => {
+                      const rows: { label: string; values: string[]; isTotal?: boolean }[] = [
+                        { label: "Acquisition Price", values: financialData.map(f => f.price > 0 ? `$${f.price.toLocaleString()}` : "N/A") },
+                        { label: "Strategic Down Payment (20%)", values: financialData.map(f => f.price > 0 ? `$${f.downPayment.toLocaleString()}` : "N/A") },
+                        { label: "Principal Loan Debt", values: financialData.map(f => f.price > 0 ? `$${f.loanAmount.toLocaleString()}` : "N/A") },
+                        { label: "Debt Service (30yr Fixed @ 7%)", values: financialData.map(f => f.mortgage > 0 ? `$${f.mortgage.toLocaleString()}/mo` : "N/A") },
+                        { label: "Association Assessments (HOA)", values: listings.map((l) => {
+                          const status = l?.hoaStatus ?? 'not_listed';
+                          if (status === 'confirmed' && l?.hoaFee != null) return `$${l.hoaFee.toLocaleString()}/mo`;
+                          if (status === 'confirmed_none') return "None";
+                          return "Investigation Req.";
+                        }) },
+                        { label: "Standard Property Taxation", values: financialData.map(f => f.tax > 0 ? `$${f.tax.toLocaleString()}/mo` : "N/A") },
+                        { label: "Hazard & Liability Coverage", values: financialData.map(f => f.insurance > 0 ? `$${f.insurance.toLocaleString()}/mo` : "N/A") },
+                        { label: "TOTAL CARRYING COST", values: financialData.map(f => f.total > 0 ? `$${f.total.toLocaleString()}/mo` : "N/A"), isTotal: true },
+                        { label: "Projected 5-Year Ownership Basis", values: financialData.map(f => f.fiveYearCost > 0 ? `$${f.fiveYearCost.toLocaleString()}` : "N/A") },
+                        { label: "Future Valuation (5yr @ 3% APR)", values: financialData.map(f => f.price > 0 ? `$${Math.round(f.price * Math.pow(1.03, 5)).toLocaleString()}` : "N/A") },
+                        { label: "Net Equity Position (Year 5)", values: financialData.map(f => {
+                          if (f.price <= 0) return "N/A";
+                          const futureValue = Math.round(f.price * Math.pow(1.03, 5));
+                          const monthlyRate = 0.07 / 12;
+                          const numPayments = 360;
+                          const loanAmt = f.loanAmount;
+                          const paidPayments = 60;
+                          const remainingBalance = Math.round(loanAmt * (Math.pow(1 + monthlyRate, numPayments) - Math.pow(1 + monthlyRate, paidPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1));
+                          return `$${(futureValue - remainingBalance).toLocaleString()}`;
+                        }) },
+                      ];
+                      return rows.map((row, ri) => (
+                        <tr key={ri} className={`group hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors ${row.isTotal ? "bg-primary/5 dark:bg-primary/10" : ""}`}>
+                          <td className={`px-8 py-5 text-xs uppercase tracking-wide ${row.isTotal ? "font-black text-primary" : "font-bold text-zinc-500 dark:text-zinc-400"}`}>{row.label}</td>
+                          {row.values.map((val, vi) => (
+                            <td key={vi} className={`px-6 py-5 text-center text-sm tabular-nums border-l border-zinc-100 dark:border-white/5 ${row.isTotal ? "font-black text-primary" : "font-medium text-zinc-900 dark:text-zinc-100"}`}>{val}</td>
+                          ))}
+                        </tr>
+                      ));
+                    })()}
+                  </tbody>
+                </table>
+              </div>
 
             {/* ─── CLOSING COST ESTIMATE (Sprint 1, Feature 1) ─── */}
             {report.closingCosts && report.closingCosts.some(cc => cc !== null) && (
-              <div id="closing-costs" className="space-y-4 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <DollarSign className="h-4 w-4 text-[#6C5CE7]" />
-                  Closing Cost Estimate
-                </h3>
-                <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+              <div id="closing-costs" className="space-y-6 scroll-mt-24">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white shadow-lg">
+                    <DollarSign className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100">Liquidity Requirements: Closing Costs</h3>
+                </div>
+                <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.closingCosts.map((cc, ci) => {
                     if (!cc) return (
-                      <div key={ci} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-1.5 mb-3">
-                          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
+                      <div key={ci} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-8 flex flex-col items-center justify-center text-center">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
+                          <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{shortAddr(properties[ci]?.address ?? `Prop ${ci + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Closing cost data unavailable for this property.</p>
+                        <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Market data unavailable for this vector</p>
                       </div>
                     );
                     return (
-                    <div key={ci} className="overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1E1E30]">
-                        <div className="flex items-center gap-1.5">
-                          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
+                    <div key={ci} className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-lg overflow-hidden flex flex-col transition-all hover:shadow-2xl hover:-tranzinc-y-1 duration-500">
+                      <div className="px-6 py-5 border-b border-border bg-zinc-900 text-white">
+                        <div className="flex items-center gap-3">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
+                          <span className="text-xs font-black uppercase tracking-widest truncate">{shortAddr(properties[ci]?.address ?? `Property ${ci + 1}`)}</span>
                         </div>
                       </div>
-                      <table className="w-full text-xs">
-                        <tbody>
-                          {[
-                            { label: "Down Payment (20%)", value: cc.downPayment },
-                            { label: "Loan Origination Fee (1%)", value: cc.loanOriginationFee },
-                            { label: "Title Insurance (0.5%)", value: cc.titleInsurance },
-                            { label: "Appraisal Fee", value: cc.appraisalFee },
-                            { label: "Home Inspection", value: cc.homeInspection },
-                            { label: "Attorney/Closing Agent Fee", value: cc.attorneyFee },
-                            { label: "Prepaid Property Tax (2 months)", value: cc.prepaidPropertyTax },
-                            { label: "First Year Insurance", value: cc.firstYearInsurance },
-                            { label: "Escrow Setup (2 mo. insurance + 2 mo. tax)", value: cc.escrowSetup },
-                          ].map((row, ri) => (
-                            <tr key={ri} className={`border-b border-gray-300 dark:border-gray-600/50 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                              <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">{row.label}</td>
-                              <td className="px-4 py-2 text-right font-medium text-slate-700 dark:text-gray-300">${row.value.toLocaleString()}</td>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                          <tbody className="divide-y divide-zinc-50 dark:divide-white/5">
+                            {[
+                              { label: "Equity Down Payment (20%)", value: cc.downPayment },
+                              { label: "Lender Origination Basis (1%)", value: cc.loanOriginationFee },
+                              { label: "Title & Indemnity Coverage", value: cc.titleInsurance },
+                              { label: "Professional Valuation (Appraisal)", value: cc.appraisalFee },
+                              { label: "Technical Home Inspection", value: cc.homeInspection },
+                              { label: "Legal & Settlement Services", value: cc.attorneyFee },
+                              { label: "Prepaid Pro-Rata Property Tax", value: cc.prepaidPropertyTax },
+                              { label: "Hazard Insurance (Paid-in-Advance)", value: cc.firstYearInsurance },
+                              { label: "Fiduciary Escrow Capitalization", value: cc.escrowSetup },
+                            ].map((row, ri) => (
+                              <tr key={ri} className="group hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors">
+                                <td className="px-6 py-3.5 text-[11px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-tight italic">{row.label}</td>
+                                <td className="px-6 py-3.5 text-right text-xs font-black text-zinc-900 dark:text-zinc-100 tabular-nums">${row.value.toLocaleString()}</td>
+                              </tr>
+                            ))}
+                            <tr className="bg-green-500/10 dark:bg-green-500/20">
+                              <td className="px-6 py-5 text-xs font-black uppercase tracking-widest text-green-600 dark:text-green-400">Net Liquidity Required</td>
+                              <td className="px-6 py-5 text-right text-base font-black text-green-600 dark:text-green-400 tabular-nums">${cc.totalCashToClose.toLocaleString()}</td>
                             </tr>
-                          ))}
-                          <tr className="bg-indigo-50/50 dark:bg-indigo-900/10">
-                            <td className="px-4 py-2.5 font-bold text-indigo-950 dark:text-gray-100">Total Cash Needed to Close</td>
-                            <td className="px-4 py-2.5 text-right font-bold text-indigo-950 dark:text-gray-100">${cc.totalCashToClose.toLocaleString()}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     );
                   })}
                 </div>
-                <p className="text-[9px] text-slate-400 italic">Closing cost estimates are approximations based on national averages. Your actual costs will vary. Consult your lender for a Loan Estimate.</p>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center">Disclaimer: Estimates are modeled on national averages. Actual closing disclosures will vary based on specific lender and jurisdiction requirements.</p>
               </div>
             )}
 
             {/* ─── INSURANCE COST ESTIMATE (Sprint 1, Feature 2) ─── */}
             {report.insuranceEstimate && report.insuranceEstimate.some(ins => ins !== null) && (
-              <div id="insurance-estimate" className="space-y-4 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <Shield className="h-4 w-4 text-[#6C5CE7]" />
-                  Insurance Cost Estimate
-                </h3>
-                <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+              <div id="insurance-estimate" className="space-y-6 scroll-mt-24">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white shadow-lg">
+                    <Shield className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100">Liability Mitigation: Insurance Estimates</h3>
+                </div>
+                <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.insuranceEstimate.map((ins, ii) => {
                     if (!ins) return (
-                      <div key={ii} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div key={ii} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-8 flex flex-col items-center justify-center text-center">
                         <div className="flex items-center gap-2 mb-4">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ii] }} />
-                          <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</h4>
+                          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ii] }} />
+                          <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{shortAddr(properties[ii]?.address ?? `Prop ${ii + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Insurance estimate data unavailable for this property.</p>
+                        <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Insurance modeling unavailable</p>
                       </div>
                     );
                     return (
-                    <div key={ii} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ii] }} />
-                        <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</h4>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Estimated Annual Homeowners Insurance</p>
-                          <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">${ins.annualRangeLow.toLocaleString()} to ${ins.annualRangeHigh.toLocaleString()} per year</p>
-                          <p className="text-[10px] text-slate-400 mt-1">${ins.monthlyEstimate.toLocaleString()} per month (estimated)</p>
+                    <div key={ii} className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-lg overflow-hidden flex flex-col transition-all hover:shadow-2xl hover:-tranzinc-y-1 duration-500">
+                      <div className="px-6 py-5 border-b border-border bg-zinc-900 text-white">
+                        <div className="flex items-center gap-3">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ii] }} />
+                          <span className="text-xs font-black uppercase tracking-widest truncate">{shortAddr(properties[ii]?.address ?? `Property ${ii + 1}`)}</span>
                         </div>
+                      </div>
+                      <div className="p-6 space-y-6">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Estimated Annual Premium</p>
+                            <span className="text-xs font-black text-zinc-400 tabular-nums">${ins.monthlyEstimate}/mo</span>
+                          </div>
+                          <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-zinc-100 dark:border-white/5">
+                            <p className="text-lg font-black text-zinc-900 dark:text-white tracking-tighter">${ins.annualRangeLow.toLocaleString()} – ${ins.annualRangeHigh.toLocaleString()}<span className="text-xs font-bold text-zinc-400">/yr</span></p>
+                          </div>
+                        </div>
+
                         {ins.multipliers.length > 0 && (
-                          <div className="rounded-lg bg-amber-50 dark:bg-amber-900/10 p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600 mb-1">Adjustment Factors</p>
-                            <ul className="space-y-1">
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-500">Risk Variance Factors</p>
+                            <div className="space-y-2">
                               {ins.multipliers.map((m, mi) => (
-                                <li key={mi} className="text-[10px] text-amber-700 dark:text-amber-300 flex items-start gap-1.5">
-                                  <span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
-                                  {m}
-                                </li>
+                                <div key={mi} className="flex items-start gap-2 bg-amber-500/5 rounded-lg px-3 py-2 border border-amber-500/10">
+                                  <AlertTriangle className="h-3 w-3 text-amber-500 mt-0.5" />
+                                  <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-tight italic leading-snug">{m}</span>
+                                </div>
                               ))}
-                            </ul>
+                            </div>
                           </div>
                         )}
-                        {/* Flood Insurance (Feature 7) inline */}
-                        {ins.floodInsuranceRequired && ins.floodInsuranceEstimateLow && ins.floodInsuranceEstimateHigh && (
-                          <div className="rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700/30 p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600 mb-1">Flood Insurance Required (NFIP Estimate)</p>
-                            <p className="text-sm font-bold text-amber-700 dark:text-amber-300">${ins.floodInsuranceEstimateLow.toLocaleString()} to ${ins.floodInsuranceEstimateHigh.toLocaleString()} per year</p>
+
+                        {ins.floodInsuranceRequired && (
+                          <div className="bg-red-500/5 rounded-xl p-4 border border-red-500/10 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <Droplets className="h-3.5 w-3.5 text-red-500" />
+                              <p className="text-[10px] font-black uppercase tracking-widest text-red-500">Mandatory Flood Coverage (NFIP)</p>
+                            </div>
+                            <p className="text-base font-black text-red-600 dark:text-red-400">${ins.floodInsuranceEstimateLow?.toLocaleString()} – ${ins.floodInsuranceEstimateHigh?.toLocaleString()}<span className="text-xs font-bold">/yr</span></p>
                           </div>
                         )}
-                        <div className="rounded-lg bg-indigo-50 dark:bg-indigo-900/10 p-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-indigo-600 mb-1">Total Estimated Annual Insurance</p>
-                          <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">${ins.totalAnnualInsuranceLow.toLocaleString()} to ${ins.totalAnnualInsuranceHigh.toLocaleString()} per year</p>
+
+                        <div className="pt-4 border-t border-zinc-100 dark:border-white/5">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2">Aggregate Annual Exposure</p>
+                          <p className="text-xl font-black text-zinc-900 tracking-tighter dark:text-zinc-100">${ins.totalAnnualInsuranceLow.toLocaleString()} – ${ins.totalAnnualInsuranceHigh.toLocaleString()}</p>
                         </div>
                       </div>
                     </div>
                     );
                   })}
                 </div>
-                <p className="text-[9px] text-slate-400 italic">Insurance estimates are approximations. Actual premiums depend on your coverage choices, insurer, and property inspection. Get quotes from at least 3 insurers.</p>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center">Note: Insurance figures are algorithmic projections. Actual premiums are subject to underwriting, claim history, and professional inspection.</p>
               </div>
             )}
 
             {/* ─── FLOOD INSURANCE DETAIL (Sprint 1, Feature 7) ─── */}
             {report.floodInsurance && report.floodInsurance.length > 0 && report.floodInsurance.some(fi => fi.required || fi.floodZone === "D") && (
-              <div className="space-y-3">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <Droplets className="h-4 w-4 text-[#00D2FF]" />
-                  Flood Insurance Detail
-                </h3>
-                <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-500 text-white shadow-lg shadow-zinc-500/20">
+                    <Droplets className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100">Hydrographic Risk: Flood Detail</h3>
+                </div>
+                <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.floodInsurance.map((fi, fii) => (
-                    <div key={fii} className={`rounded-xl border p-4 shadow-sm ${fi.required ? "border-amber-300 dark:border-amber-700/40 bg-amber-50/50 dark:bg-amber-900/10" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A2E]"}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[fii] }} />
-                        <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[fii]?.address ?? `Property ${fii + 1}`)}</span>
-                        <span className={`ml-auto inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${fi.required ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"}`}>
+                    <div key={fii} className={`report-card p-6 border-l-[6px] transition-all hover:shadow-2xl hover:-tranzinc-y-1 duration-500 ${fi.required ? "border-l-amber-500 bg-amber-500/5" : "border-l-green-500 bg-green-500/5 grayscale opacity-80"}`}>
+                      <div className="flex items-center justify-between mb-4 border-b border-border/50 pb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="h-1.5 w-8 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[fii] }} />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 truncate max-w-[120px]">{shortAddr(properties[fii]?.address ?? `Prop ${fii + 1}`)}</span>
+                        </div>
+                        <span className={`inline-flex rounded-lg px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.1em] ${fi.required ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400" : "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400"}`}>
                           Zone {fi.floodZone || "Unknown"}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-700 dark:text-gray-300">{fi.note}</p>
+                      <p className="text-xs font-bold text-zinc-700 dark:text-zinc-300 tracking-tight leading-relaxed italic uppercase">&quot;{fi.note}&quot;</p>
                       {fi.estimateLow && fi.estimateHigh && fi.required && (
-                        <p className="mt-2 text-xs font-semibold text-amber-700 dark:text-amber-300">Estimated: ${fi.estimateLow.toLocaleString()} to ${fi.estimateHigh.toLocaleString()} per year</p>
+                        <div className="mt-6 pt-4 border-t border-border/50">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 mb-1">Projected NFIP Premium</p>
+                          <p className="text-lg font-black text-amber-600 tracking-tighter">${fi.estimateLow.toLocaleString()} – ${fi.estimateHigh.toLocaleString()}<span className="text-xs font-bold text-zinc-400">/yr</span></p>
+                        </div>
                       )}
                       {fi.nfipCoverageNote && (
-                        <p className="mt-2 text-[10px] text-slate-500 dark:text-gray-400">{fi.nfipCoverageNote}</p>
+                        <p className="mt-3 text-[10px] font-medium text-zinc-400 dark:text-zinc-500 tracking-tighter uppercase leading-tight">{fi.nfipCoverageNote}</p>
                       )}
                     </div>
                   ))}
@@ -1680,123 +1762,140 @@ const params = useParams();
 
             {/* ─── FIRST-TIME BUYER LOAN PROGRAMS (Sprint 1, Feature 6) ─── */}
             {report.loanPrograms && report.loanPrograms.some(lp => lp !== null) && (
-              <div id="loan-programs" className="space-y-4 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <Home className="h-4 w-4 text-[#6C5CE7]" />
-                  First-Time Buyer Loan Programs
-                </h3>
-                <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+              <div id="loan-programs" className="space-y-6 scroll-mt-24">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white shadow-lg shadow-zinc-900/20">
+                    <Home className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100">Capital Access: Strategic Loan Programs</h3>
+                </div>
+                <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.loanPrograms.map((lp, li) => {
                     if (!lp) return (
-                      <div key={li} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-1.5 mb-3">
-                          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[li] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
+                      <div key={li} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-8 flex flex-col items-center justify-center text-center">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[li] }} />
+                          <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{shortAddr(properties[li]?.address ?? `Prop ${li + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Loan program data unavailable for this property.</p>
+                        <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Incentive data unavailable</p>
                       </div>
                     );
                     return (
-                    <div key={li} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm overflow-hidden">
-                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1E1E30]">
-                        <div className="flex items-center gap-1.5">
-                          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[li] }} />
-                          <span className="text-xs font-semibold text-slate-600 dark:text-gray-300 truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
+                    <div key={li} className="bg-white dark:bg-zinc-900 rounded-3xl border border-border shadow-lg overflow-hidden flex flex-col transition-all hover:shadow-2xl hover:-tranzinc-y-1 duration-500">
+                      <div className="px-6 py-5 border-b border-border bg-zinc-900 text-white">
+                        <div className="flex items-center gap-3">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[li] }} />
+                          <span className="text-xs font-black uppercase tracking-widest truncate">{shortAddr(properties[li]?.address ?? `Property ${li + 1}`)}</span>
                         </div>
                       </div>
-                      <table className="w-full text-xs">
-                        <thead>
-                          <tr className="bg-[#6C5CE7]">
-                            <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Program</th>
-                            <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Min Down</th>
-                            <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Est. Monthly</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {lp.programs.map((prog, pi) => (
-                            <tr key={pi} className={`border-b border-gray-300 dark:border-gray-600/50 ${pi % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                              <td className="px-3 py-2">
-                                <p className="font-semibold text-slate-700 dark:text-gray-300">{prog.name}</p>
-                                <p className="text-[10px] text-slate-400 mt-0.5">{prog.keyRequirement}</p>
-                              </td>
-                              <td className="px-3 py-2 text-center font-medium text-slate-700 dark:text-gray-300">{prog.minDownPayment}</td>
-                              <td className="px-3 py-2 text-center font-medium text-slate-700 dark:text-gray-300">{prog.estimatedMonthlyPayment}</td>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                          <thead>
+                            <tr className="bg-zinc-50 dark:bg-zinc-800/50">
+                              <th className="px-5 py-3 text-left text-[10px] font-black uppercase tracking-widest text-zinc-400">Institutional Instrument</th>
+                              <th className="px-4 py-3 text-center text-[10px] font-black uppercase tracking-widest text-zinc-400">LTV Target</th>
+                              <th className="px-4 py-3 text-right text-[10px] font-black uppercase tracking-widest text-zinc-400 underline decoration-zinc-500/30 decoration-2">P+I Est.</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                      <div className="px-4 py-3 bg-indigo-50/50 dark:bg-indigo-900/10 border-t border-gray-200 dark:border-gray-700">
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-indigo-600 mb-1">State Program ({lp.state})</p>
-                        <p className="text-[10px] text-slate-600 dark:text-gray-400">{lp.stateProgram}</p>
+                          </thead>
+                          <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
+                            {lp.programs.map((prog, pi) => (
+                              <tr key={pi} className="group hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors">
+                                <td className="px-5 py-4">
+                                  <p className="text-xs font-black text-zinc-800 dark:text-zinc-200 uppercase tracking-tight italic">{prog.name}</p>
+                                  <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tight mt-1">{prog.keyRequirement}</p>
+                                </td>
+                                <td className="px-4 py-4 text-center text-xs font-bold text-zinc-700 dark:text-zinc-300 tabular-nums">{prog.minDownPayment}</td>
+                                <td className="px-4 py-4 text-right text-xs font-black text-zinc-900 dark:text-zinc-100 tabular-nums underline decoration-zinc-500/10">{prog.estimatedMonthlyPayment}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="px-6 py-5 bg-zinc-500/5 dark:bg-zinc-500/10 border-t border-border">
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-900 mb-2 px-1">Regional Catalyst: {lp.state}</p>
+                        <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tight italic bg-white dark:bg-zinc-900/50 p-3 rounded-xl border border-border/50 leading-relaxed">&quot;{lp.stateProgram}&quot;</p>
                       </div>
                     </div>
                     );
                   })}
                 </div>
-                <p className="text-[9px] text-slate-400 italic">Loan program eligibility is estimated based on purchase price and location. Income limits, credit score requirements, and program availability change frequently. Consult a HUD-approved housing counselor or licensed mortgage broker.</p>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center">Eligibility is modeled on acquisition basis and regional accessibility limits. Program availability is subject to credit verification and institutional capacity limits.</p>
               </div>
             )}
 
             {/* ─── TAX REASSESSMENT RISK (Sprint 1, Feature 3) ─── */}
             {report.taxReassessment && report.taxReassessment.some(tr => tr !== null) && (
-              <div id="tax-reassessment" className="space-y-3 scroll-mt-20">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-indigo-950 dark:text-gray-100 mt-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-500" />
-                  Property Tax Reassessment Risk
-                </h3>
-                <div className={`grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+              <div id="tax-reassessment" className="space-y-6 scroll-mt-24">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20">
+                    <AlertTriangle className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100">Fiscal Exposure: Tax Reassessment Risk</h3>
+                </div>
+                <div className={`grid gap-6 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
                   {report.taxReassessment.map((tr, ti) => {
                     if (!tr) return (
-                      <div key={ti} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ti] }} />
-                          <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
+                      <div key={ti} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-8 flex flex-col items-center justify-center text-center">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ti] }} />
+                          <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{shortAddr(properties[ti]?.address ?? `Prop ${ti + 1}`)}</span>
                         </div>
-                        <p className="text-xs text-slate-500 italic">Tax reassessment data unavailable for this property.</p>
+                        <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Tax risk modeling unavailable</p>
                       </div>
                     );
                     return (
-                    <div key={ti} className={`rounded-xl border p-4 shadow-sm ${tr.isReassessmentRisk ? "border-amber-300 dark:border-amber-700/40 bg-amber-50/30 dark:bg-amber-900/10" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1A1A2E]"}`}>
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ti] }} />
-                        <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100 truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
+                    <div key={ti} className={`bg-white dark:bg-zinc-900 rounded-2xl border transition-all hover:shadow-2xl hover:-tranzinc-y-1 duration-500 overflow-hidden ${tr.isReassessmentRisk ? "border-amber-500 shadow-lg shadow-amber-500/5" : "border-border shadow-md"}`}>
+                      <div className={`px-6 py-5 border-b text-white ${tr.isReassessmentRisk ? "bg-amber-600" : "bg-zinc-900"}`}>
+                        <div className="flex items-center gap-3">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ti] }} />
+                          <span className="text-xs font-black uppercase tracking-widest truncate">{shortAddr(properties[ti]?.address ?? `Property ${ti + 1}`)}</span>
+                        </div>
                       </div>
-                      {tr.isReassessmentRisk && tr.assessedValue && tr.gapPercentage !== null ? (
-                        <div className="space-y-2">
-                          <div className="rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-700/30 p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600 mb-1">Reassessment Risk Detected</p>
-                            <p className="text-xs text-amber-800 dark:text-amber-300">
-                              This property is listed at ${tr.listingPrice.toLocaleString()}, which is {tr.gapPercentage}% above its current assessed value of ${tr.assessedValue.toLocaleString()}. After purchase, the county may reassess the property closer to the sale price.
-                            </p>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-2">
-                              <p className="text-[10px] text-slate-500">Current Annual Tax (est.)</p>
-                              <p className="text-xs font-bold text-slate-700 dark:text-gray-300">{tr.estimatedCurrentAnnualTax !== null ? `$${tr.estimatedCurrentAnnualTax.toLocaleString()}` : "Data unavailable"}</p>
+                      <div className="p-6 space-y-5">
+                        {tr.isReassessmentRisk && tr.assessedValue && tr.gapPercentage !== null ? (
+                          <>
+                            <div className="bg-amber-500/10 rounded-xl p-4 border border-amber-500/20">
+                              <p className="text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400 mb-2">High Variance Detected</p>
+                              <p className="text-[11px] font-bold text-amber-800 dark:text-amber-200 leading-relaxed italic uppercase">
+                                Listed at ${tr.listingPrice.toLocaleString()} — {tr.gapPercentage}% above current assessment of ${tr.assessedValue.toLocaleString()}.
+                              </p>
                             </div>
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-2">
-                              <p className="text-[10px] text-slate-500">Post-Purchase Tax (est.)</p>
-                              <p className="text-xs font-bold text-slate-700 dark:text-gray-300">${tr.estimatedPostPurchaseAnnualTax.toLocaleString()}</p>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-zinc-100 dark:border-white/5">
+                                <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1">Current Base</p>
+                                <p className="text-xs font-black text-zinc-900 dark:text-white tabular-nums">{tr.estimatedCurrentAnnualTax !== null ? `$${tr.estimatedCurrentAnnualTax.toLocaleString()}/yr` : "N/A"}</p>
+                              </div>
+                              <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-zinc-100 dark:border-white/5">
+                                <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1">Post-Acquisition</p>
+                                <p className="text-xs font-black text-zinc-900 dark:text-white tabular-nums">${tr.estimatedPostPurchaseAnnualTax.toLocaleString()}/yr</p>
+                              </div>
+                            </div>
+                            {tr.estimatedAnnualTaxIncrease !== null && tr.estimatedAnnualTaxIncrease > 0 && (
+                              <div className="flex justify-between items-center py-3 px-4 bg-amber-500 text-white rounded-xl shadow-lg shadow-amber-500/20">
+                                <span className="text-[10px] font-black uppercase tracking-widest">Potential Escalation</span>
+                                <span className="text-sm font-black tabular-nums">+${tr.estimatedAnnualTaxIncrease.toLocaleString()}/yr</span>
+                              </div>
+                            )}
+                          </>
+                        ) : tr.assessedValue ? (
+                          <div className="bg-green-500/10 rounded-xl p-5 border border-green-500/20 flex items-center gap-3">
+                            <ShieldCheck className="h-5 w-5 text-green-500" />
+                            <p className="text-[11px] font-black text-green-700 dark:text-green-400 uppercase tracking-tight italic">Valuation Alignment: Low Reassessment Risk</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-5 border border-zinc-100 dark:border-white/5">
+                              <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 leading-relaxed italic uppercase">
+                                Assessment modeling based on average effective rates (1.1%) due to unavailable public records.
+                              </p>
+                            </div>
+                            <div className="flex justify-between items-center py-4 border-t border-border/50">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Algorithmic Est.</span>
+                              <span className="text-sm font-black text-zinc-900 dark:text-white tabular-nums">${Math.round(tr.listingPrice * 0.011).toLocaleString()}/yr</span>
                             </div>
                           </div>
-                          {tr.estimatedAnnualTaxIncrease !== null && tr.estimatedAnnualTaxIncrease > 0 && (
-                            <p className="text-xs text-amber-700 dark:text-amber-300 font-semibold">Budget for an additional ${tr.estimatedAnnualTaxIncrease.toLocaleString()} per year in property taxes.</p>
-                          )}
-                        </div>
-                      ) : tr.assessedValue ? (
-                        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/10 p-3">
-                          <p className="text-xs text-emerald-700 dark:text-emerald-300">Assessed value is close to listing price. Low reassessment risk.</p>
-                        </div>
-                      ) : (
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3 space-y-2">
-                          <p className="text-xs text-slate-700 dark:text-gray-300">
-                            Assessed value not available from public records. Based on the purchase price of {`$${tr.listingPrice.toLocaleString()}`} and the average effective property tax rate of 1.1%, estimated annual property taxes are approximately {`$${Math.round(tr.listingPrice * 0.011).toLocaleString()}`} ({`$${Math.round((tr.listingPrice * 0.011) / 12).toLocaleString()}`}/month).
-                          </p>
-                          <p className="text-[10px] text-slate-500 dark:text-gray-400">
-                            Virginia property taxes are reassessed periodically. After purchase, your assessed value will likely adjust toward the sale price over the next 1 to 3 years. Request the actual tax bill from the seller or agent to confirm.
-                          </p>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                     );
                   })}
@@ -1805,69 +1904,85 @@ const params = useParams();
             )}
 
             {/* Total monthly cost comparison bar chart */}
-            <div className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-              <h4 className="text-xs font-semibold text-indigo-950 dark:text-gray-100 mb-4">Total Estimated Monthly Cost Comparison</h4>
-              <ResponsiveContainer width="100%" height={Math.max(150, financialData.length * 60)}>
-                <BarChart data={financialData.map((f, i) => ({ name: f.shortAddr, total: f.total, fill: PROPERTY_COLORS[i] }))} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                  <XAxis type="number" tick={{ fontSize: 10 }} tickFormatter={(v: number) => `$${v.toLocaleString()}`} />
-                  <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} width={100} />
-                  <Tooltip formatter={(value) => `$${Number(value).toLocaleString()}`} />
-                  <Bar dataKey="total" name="Total Monthly Cost" barSize={20} label={{ position: "right", fontSize: 10, fill: "#64748B", formatter: (v: unknown) => `$${Number(v).toLocaleString()}` }}>
-                    {financialData.map((_, i) => (
-                      <Cell key={i} fill={PROPERTY_COLORS[i]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white shadow-lg">
+                  <BarChart3 className="h-5 w-5" />
+                </div>
+                <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100">Relative Liquidity Comparison</h3>
+              </div>
+              <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-border p-10 shadow-xl">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-8 text-center italic">Aggregate Monthly Ownership Liability</p>
+                <div className="h-[280px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={financialData.map((f, i) => ({ name: f.shortAddr, total: f.total, fill: PROPERTY_COLORS[i] }))} layout="vertical" barCategoryGap="25%">
+                      <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.05} horizontal={false} />
+                      <XAxis type="number" hide domain={[0, 'dataMax + 1000']} />
+                      <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fontWeight: 900, fill: "currentColor", opacity: 0.7 }} width={100} axisLine={false} tickLine={false} />
+                      <Tooltip 
+                        cursor={{ fill: 'currentColor', opacity: 0.05 }}
+                        contentStyle={{ backgroundColor: 'var(--background)', borderRadius: '16px', border: '1px solid var(--border)', fontSize: '12px', fontWeight: 900, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
+                        formatter={(value) => [`$${Number(value).toLocaleString()}`, "Monthly Total"]}
+                      />
+                      <Bar dataKey="total" radius={[0, 8, 8, 0]} barSize={32}>
+                        {financialData.map((_, i) => (
+                          <Cell key={i} fill={PROPERTY_COLORS[i]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center max-w-2xl mx-auto leading-relaxed">Financial modeling aggregates debt service, localized taxation, and hazard coverage. Actual liability is contingent on individual credit profiles and dynamic insurance underwriting.</p>
             </div>
 
-            <p className="text-[9px] text-slate-400 italic">Monthly costs are estimates for budgeting purposes. Mortgage calculated at 7% fixed rate with 20% down payment. Property tax estimate uses 1.1% annual rate (US average). Insurance estimate based on property size. Actual figures will vary. Consult a mortgage lender for personalized quotes.</p>
+            <p className="text-xs text-zinc-400 italic">Monthly costs are estimates for budgeting purposes. Mortgage calculated at 7% fixed rate with 20% down payment. Property tax estimate uses 1.1% annual rate (US average). Insurance estimate based on property size. Actual figures will vary. Consult a mortgage lender for personalized quotes.</p>
 
             {/* FIX 4: How We Calculate This (expandable) */}
-            <div className="rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#15152A] shadow-sm">
+            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 shadow-sm">
               <button
                 type="button"
                 onClick={() => setShowFinancialMethodology(!showFinancialMethodology)}
                 className="flex w-full items-center justify-between px-5 py-3 text-left"
               >
-                <span className="text-xs font-semibold text-indigo-950 dark:text-gray-100">How We Calculate This</span>
-                {showFinancialMethodology ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                <span className="text-xs font-semibold text-zinc-950 dark:text-gray-100">How We Calculate This</span>
+                {showFinancialMethodology ? <ChevronUp className="h-4 w-4 text-zinc-400" /> : <ChevronDown className="h-4 w-4 text-zinc-400" />}
               </button>
               {showFinancialMethodology && (
-                <div className="px-5 pb-5 space-y-3 text-xs leading-relaxed text-slate-600 dark:text-gray-400">
+                <div className="px-5 pb-5 space-y-3 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Monthly Mortgage</p>
+                    <p className="font-semibold text-zinc-700 dark:text-zinc-300">Monthly Mortgage</p>
                     <p>Calculated using the listed purchase price, assuming 20% down payment and a 30-year fixed mortgage at 7.0% interest rate. This is a standard estimate. Actual rates vary based on your credit score, lender, and market conditions at time of purchase.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Property Tax</p>
+                    <p className="font-semibold text-zinc-700 dark:text-zinc-300">Property Tax</p>
                     <p>Estimated at 1.1% of the purchase price annually (the US national average effective property tax rate). Actual property taxes vary significantly by county and municipality. Check with the local tax assessor for exact figures.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Homeowner&#39;s Insurance</p>
+                    <p className="font-semibold text-zinc-700 dark:text-zinc-300">Homeowner&#39;s Insurance</p>
                     <p>Estimated at $150-$250 per month based on property size and type. Actual insurance costs vary by location, coverage level, and insurer.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">5-Year Cost of Ownership</p>
+                    <p className="font-semibold text-zinc-700 dark:text-zinc-300">5-Year Cost of Ownership</p>
                     <p>Sum of all estimated monthly costs multiplied by 60 months.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Estimated Home Value in 5 Years</p>
+                    <p className="font-semibold text-zinc-700 dark:text-zinc-300">Estimated Home Value in 5 Years</p>
                     <p>Calculated assuming 3% annual appreciation, which approximates the long-term US average. Actual appreciation varies significantly by location and market conditions.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-700 dark:text-gray-300">Estimated Equity After 5 Years</p>
+                    <p className="font-semibold text-zinc-700 dark:text-zinc-300">Estimated Equity After 5 Years</p>
                     <p>Estimated home value in 5 years minus the remaining loan balance after 5 years of payments.</p>
                   </div>
-                  <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="text-[10px] italic">All figures are estimates for comparison and budgeting purposes only. rivvl.ai is not a mortgage lender, financial advisor, or appraiser. Always consult qualified professionals for accurate figures before making purchasing decisions.</p>
+                  <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
+                    <p className="text-xs italic">All figures are estimates for comparison and budgeting purposes only. rivvl.ai is not a mortgage lender, financial advisor, or appraiser. Always consult qualified professionals for accurate figures before making purchasing decisions.</p>
                   </div>
                 </div>
               )}
             </div>
           </div>
         )}
+        </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
@@ -1877,532 +1992,682 @@ const params = useParams();
       {isPaid ? (
         <>
           {/* ─── HOA RISK INTELLIGENCE (Sprint 1, Feature 4) ─── */}
-          <section id="hoa-risk" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-              <Building2 className="h-5 w-5 text-white" />
-              HOA Risk Intelligence
-            </h2>
-            <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Analysis of HOA fee adequacy and potential risks</p>
-            <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-              {properties.map((prop, hi) => {
-                const hoa = report.hoaRisk?.[hi] ?? null;
-                const listing = listings[hi];
-                const hoaStatus = listing?.hoaStatus ?? 'not_listed';
-                if (!hoa && hoaStatus === 'confirmed_none') {
-                  // Only show "No HOA Confirmed" if the listing explicitly states no HOA
-                  return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
-                      </div>
-                      <div className="rounded-lg border border-emerald-300 dark:border-emerald-700/40 bg-emerald-50 dark:bg-emerald-900/10 p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Check className="h-4 w-4 text-emerald-500" />
-                          <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">No HOA Confirmed</p>
-                        </div>
-                        <p className="text-xs text-emerald-800 dark:text-emerald-300 leading-relaxed">
-                          This property has confirmed no HOA. However, verify directly with the listing agent as some community fees may still apply.
-                        </p>
-                      </div>
-                    </div>
-                  );
-                }
-                if (!hoa && hoaStatus !== 'confirmed_none') {
-                  // HOA status is not_listed/unknown and AI didn't generate risk data — show discovery questions
-                  return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
-                        </div>
-                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white bg-amber-500">
-                          HOA Unknown
-                        </span>
-                      </div>
-                      <div className="rounded-lg border border-amber-300 dark:border-amber-700/40 bg-amber-50 dark:bg-amber-900/10 p-4 mb-3">
-                        <div className="flex items-center gap-2 mb-2">
-                          <AlertTriangle className="h-4 w-4 text-amber-500" />
-                          <p className="text-xs font-bold text-amber-700 dark:text-amber-300">HOA Status Not Disclosed</p>
-                        </div>
-                        <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                          {`HOA fee was not disclosed in the listing. This requires investigation before making an offer. Undisclosed HOA fees are common for ${listing?.propertyType ?? 'this property type'} and could add $100 to $400 per month to ownership costs.`}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Discovery Questions to Ask the Listing Agent</p>
-                        <ol className="space-y-1.5 list-decimal list-inside">
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Does this property have an HOA? If so, what is the monthly fee?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Are there any community association fees, maintenance fees, or shared amenity costs?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Are there any upcoming assessments or neighborhood improvement fees planned?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">What are the deed restrictions or CC&Rs for this property?</li>
-                          <li className="text-xs text-slate-700 dark:text-gray-300">Are there any required memberships (pool, recreation center, etc.) with separate fees?</li>
-                        </ol>
-                      </div>
-                    </div>
-                  );
-                }
-                // Properties with not_listed HOA that have discovery questions from the AI
-                if (hoa && hoa.monthlyFee === 0 && hoaStatus !== 'confirmed') {
-                  return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
-                        </div>
-                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white bg-amber-500">
-                          HOA Unknown
-                        </span>
-                      </div>
-                      <div className="rounded-lg border border-amber-300 dark:border-amber-700/40 bg-amber-50 dark:bg-amber-900/10 p-4 mb-3">
-                        <div className="flex items-center gap-2 mb-2">
-                          <AlertTriangle className="h-4 w-4 text-amber-500" />
-                          <p className="text-xs font-bold text-amber-700 dark:text-amber-300">HOA Status Not Disclosed</p>
-                        </div>
-                        <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                          {`HOA fee was not disclosed in the listing. This requires investigation before making an offer. Undisclosed HOA fees are common for ${listing?.propertyType ?? 'this property type'} and could add $100 to $400 per month to ownership costs.`}
-                        </p>
-                      </div>
-                      {hoa.riskObservations.length > 0 && (
-                        <div className="mb-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Risk Observations</p>
-                          <ul className="space-y-1.5">
-                            {hoa.riskObservations.map((obs, oi) => (
-                              <li key={oi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
-                                {obs}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {hoa.agentQuestions.length > 0 && (
-                        <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Discovery Questions to Ask the Listing Agent</p>
-                          <ol className="space-y-1.5 list-decimal list-inside">
-                            {hoa.agentQuestions.map((q, qi) => (
-                              <li key={qi} className="text-xs text-slate-700 dark:text-gray-300">{q}</li>
-                            ))}
-                          </ol>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-                  if (!hoa) return null;
-                  const riskColor = hoa.riskLevel === "high" ? "#EF4444" : hoa.riskLevel === "medium" ? "#F59E0B" : "#10B981";
-                  const riskLabel = hoa.riskLevel === "high" ? "High Risk" : hoa.riskLevel === "medium" ? "Medium Risk" : "Low Risk";
-                  return (
-                    <div key={hi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[hi]?.address ?? `Property ${hi + 1}`}</h3>
-                        </div>
-                        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: riskColor }}>
-                          {riskLabel}
-                        </span>
-                      </div>
-                      <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3 mb-3">
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Monthly HOA Fee</p>
-                        <p className="text-sm font-bold text-indigo-950 dark:text-gray-100">${hoa.monthlyFee.toLocaleString()}/month</p>
-                      </div>
-                      {hoa.riskObservations.length > 0 && (
-                        <div className="mb-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Risk Observations</p>
-                          <ul className="space-y-1.5">
-                            {hoa.riskObservations.map((obs, oi) => (
-                              <li key={oi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
-                                {obs}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {hoa.agentQuestions.length > 0 && (
-                        <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Questions to Ask the HOA</p>
-                          <ol className="space-y-1.5 list-decimal list-inside">
-                            {hoa.agentQuestions.map((q, qi) => (
-                              <li key={qi} className="text-xs text-slate-700 dark:text-gray-300">{q}</li>
-                            ))}
-                          </ol>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+          <section id="hoa-risk" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+            <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+              <div className="relative z-10 flex items-center gap-5">
+                <div className="w-14 h-14 rounded-2xl bg-zinc-800/50 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner">
+                  <Building2 className="h-7 w-7" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black uppercase tracking-tight leading-none">HOA Risk Intelligence</h2>
+                  <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Community Governance & Fee Sustainability Analysis</p>
+                </div>
               </div>
-            </section>
+            </div>
+            
+            <div className="p-10">
+              <div className="mb-10 p-5 rounded-2xl bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/20 flex items-start gap-4 shadow-sm">
+                <div className="mt-1 h-2.5 w-2.5 rounded-full bg-yellow-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+                <p className="text-xs font-bold tracking-wide text-yellow-700 dark:text-yellow-400 leading-relaxed italic">
+                  Intelligence Summary: Analysis of fee adequacy, reserve status, and underlying community risk factors that impact long-term valuation.
+                </p>
+              </div>
+
+              <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                {properties.map((prop, hi) => {
+                  const hoa = report.hoaRisk?.[hi] ?? null;
+                  const listing = listings[hi];
+                  const hoaStatus = listing?.hoaStatus ?? 'not_listed';
+
+                  if (!hoa && hoaStatus === 'confirmed_none') {
+                    return (
+                      <div key={hi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
+                          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
+                        </div>
+                        <div className="rounded-2xl border-l-[6px] border-l-green-500 bg-green-50 dark:bg-green-900/10 p-6 shadow-sm">
+                          <div className="flex items-center gap-3 mb-3">
+                            <Check className="h-4 w-4 text-green-500" />
+                            <p className="text-xs font-black text-green-700 dark:text-green-400 uppercase tracking-widest italic">Confirmed Independent</p>
+                          </div>
+                          <p className="text-sm font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed italic tracking-tight">
+                            &quot;Physical audit of listing records confirms zero mandatory HOA affiliation for this parcel.&quot;
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  if (!hoa && hoaStatus !== 'confirmed_none') {
+                    return (
+                      <div key={hi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="flex items-center gap-3">
+                            <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
+                          </div>
+                          <span className="inline-flex rounded-xl px-2.5 py-1 text-[10px] font-black uppercase tracking-widest bg-amber-500 text-white shadow-lg shadow-amber-500/20">Unknown</span>
+                        </div>
+                        <div className="rounded-2xl border-l-[6px] border-l-amber-500 bg-amber-50 dark:bg-amber-900/10 p-6 shadow-sm mb-6">
+                          <div className="flex items-center gap-3 mb-3">
+                            <AlertTriangle className="h-4 w-4 text-amber-500" />
+                            <p className="text-xs font-black text-amber-700 dark:text-amber-400 uppercase tracking-widest italic tracking-tight">Disclosure Omission</p>
+                          </div>
+                          <p className="text-sm font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed italic tracking-tight">
+                            &quot;HOA Fee not explicitly disclosed. High probability for {listing?.propertyType ?? 'this asset class'} requiring secondary validation.&quot;
+                          </p>
+                        </div>
+                        <div className="space-y-4">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1 italic">Discovery Protocol</p>
+                          <ul className="space-y-2.5">
+                            {[
+                              "Does this property have an HOA? If so, what is the monthly fee?",
+                              "Are there any community association fees or shared amenity costs?",
+                              "What are the deed restrictions or CC&Rs for this property?",
+                            ].map((q, qi) => (
+                              <li key={qi} className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-start gap-3 bg-white dark:bg-zinc-900/50 p-3 rounded-xl border border-zinc-100 dark:border-white/5 tracking-tighter">
+                                <span className="text-zinc-500">{qi+1}.</span>
+                                {q}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  if (hoa && hoa.monthlyFee === 0 && hoaStatus !== 'confirmed') {
+                    return (
+                      <div key={hi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="flex items-center gap-3">
+                            <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
+                          </div>
+                          <span className="inline-flex rounded-xl px-2.5 py-1 text-[10px] font-black uppercase tracking-widest bg-amber-500 text-white shadow-lg shadow-amber-500/20">Liability Trace</span>
+                        </div>
+                        <div className="rounded-2xl border-l-[6px] border-l-amber-500 bg-amber-50 dark:bg-amber-900/10 p-6 shadow-sm mb-6 italic">
+                           <p className="text-sm font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed tracking-tight italic">
+                            &quot;Record mismatch detected. Listing indicates zero fee, but community infrastructure suggests mandatory assessments.&quot;
+                          </p>
+                        </div>
+                        {hoa.riskObservations.length > 0 && (
+                          <div className="mb-6 space-y-3">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1 italic">Risk Indicators</p>
+                            {hoa.riskObservations.map((obs, oi) => (
+                              <div key={oi} className="flex items-start gap-3 bg-red-500/5 p-3 rounded-xl border border-red-500/10">
+                                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
+                                <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-200 tracking-tighter italic leading-snug">{obs}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {hoa.agentQuestions.length > 0 && (
+                          <div className="space-y-4">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 px-1 italic">Interrogation Points</p>
+                            <ul className="space-y-2.5">
+                              {hoa.agentQuestions.map((q, qi) => (
+                                <li key={qi} className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-start gap-3 bg-white dark:bg-zinc-900/50 p-3 rounded-xl border border-zinc-100 dark:border-white/5 uppercase tracking-tighter leading-tight">
+                                  <span className="text-zinc-900">{qi+1}.</span>
+                                  {q}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  if (!hoa) return null;
+                  const riskLevel = hoa.riskLevel || 'low';
+                  const riskConfig = {
+                    high: { color: "bg-red-500", text: "High Threat", icon: ShieldAlert, sub: "Significant Fiscal Risk" },
+                    medium: { color: "bg-amber-500", text: "Moderate Risk", icon: AlertTriangle, sub: "Notable Liabilities" },
+                    low: { color: "bg-green-500", text: "Low Threat", icon: ShieldCheck, sub: "Stable Governance" }
+                  }[riskLevel];
+
+                  return (
+                    <div key={hi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                      <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                        <div className="flex items-center gap-3">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[hi] }} />
+                          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
+                        </div>
+                        <span className={`inline-flex rounded-xl px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg ${riskConfig.color}`}>
+                          {riskConfig.text}
+                        </span>
+                      </div>
+
+                      <div className="bg-zinc-900 rounded-2xl p-6 text-white mb-8 shadow-inner shadow-black/20">
+                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 mb-1">Assessed Monthly Liability</p>
+                        <p className="text-2xl font-black tracking-tighter tabular-nums">${hoa.monthlyFee.toLocaleString()}<span className="text-xs font-bold text-white/30 ml-1">/mo</span></p>
+                      </div>
+
+                      <div className="space-y-6">
+                        {hoa.riskObservations.length > 0 && (
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1 italic">Intelligence Feed</p>
+                            <div className="space-y-2.5">
+                              {hoa.riskObservations.map((obs, oi) => (
+                                <div key={oi} className="flex gap-3 bg-white dark:bg-zinc-900/50 p-4 rounded-2xl border border-zinc-100 dark:border-white/5 transition-all hover:tranzinc-x-1">
+                                  <riskConfig.icon className="h-4 w-4 shrink-0 mt-0.5" style={{ color: riskLevel === 'high' ? '#EF4444' : riskLevel === 'medium' ? '#F59E0B' : '#10B981' }} />
+                                  <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-tight italic italic leading-relaxed">{obs}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {hoa.agentQuestions.length > 0 && (
+                          <div className="space-y-4">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 px-1 italic">Validation Checklist</p>
+                            <div className="space-y-2">
+                              {hoa.agentQuestions.map((q, qi) => (
+                                <div key={qi} className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-100/30 dark:bg-zinc-800/30 px-4 py-3 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-700/50 flex gap-3 uppercase tracking-tighter leading-snug italic">
+                                  <span className="text-zinc-900">{qi+1}.</span>
+                                  {q}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
           {/* ─── NEGOTIATION INTELLIGENCE (paid) ─── */}
           {(() => {
             const hasNegData = report.negotiationIntelligence && report.negotiationIntelligence.length > 0;
             if (hasNegData) {
               return (
-                <section id="negotiation-intelligence" data-toc-section className="mt-8 scroll-mt-20">
-                  <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                    <Handshake className="h-5 w-5 text-white" />
-                    Negotiation Intelligence
-                  </h2>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">How much leverage do you have as a buyer?</p>
-                  <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                    {report.negotiationIntelligence!.map((neg, ni) => {
-                      const strengthColor = neg.negotiationStrength === "strong_buyer" ? "#10B981" : neg.negotiationStrength === "balanced" ? "#F59E0B" : "#EF4444";
-                      const strengthLabel = neg.negotiationStrength === "strong_buyer" ? "Strong Buyer Position" : neg.negotiationStrength === "balanced" ? "Balanced Market" : "Seller's Market";
-                      return (
-                        <div key={ni} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ni] }} />
-                              <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[ni]?.address ?? `Property ${ni + 1}`}</h3>
-                            </div>
-                            <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: strengthColor }}>
-                              {strengthLabel}
-                            </span>
-                          </div>
-                          <div className="space-y-3">
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Market Position</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.marketPosition}</p>
-                            </div>
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Days on Market Analysis</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.daysOnMarketAnalysis}</p>
-                            </div>
-                            <div className="rounded-lg bg-blue-50 dark:bg-blue-900/10 p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-1">Suggested Offer Range</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.suggestedOfferRange}</p>
-                              <p className="mt-1 text-[9px] italic text-slate-400">Estimate based on available data</p>
-                            </div>
-                            <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Concession Opportunities</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.concessionOpportunities}</p>
-                            </div>
-                            {neg.redFlags && neg.redFlags !== "None identified" && (
-                              <div className="rounded-lg bg-red-50 dark:bg-red-900/10 p-3">
-                                <p className="text-[10px] font-bold uppercase tracking-wide text-red-600 mb-1">Red Flags</p>
-                                <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">{neg.redFlags}</p>
+                <section id="negotiation-intelligence" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+                  <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                    <div className="relative z-10 flex items-center gap-5">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-inner">
+                        <Handshake className="h-7 w-7" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Negotiation Intelligence</h2>
+                        <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Buyer Leverage & Strategic Acquisition Modeling</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-10">
+                    <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                      {report.negotiationIntelligence!.map((neg, ni) => {
+                        const strength = neg.negotiationStrength || 'balanced';
+                        const config = {
+                          strong_buyer: { color: "bg-green-500", text: "Dominant Leverage", sub: "Buyer's Market" },
+                          balanced: { color: "bg-amber-500", text: "Equilibrium", sub: "Balanced Market" },
+                          sellers_market: { color: "bg-red-500", text: "Seller Advantage", sub: "Supply Constrained" }
+                        }[strength] || { color: "bg-zinc-500", text: "Neutral", sub: "Data Limited" };
+
+                        return (
+                          <div key={ni} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                            <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ni] }} />
+                                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[ni]?.address ?? `Prop ${ni+1}`)}</h3>
                               </div>
-                            )}
+                              <span className={`inline-flex rounded-xl px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg ${config.color}`}>
+                                {config.text}
+                              </span>
+                            </div>
+
+                            <div className="space-y-6">
+                              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border p-5 shadow-sm">
+                                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-900 mb-2">Market Position Analysis</p>
+                                <p className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 leading-relaxed italic uppercase tracking-tight">&quot;{neg.marketPosition}&quot;</p>
+                              </div>
+
+                              <div className="grid grid-cols-1 gap-4">
+                                <div className="bg-zinc-100/50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-white/5">
+                                  <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400 mb-1">Time on Market Impact</p>
+                                  <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 leading-snug uppercase tracking-tighter italic">{neg.daysOnMarketAnalysis}</p>
+                                </div>
+                                <div className="bg-green-500/5 dark:bg-green-500/10 p-5 rounded-2xl border border-green-500/20 shadow-inner">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-green-600 dark:text-green-400 mb-2">Suggested Delta Range</p>
+                                  <p className="text-sm font-black text-green-700 dark:text-green-300 uppercase tracking-tighter leading-tight italic">{neg.suggestedOfferRange}</p>
+                                </div>
+                              </div>
+
+                              <div className="space-y-3">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1 italic">Tactical Concessions</p>
+                                <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-700 tracking-tighter uppercase leading-relaxed italic">
+                                  {neg.concessionOpportunities}
+                                </p>
+                              </div>
+
+                              {neg.redFlags && neg.redFlags !== "None identified" && (
+                                <div className="bg-red-500/10 p-4 rounded-xl border border-zinc-800/20">
+                                  <p className="text-[9px] font-black uppercase tracking-widest text-red-600 mb-1 flex items-center gap-1">
+                                    <AlertCircle className="h-3 w-3" />
+                                    Risk Exposure
+                                  </p>
+                                  <p className="text-[11px] font-bold text-red-700 dark:text-red-400 uppercase tracking-tighter italic leading-snug">{neg.redFlags}</p>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </section>
               );
             }
             // Fallback: generate negotiation intelligence from listing data
             return (
-              <section id="negotiation-intelligence" data-toc-section className="mt-8 scroll-mt-20">
-                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                  <Handshake className="h-5 w-5 text-white" />
-                  Negotiation Intelligence
-                </h2>
-                <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">How much leverage do you have as a buyer?</p>
-                <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                  {properties.map((prop, pi) => {
-                    const listing = listings[pi];
-                    const dom = listing?.daysOnMarket ?? null;
-                    const reductions = listing?.priceHistory?.filter(e => e.event === "Price Reduced") ?? [];
-                    const strength = dom !== null ? (dom > 90 ? "strong_buyer" : dom > 30 ? "balanced" : "sellers_market") : "balanced";
-                    const strengthColor = strength === "strong_buyer" ? "#10B981" : strength === "balanced" ? "#F59E0B" : "#EF4444";
-                    const strengthLabel = strength === "strong_buyer" ? "Strong Buyer Position" : strength === "balanced" ? "Balanced Market" : "Seller's Market";
-                    const price = listing?.price ?? 0;
-                    const offerLow = dom !== null && dom > 90 ? Math.round(price * 0.92) : dom !== null && dom > 45 ? Math.round(price * 0.95) : dom !== null && dom > 30 ? Math.round(price * 0.97) : Math.round(price * 0.98);
-                    const offerHigh = dom !== null && dom > 90 ? Math.round(price * 0.97) : dom !== null && dom > 45 ? Math.round(price * 0.98) : price;
+              <section id="negotiation-intelligence" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+                <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white">
+                  <div className="flex items-center gap-5">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30">
+                      <Handshake className="h-7 w-7" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Negotiation Intelligence</h2>
+                      <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Algorithmic Leverage Modeling</p>
+                    </div>
+                  </div>
+                </div>
 
-                    return (
-                      <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-2">
-                            <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                            <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
-                          </div>
-                          <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold text-white" style={{ backgroundColor: strengthColor }}>
-                            {strengthLabel}
-                          </span>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Days on Market Analysis</p>
-                            <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">
-                              {dom !== null
-                                ? `This property has been on the market for ${dom} days. ${dom > 90 ? "Properties on market longer than 90 days typically have significant negotiation room — consider offering 5-8% below asking." : dom > 45 ? "At 46-90 days, buyer leverage is moderate — consider offering 3-5% below asking." : dom > 30 ? "At 15-45 days, the market position is balanced — consider offering 1-3% below asking." : "At under 14 days, the seller has a stronger position. Be prepared to offer at or near asking price."}`
-                                : "Days on market data is not available. Ask your agent about the listing history and any previous offers."}
-                            </p>
-                          </div>
-                          {price > 0 && (
-                            <div className="rounded-lg bg-blue-50 dark:bg-blue-900/10 p-3">
-                              <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-1">Suggested Offer Range</p>
-                              <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">${offerLow.toLocaleString()} – ${offerHigh.toLocaleString()}</p>
-                              <p className="mt-1 text-[9px] italic text-slate-400">AI Estimate based on days on market and listing data</p>
+                <div className="p-10">
+                  <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                    {properties.map((prop, pi) => {
+                      const listing = listings[pi];
+                      const dom = listing?.daysOnMarket ?? null;
+                      const reductions = listing?.priceHistory?.filter(e => e.event === "Price Reduced") ?? [];
+                      const strength = dom !== null ? (dom > 90 ? "strong_buyer" : dom > 30 ? "balanced" : "sellers_market") : "balanced";
+                      const config = {
+                        strong_buyer: { color: "bg-green-500", text: "Dominant Leverage", sub: "Buyer High" },
+                        balanced: { color: "bg-amber-500", text: "Market Equilibrium", sub: "Balanced" },
+                        sellers_market: { color: "bg-red-500", text: "Seller Advantage", sub: "High Demand" }
+                      }[strength];
+                      
+                      const price = listing?.price ?? 0;
+                      const offerLow = dom !== null && dom > 90 ? Math.round(price * 0.92) : dom !== null && dom > 45 ? Math.round(price * 0.95) : dom !== null && dom > 30 ? Math.round(price * 0.97) : Math.round(price * 0.98);
+                      const offerHigh = dom !== null && dom > 90 ? Math.round(price * 0.97) : dom !== null && dom > 45 ? Math.round(price * 0.98) : price;
+
+                      return (
+                        <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                          <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                            <div className="flex items-center gap-3">
+                              <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
                             </div>
-                          )}
-                          <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Concession Opportunities</p>
-                            <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">
-                              {reductions.length > 0
-                                ? `This property has had ${reductions.length} price reduction(s), signaling seller flexibility. Consider asking for closing cost credits, repair credits, or appliance inclusions.`
-                                : "No price reductions detected yet. You can still ask for closing cost credits, home warranty inclusion, or repair credits based on inspection findings."}
-                            </p>
+                            <span className={`inline-flex rounded-xl px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg ${config.color}`}>
+                              {config.text}
+                            </span>
+                          </div>
+
+                          <div className="space-y-6">
+                            <div className="bg-zinc-900 rounded-2xl p-6 text-white mb-6 shadow-inner">
+                              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 mb-1">Time Exposure Coefficient</p>
+                              <p className="text-2xl font-black tracking-tighter tabular-nums">{dom !== null ? dom : 'N/A'}<span className="text-xs font-bold text-white/30 ml-1">days on market</span></p>
+                            </div>
+
+                            <div className="space-y-4">
+                              <div className="bg-zinc-100/50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-white/5">
+                                <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 leading-snug uppercase tracking-tighter italic">
+                                  {dom !== null
+                                    ? `&quot;Exposure of ${dom} days indicates ${dom > 90 ? "critical negotiation window; high liquidity-driven leverage identified." : dom > 45 ? "moderate stale-listing discount potential." : "early stage listing; limited downward mobility."}&quot;`
+                                    : "Days on market analysis not available. Historical patterns suggest standard regional baseline."}
+                                </p>
+                              </div>
+
+                              {price > 0 && (
+                                <div className="bg-green-500/5 dark:bg-green-500/10 p-5 rounded-2xl border border-green-500/20 shadow-inner">
+                                  <p className="text-[10px] font-black uppercase tracking-widest text-green-600 dark:text-green-400 mb-2">Algorithmic Target Range</p>
+                                  <p className="text-sm font-black text-green-700 dark:text-green-300 uppercase tracking-tighter tabular-nums tracking-wide">
+                                    ${offerLow.toLocaleString()} – ${offerHigh.toLocaleString()}
+                                  </p>
+                                </div>
+                              )}
+
+                              <div className="space-y-3">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 px-1 italic">Structural Liquidity Signal</p>
+                                <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-700 tracking-tighter uppercase leading-relaxed italic">
+                                  {reductions.length > 0
+                                    ? `Detected ${reductions.length} downward price adjustment(s). Seller motivation coefficient: Extreme. Pursue appraisal gaps & CC credits.`
+                                    : "Zero price adjustments detected. Baseline negotiations target structural inspection findings & closing credits."}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </section>
             );
           })()}
 
           {/* ─── NEIGHBORHOOD INTELLIGENCE (paid) ─── */}
-          <section id="neighborhood" data-toc-section className="mt-8 scroll-mt-20">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-              <MapPin className="h-5 w-5 text-white" />
-              Neighborhood Intelligence
-            </h2>
-            {report.neighborhoodIntelligenceStructured && report.neighborhoodIntelligenceStructured.length > 0 ? (
-              <>
-                <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                  {report.neighborhoodIntelligenceStructured.map((data, pi) => (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                        <h3 className="text-sm font-semibold" style={{ color: PROPERTY_COLORS[pi] }}>{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
-                      </div>
-                      <ul className="space-y-2">
-                        {data.bullets.map((bullet, bi) => (
-                          <li key={bi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                            <span className="mt-1 h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                            {bullet}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+          <section id="neighborhood" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+            <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+              <div className="relative z-10 flex items-center gap-5">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                  <MapPin className="h-7 w-7" />
                 </div>
-                {report.neighborhoodIntelligenceStructured[0]?.verdict && (
-                  <div className="mt-3 rounded-xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-                    <p className="text-xs font-semibold text-[#6C5CE7]">Comparison Verdict</p>
-                    <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">{report.neighborhoodIntelligenceStructured[0].verdict}</p>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
-                  {report.neighborhoodIntelligence || (() => {
-                    const cities = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[1]?.trim()).filter(Boolean)));
-                    const states = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[2]?.trim()?.split(" ")[0]).filter(Boolean)));
-                    const cityStr = cities.length > 0 ? cities.join(" / ") : "this area";
-                    const stateStr = states.length > 0 ? states[0] : "";
-                    return `The properties being compared are located in ${cityStr}${stateStr ? `, ${stateStr}` : ""}. Neighborhood data was not available for this comparison. Visit census.gov or city-data.com with the property address for local demographic information.`;
-                  })()}
-                </p>
+                <div>
+                  <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Geographic Intelligence</h2>
+                  <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Neighborhood Dynamics & Community Profile</p>
+                </div>
               </div>
-            )}
-          </section>
+            </div>
 
-          {/* ─── NEARBY SCHOOLS (paid, real data) ─── */}
-          {isPaid && paidData?.schools && paidData.schools.some(s => s.length > 0) ? (
-            <section id="schools" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <GraduationCap className="h-5 w-5 text-white" />
-                Nearby Schools
-              </h2>
-              <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                {paidData.schools.map((schoolList, pi) => {
-                  // Group by level and limit 3 per level
-                  const grouped: Record<string, NearbySchool[]> = {};
-                  for (const s of schoolList) {
-                    if (!grouped[s.level]) grouped[s.level] = [];
-                    if (grouped[s.level].length < 3) grouped[s.level].push(s);
-                  }
-                  const displaySchools = Object.values(grouped).flat().sort((a, b) => a.distanceMiles - b.distanceMiles).slice(0, 9);
-
-                  return (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
-                      </div>
-                      {displaySchools.length > 0 ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-xs">
-                            <thead>
-                              <tr className="bg-[#6C5CE7]">
-                                <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">School Name</th>
-                                <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Level</th>
-                                <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Distance</th>
-                                <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">View Ratings</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {displaySchools.map((school, si) => {
-                                const levelColor = school.level === 'Elementary' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                                  : school.level === 'Middle' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
-                                  : school.level === 'High' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
-                                  : school.level === 'Middle/High' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300'
-                                  : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400';
-                                return (
-                                  <tr key={si} className={si % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}>
-                                    <td className="px-2 py-1.5 font-medium text-slate-700 dark:text-gray-300">{school.name}</td>
-                                    <td className="px-2 py-1.5 text-center">
-                                      <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${levelColor}`}>{school.level}</span>
-                                    </td>
-                                    <td className="px-2 py-1.5 text-center text-slate-500 dark:text-gray-400">{school.distanceMiles} mi</td>
-                                    <td className="px-2 py-1.5 text-center">
-                                      <a href={school.greatSchoolsSearchUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md border border-purple-300 dark:border-purple-700 px-2 py-0.5 text-[10px] font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
-                                        View on GreatSchools <ExternalLink className="h-2.5 w-2.5" />
-                                      </a>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+            <div className="p-10">
+              {report.neighborhoodIntelligenceStructured && report.neighborhoodIntelligenceStructured.length > 0 ? (
+                <div className="space-y-10">
+                  <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                    {report.neighborhoodIntelligenceStructured.map((data, pi) => (
+                      <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[pi]?.address ?? `Prop ${pi+1}`)}</h3>
                         </div>
-                      ) : (
-                        <p className="text-xs text-slate-500 dark:text-gray-400 italic">No public schools found within 2 miles of this address.</p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="mt-2 text-[9px] text-slate-400 italic">School directory data from the National Center for Education Statistics (NCES). For ratings, test scores, and parent reviews, click &apos;View on GreatSchools&apos; for each school. School attendance boundaries may differ from proximity. Confirm your assigned school with the local school district.</p>
-            </section>
-          ) : isPaid && (
-            <section id="schools" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <GraduationCap className="h-5 w-5 text-white" />
-                School District Context
-              </h2>
-              {report.schoolDistrictContextStructured && report.schoolDistrictContextStructured.length > 0 ? (
-                <>
-                  <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                    {report.schoolDistrictContextStructured.map((data, pi) => (
-                      <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                          <h3 className="text-sm font-semibold" style={{ color: PROPERTY_COLORS[pi] }}>{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
-                        </div>
-                        <ul className="space-y-2">
+                        <ul className="space-y-4">
                           {data.bullets.map((bullet, bi) => (
-                            <li key={bi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                              <span className="mt-1 h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                              {bullet}
+                            <li key={bi} className="flex items-start gap-4 text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tight leading-relaxed italic">
+                              <span className="mt-1 h-2 w-2 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                              &quot;{bullet}&quot;
                             </li>
                           ))}
                         </ul>
                       </div>
                     ))}
                   </div>
-                  {report.schoolDistrictContextStructured[0]?.verdict && (
-                    <div className="mt-3 rounded-xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-                      <p className="text-xs font-semibold text-[#6C5CE7]">Comparison Verdict</p>
-                      <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">{report.schoolDistrictContextStructured[0].verdict}</p>
+                  {report.neighborhoodIntelligenceStructured[0]?.verdict && (
+                    <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/20 flex items-start gap-4 shadow-sm">
+                      <div className="mt-1 h-2.5 w-2.5 rounded-full bg-zinc-900 animate-pulse" />
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 mb-1">Comparative Verdict</p>
+                        <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tighter leading-relaxed italic">{report.neighborhoodIntelligenceStructured[0].verdict}</p>
+                      </div>
                     </div>
                   )}
-                </>
+                </div>
               ) : (
-                <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
-                    {report.schoolDistrictContext || "School district data was not available for these addresses. Visit GreatSchools.org or your county school district website to verify school assignments."}
+                <div className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center">
+                  <p className="text-sm font-bold text-zinc-500 uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic">
+                    {report.neighborhoodIntelligence || "Regional demographic and baseline community profiling data not available for this specific coordinate set."}
                   </p>
-                  <p className="mt-2 text-[9px] text-slate-400 italic">School data sourced from public records. Confirm current school assignments with the local school district.</p>
                 </div>
               )}
+            </div>
+          </section>
+
+          {/* ─── NEARBY SCHOOLS (paid, real data) ─── */}
+          {isPaid && paidData?.schools && paidData.schools.some(s => s.length > 0) ? (
+            <section id="schools" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                <div className="relative z-10 flex items-center gap-5">
+                  <div className="w-14 h-14 rounded-2xl bg-zinc-800/50 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner">
+                    <GraduationCap className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Educational Infrastructure</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Institutional Proximity & NCES Registry Data</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-10">
+                <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                  {paidData.schools.map((schoolList, pi) => {
+                    const grouped: Record<string, NearbySchool[]> = {};
+                    for (const s of schoolList) {
+                      if (!grouped[s.level]) grouped[s.level] = [];
+                      if (grouped[s.level].length < 3) grouped[s.level].push(s);
+                    }
+                    const displaySchools = Object.values(grouped).flat().sort((a, b) => a.distanceMiles - b.distanceMiles).slice(0, 9);
+
+                    return (
+                      <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 flex flex-col transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl">
+                        <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[pi]?.address ?? `Prop ${pi+1}`)}</h3>
+                        </div>
+                        {displaySchools.length > 0 ? (
+                          <div className="space-y-4">
+                            {displaySchools.map((school, si) => {
+                              const levelColor = school.level === 'Elementary' ? 'bg-zinc-700' 
+                                : school.level === 'Middle' ? 'bg-green-600' 
+                                : school.level === 'High' ? 'bg-zinc-500' 
+                                : 'bg-zinc-400';
+                              return (
+                                <div key={si} className="group relative bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-zinc-100 dark:border-white/5 shadow-sm transition-all hover:tranzinc-x-1">
+                                  <div className="flex justify-between items-start mb-2">
+                                    <h4 className="text-[11px] font-black uppercase tracking-tighter text-zinc-800 dark:text-zinc-200 leading-tight pr-4">{school.name}</h4>
+                                    <span className={`shrink-0 rounded-lg px-2 py-1 text-[8px] font-black uppercase text-white ${levelColor} shadow-lg shadow-${levelColor.split('-')[1]}-500/20`}>
+                                      {school.level}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-zinc-50 dark:border-white/5">
+                                    <div className="flex items-center gap-1.5 text-[10px] font-black text-zinc-400 uppercase tracking-widest">
+                                      <MapPin className="h-3 w-3" />
+                                      {school.distanceMiles}<span className="text-[8px]">mi</span>
+                                    </div>
+                                    <a href={school.greatSchoolsSearchUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[9px] font-black text-zinc-900 hover:underline uppercase tracking-widest">
+                                      Registry <ExternalLink className="h-2.5 w-2.5" />
+                                    </a>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center py-10 grayscale opacity-50">
+                            <GraduationCap className="h-8 w-8 text-zinc-300 mb-3" />
+                            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic">Zero Proximity Records</p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="px-10 py-6 border-t border-border bg-zinc-50/50 dark:bg-zinc-900/50">
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center max-w-4xl mx-auto leading-relaxed">Infrastructure data via NCES Registry. Intelligence feeds represent geographic proximity indices; boundary confirmation via jurisdictional authorities is mandatory.</p>
+              </div>
+            </section>
+          ) : isPaid && (
+            <section id="schools" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-900 px-8 py-8 text-white">
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 rounded-2xl bg-zinc-800/50 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner">
+                    <GraduationCap className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">School District Context</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Institutional Baseline & District Analysis</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-10">
+                {report.schoolDistrictContextStructured && report.schoolDistrictContextStructured.length > 0 ? (
+                  <div className="space-y-10">
+                    <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                      {report.schoolDistrictContextStructured.map((data, pi) => (
+                        <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                          <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                            <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[pi]?.address ?? `Prop ${pi+1}`)}</h3>
+                          </div>
+                          <ul className="space-y-4">
+                            {data.bullets.map((bullet, bi) => (
+                              <li key={bi} className="flex items-start gap-4 text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tight leading-relaxed italic">
+                                <span className="mt-1 h-2 w-2 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                                &quot;{bullet}&quot;
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                    {report.schoolDistrictContextStructured[0]?.verdict && (
+                      <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/20 flex items-start gap-4 shadow-sm">
+                        <div className="mt-1 h-2.5 w-2.5 rounded-full bg-zinc-900 animate-pulse" />
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 mb-1">Comparative Verdict</p>
+                          <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tighter leading-relaxed italic">{report.schoolDistrictContextStructured[0].verdict}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center">
+                    <p className="text-sm font-bold text-zinc-500 uppercase tracking-widest leading-relaxed max-w-2xl mx-auto italic">
+                      {report.schoolDistrictContext || "NCES district intelligence protocols not available for localized verification at this primary coordinate baseline."}
+                    </p>
+                  </div>
+                )}
+              </div>
             </section>
           )}
 
           {/* ─── SAFETY CONTEXT (paid, crime data) ─── */}
           {isPaid && paidData?.crimeData && paidData.crimeData.some(c => c !== null) ? (
-            <section id="safety-crime" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <Shield className="h-5 w-5 text-white" />
-                Safety Context
-              </h2>
-              <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                {paidData.crimeData.map((crime, ci) => (
-                  <div key={ci} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
-                      <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[ci]?.address ?? `Property ${ci + 1}`}</h3>
-                    </div>
-                    {crime ? (
-                      <div className="space-y-3">
-                        {/* Violent Crime Rate */}
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Violent Crime Rate</span>
-                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${crime.vsNationalViolent === 'below' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : crime.vsNationalViolent === 'above' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
-                              {crime.vsNationalViolent === 'below' ? 'Below Average' : crime.vsNationalViolent === 'above' ? 'Above Average' : 'Average'}
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-700 dark:text-gray-300">{crime.violentCrimeRate.toLocaleString()} per 100,000 residents</p>
-                          <div className="mt-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
-                            <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${Math.min(100, (crime.violentCrimeRate / 800) * 100)}%`, backgroundColor: crime.vsNationalViolent === 'below' ? '#10B981' : crime.vsNationalViolent === 'above' ? '#EF4444' : '#F59E0B' }} />
-                            <div className="absolute top-0 h-full w-0.5 bg-slate-500" style={{ left: `${(380 / 800) * 100}%` }} title="National average: 380" />
-                          </div>
-                          <p className="mt-1 text-[9px] text-slate-400">National average: ~380 per 100,000</p>
-                        </div>
-                        {/* Property Crime Rate */}
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Property Crime Rate</span>
-                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${crime.vsNationalProperty === 'below' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : crime.vsNationalProperty === 'above' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
-                              {crime.vsNationalProperty === 'below' ? 'Below Average' : crime.vsNationalProperty === 'above' ? 'Above Average' : 'Average'}
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-700 dark:text-gray-300">{crime.propertyCrimeRate.toLocaleString()} per 100,000 residents</p>
-                          <div className="mt-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
-                            <div className="absolute left-0 top-0 h-full rounded-full" style={{ width: `${Math.min(100, (crime.propertyCrimeRate / 4000) * 100)}%`, backgroundColor: crime.vsNationalProperty === 'below' ? '#10B981' : crime.vsNationalProperty === 'above' ? '#EF4444' : '#F59E0B' }} />
-                            <div className="absolute top-0 h-full w-0.5 bg-slate-500" style={{ left: `${(2100 / 4000) * 100}%` }} title="National average: 2100" />
-                          </div>
-                          <p className="mt-1 text-[9px] text-slate-400">National average: ~2,100 per 100,000</p>
-                        </div>
-                        <p className="text-[9px] text-slate-400 italic">{crime.dataNote}</p>
-                      </div>
-                    ) : (
-                      <p className="text-xs text-slate-500 dark:text-gray-400 italic">Crime data not available for this jurisdiction.</p>
-                    )}
+            <section id="safety-crime" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-700 to-zinc-900 px-8 py-8 text-white relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                <div className="relative z-10 flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-inner">
+                    <Shield className="h-7 w-7" />
                   </div>
-                ))}
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Safety Context</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Jurisdictional Crime Indices & FBI UCR Feed</p>
+                  </div>
+                </div>
               </div>
-              <p className="mt-2 text-[9px] text-slate-400 italic">Crime statistics from FBI Uniform Crime Reporting. These are city/jurisdiction-level figures, not neighborhood or street-level data. They reflect reported crimes only.</p>
+
+              <div className="p-10">
+                <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                  {paidData.crimeData.map((crime, ci) => (
+                    <div key={ci} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                      <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                        <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[ci] }} />
+                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[ci]?.address ?? `Prop ${ci+1}`)}</h3>
+                      </div>
+                      
+                      {crime ? (
+                        <div className="space-y-8">
+                          {/* Violent Crime Rate */}
+                          <div>
+                            <div className="flex items-center justify-between mb-4">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 italic">Violent Index</span>
+                              <span className={`inline-flex rounded-xl px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg ${crime.vsNationalViolent === 'below' ? 'bg-green-500' : crime.vsNationalViolent === 'above' ? 'bg-red-500' : 'bg-amber-500'}`}>
+                                {crime.vsNationalViolent === 'below' ? 'Below Average' : crime.vsNationalViolent === 'above' ? 'Above Average' : 'Par'}
+                              </span>
+                            </div>
+                            <div className="bg-zinc-900 rounded-2xl p-5 mb-4 shadow-inner">
+                              <p className="text-2xl font-black tracking-tighter text-white tabular-nums leading-none">
+                                {crime.violentCrimeRate.toLocaleString()}
+                                <span className="text-[10px] font-bold text-white/30 ml-2 uppercase tracking-widest">/ 100k</span>
+                              </p>
+                            </div>
+                            <div className="relative h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden shadow-inner">
+                              <div className="absolute left-0 top-0 h-full transition-all duration-1000" style={{ width: `${Math.min(100, (crime.violentCrimeRate / 800) * 100)}%`, backgroundColor: crime.vsNationalViolent === 'below' ? '#10B981' : crime.vsNationalViolent === 'above' ? '#EF4444' : '#F59E0B' }} />
+                              <div className="absolute top-0 h-full w-1 bg-white/50 border-x border-black/20" style={{ left: `${(380 / 800) * 100}%` }} />
+                            </div>
+                            <div className="flex items-center justify-between mt-2 px-1">
+                              <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Jurisdiction Level</p>
+                              <p className="text-[9px] font-black uppercase tracking-widest text-zinc-900">National Median (380)</p>
+                            </div>
+                          </div>
+
+                          {/* Property Crime Rate */}
+                          <div>
+                            <div className="flex items-center justify-between mb-4 pt-4 border-t border-zinc-100 dark:border-white/5">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 italic">Property Index</span>
+                              <span className={`inline-flex rounded-xl px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg ${crime.vsNationalProperty === 'below' ? 'bg-green-500' : crime.vsNationalProperty === 'above' ? 'bg-red-500' : 'bg-amber-500'}`}>
+                                {crime.vsNationalProperty === 'below' ? 'Below Average' : crime.vsNationalProperty === 'above' ? 'Above Average' : 'Par'}
+                              </span>
+                            </div>
+                            <div className="bg-zinc-900 rounded-2xl p-5 mb-4 shadow-inner">
+                              <p className="text-2xl font-black tracking-tighter text-white tabular-nums leading-none">
+                                {crime.propertyCrimeRate.toLocaleString()}
+                                <span className="text-[10px] font-bold text-white/30 ml-2 uppercase tracking-widest">/ 100k</span>
+                              </p>
+                            </div>
+                            <div className="relative h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden shadow-inner">
+                              <div className="absolute left-0 top-0 h-full transition-all duration-1000" style={{ width: `${Math.min(100, (crime.propertyCrimeRate / 4000) * 100)}%`, backgroundColor: crime.vsNationalProperty === 'below' ? '#10B981' : crime.vsNationalProperty === 'above' ? '#EF4444' : '#F59E0B' }} />
+                              <div className="absolute top-0 h-full w-1 bg-white/50 border-x border-black/20" style={{ left: `${(2100 / 4000) * 100}%` }} />
+                            </div>
+                            <div className="flex items-center justify-between mt-2 px-1">
+                              <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Jurisdiction Level</p>
+                              <p className="text-[9px] font-black uppercase tracking-widest text-zinc-900">National Median (2,100)</p>
+                            </div>
+                          </div>
+
+                          <div className="bg-zinc-100/50 dark:bg-white/5 p-4 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-700/50">
+                            <p className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-tighter italic leading-relaxed">Intelligence Note: {crime.dataNote}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-10 grayscale opacity-50">
+                          <AlertCircle className="h-8 w-8 text-zinc-300 mb-3" />
+                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic">Data Retraction via FBI UCR</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="px-10 py-6 border-t border-border bg-zinc-50/50 dark:bg-zinc-900/50">
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center max-w-4xl mx-auto leading-relaxed">Statistics sourced via FBI Uniform Crime Reporting (UCR) protocols. Metrics reflect jurisdictional aggregates rather than granular parcel-level risk. Reported incidents only.</p>
+              </div>
             </section>
           ) : isPaid && (
-            <section id="safety-crime" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <Shield className="h-5 w-5 text-white" />
-                Safety and Crime Context
-              </h2>
-              <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div className="space-y-3">
-                  {(() => {
-                    const cities = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[1]?.trim()).filter(Boolean)));
-                    const cityStr = cities.length > 0 ? cities.join(" and ") : "this area";
-                    return (
-                      <>
-                        <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">
-                          Crime statistics for {cityStr} could not be retrieved from the FBI Uniform Crime Reporting database at the time of report generation.
-                        </p>
-                        <div className="rounded-lg bg-blue-50 dark:bg-blue-900/10 p-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-1">What To Do</p>
-                          <p className="text-xs leading-relaxed text-slate-700 dark:text-gray-300">
-                            Neighborhood-level crime data is not available for this area from federal databases. Search &quot;{cityStr} crime statistics&quot; or contact the local police department&apos;s public records office for current data.
-                          </p>
-                        </div>
-                      </>
-                    );
-                  })()}
+            <section id="safety-crime" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white">
+                <div className="flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30">
+                    <Shield className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Safety & Crime Context</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Forensic Data Retrieval Status</p>
+                  </div>
                 </div>
-                <p className="mt-2 text-[9px] text-slate-400 italic">State-level crime data from FBI UCR public records. Always verify current crime statistics with local law enforcement for neighborhood-level accuracy.</p>
+              </div>
+              
+              <div className="p-10">
+                <div className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center max-w-4xl mx-auto">
+                    {(() => {
+                      const cities = Array.from(new Set(listings.map(l => l.fullAddress?.split(",")[1]?.trim()).filter(Boolean)));
+                      const cityStr = cities.length > 0 ? cities.join(" and ") : "this area";
+                      return (
+                        <div className="space-y-6">
+                          <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest leading-relaxed italic">
+                            &quot;Geographic indices for {cityStr} could not be retrieved from the FBI UCR database at this primary coordinate baseline.&quot;
+                          </p>
+                          <div className="p-6 rounded-2xl bg-zinc-500/5 border border-zinc-500/20 text-zinc-700 dark:text-zinc-400 text-left">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-3">Interrogation Protocol</p>
+                            <p className="text-xs font-bold uppercase tracking-tight leading-relaxed italic italic leading-relaxed">
+                              Neighborhood-specific indices require localized validation. Search &quot;{cityStr} forensic crime audit&quot; or contact municipal public record offices for updated risk modeling.
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                </div>
+              </div>
+              <div className="px-10 py-6 border-t border-border bg-zinc-50/50 dark:bg-zinc-900/50">
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic text-center max-w-4xl mx-auto leading-relaxed">Baseline crime metrics via FBI public records and state-level forensic feeds.Parcel-level validation is mandatory via local law enforcement audits.</p>
               </div>
             </section>
           )}
@@ -2440,197 +2705,159 @@ const params = useParams();
             });
 
             return (
-            <section id="price-history" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <History className="h-5 w-5 text-white" />
-                Price History
-              </h2>
-
-              {/* Side-by-side comparison table */}
-              <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="px-4 py-2.5 text-left font-semibold text-slate-600 dark:text-gray-400"></th>
-                      {propertyStats.map((ps, idx) => (
-                        <th key={idx} className="px-4 py-2.5 text-left font-semibold text-slate-700 dark:text-gray-200">
-                          <div className="flex items-center gap-1.5">
-                            <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[idx] }} />
-                            <span className="truncate max-w-[200px]">{ps.address.length > 35 ? ps.address.slice(0, 35) + '...' : ps.address}</span>
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Last Sale Price</td>
-                      {propertyStats.map((ps, idx) => {
-                        const best = propertyStats.every(other => ps.lastSalePrice == null || other.lastSalePrice == null || ps.lastSalePrice <= (other.lastSalePrice ?? Infinity));
-                        return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best && ps.lastSalePrice != null ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
-                            {ps.lastSalePrice != null ? `$${ps.lastSalePrice.toLocaleString()}` : 'Not available'}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                    <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Last Sale Date</td>
-                      {propertyStats.map((ps, idx) => (
-                        <td key={idx} className="px-4 py-2 text-slate-700 dark:text-gray-300">
-                          {ps.lastSaleDate ? (() => { try { return new Date(ps.lastSaleDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }); } catch { return ps.lastSaleDate; } })() : '\u2014'}
-                        </td>
-                      ))}
-                    </tr>
-                    <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Total Appreciation</td>
-                      {propertyStats.map((ps, idx) => {
-                        const best = propertyStats.every(other => other.appreciationPct == null || (ps.appreciationPct != null && ps.appreciationPct >= (other.appreciationPct ?? -Infinity)));
-                        return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best && ps.appreciation != null ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
-                            {ps.appreciation != null && ps.appreciationPct != null
-                              ? <span className={ps.appreciation >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                                  {ps.appreciation >= 0 ? '+' : ''}${Math.abs(ps.appreciation).toLocaleString()} ({ps.appreciation >= 0 ? '+' : ''}{ps.appreciationPct.toFixed(1)}%)
-                                </span>
-                              : '\u2014'}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                    <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Price Reductions</td>
-                      {propertyStats.map((ps, idx) => {
-                        const best = ps.reductionCount === 0 && ps.events.length > 0;
-                        return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
-                            {ps.events.length > 0
-                              ? (ps.reductionCount > 0
-                                ? `${ps.reductionCount} reduction${ps.reductionCount > 1 ? 's' : ''} (-$${ps.totalReduction.toLocaleString()})`
-                                : 'No reductions')
-                              : 'Unknown'}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                    <tr>
-                      <td className="px-4 py-2 font-medium text-slate-600 dark:text-gray-400">Days on Market</td>
-                      {propertyStats.map((ps, idx) => {
-                        const best = propertyStats.every(other => other.daysOnMarket == null || (ps.daysOnMarket != null && ps.daysOnMarket <= (other.daysOnMarket ?? Infinity)));
-                        return (
-                          <td key={idx} className={`px-4 py-2 text-slate-700 dark:text-gray-300 ${best && ps.daysOnMarket != null ? 'bg-emerald-50 dark:bg-emerald-900/20' : ''}`}>
-                            {ps.daysOnMarket != null ? `${ps.daysOnMarket} days` : 'Unknown'}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  </tbody>
-                </table>
+            <section id="price-history" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                <div className="relative z-10 flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                    <History className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Price Evolution Matrix</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Historical Valuation & Appreciation Modeling</p>
+                  </div>
+                </div>
               </div>
 
-              {/* AI narrative comparison */}
-              {report.priceHistoryComparison && (
-                <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.priceHistoryComparison}</p>
+              <div className="p-10">
+                {/* Side-by-side comparison table */}
+                <div className="overflow-x-auto rounded-3xl border border-zinc-200 dark:border-white/5 bg-white dark:bg-zinc-900/40 shadow-xl overflow-hidden mb-10">
+                  <table className="w-full text-[11px] font-bold uppercase tracking-tighter">
+                    <thead>
+                      <tr className="bg-zinc-900 text-white">
+                        <th className="px-6 py-5 text-left text-[9px] font-black uppercase tracking-[0.2em] text-white/40">Valuation Metrics</th>
+                        {propertyStats.map((ps, idx) => (
+                          <th key={idx} className="px-6 py-5 text-left border-l border-white/5">
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-6 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[idx] }} />
+                              <span className="truncate max-w-[160px]">{shortAddr(ps.address)}</span>
+                            </div>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
+                      <tr>
+                        <td className="px-6 py-4 text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 uppercase tracking-widest font-black text-[9px]">Last Sale Baseline</td>
+                        {propertyStats.map((ps, idx) => (
+                          <td key={idx} className="px-6 py-4 text-zinc-900 dark:text-zinc-100 tabular-nums italic font-black text-sm">
+                            {ps.lastSalePrice != null ? `$${ps.lastSalePrice.toLocaleString()}` : '\u2014'}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 uppercase tracking-widest font-black text-[9px]">Last Sale Date</td>
+                        {propertyStats.map((ps, idx) => (
+                          <td key={idx} className="px-6 py-4 text-zinc-600 dark:text-zinc-400 italic">
+                            {ps.lastSaleDate ? (() => { try { return new Date(ps.lastSaleDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }); } catch { return ps.lastSaleDate; } })() : '\u2014'}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 uppercase tracking-widest font-black text-[9px]">Total Appreciation</td>
+                        {propertyStats.map((ps, idx) => {
+                          const isPositive = (ps.appreciation ?? 0) >= 0;
+                          return (
+                            <td key={idx} className="px-6 py-4 tabular-nums italic font-black text-sm">
+                              {ps.appreciation != null && ps.appreciationPct != null ? (
+                                <span className={isPositive ? 'text-green-500' : 'text-red-500'}>
+                                  {isPositive ? '+' : ''}{ps.appreciationPct.toFixed(1)}%
+                                </span>
+                              ) : '\u2014'}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 uppercase tracking-widest font-black text-[9px]">Price Cuts</td>
+                        {propertyStats.map((ps, idx) => (
+                          <td key={idx} className="px-6 py-4 text-zinc-600 dark:text-zinc-400 italic">
+                             {ps.reductionCount > 0 ? `${ps.reductionCount} Reductions` : 'Zero adjustments'}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr>
+                        <td className="px-6 py-4 text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 uppercase tracking-widest font-black text-[9px] border-b-0">Days on Market</td>
+                        {propertyStats.map((ps, idx) => (
+                          <td key={idx} className="px-6 py-4 text-zinc-900 dark:text-zinc-100 italic font-black text-sm border-b-0">
+                            {ps.daysOnMarket != null ? `${ps.daysOnMarket} Days` : 'Unknown'}
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              )}
 
-              {/* Per-property sales history and insights */}
-              <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                {properties.map((prop, idx) => {
-                  const listing = listings[idx];
-                  const events = listing?.priceHistory?.slice(0, 8) ?? [];
-                  const insights = report.priceHistoryInsights?.[idx] ?? [];
-                  const ph = paidData?.priceHistory?.[idx];
-                  const lastSalePrice = listing?.lastSalePrice ?? ph?.lastSalePrice ?? null;
-                  const lastSaleDate = listing?.lastSaleDate ?? ph?.lastSaleDate ?? null;
+                {/* AI narrative comparison */}
+                {report.priceHistoryComparison && (
+                  <div className="mb-10 p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-white/5 shadow-sm">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 mb-3 px-1 italic">Trend Synthesis</p>
+                    <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tighter leading-relaxed italic">&quot;{report.priceHistoryComparison}&quot;</p>
+                  </div>
+                )}
 
-                  return (
-                    <div key={idx} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[idx] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{prop.address}</h3>
-                      </div>
+                {/* Per-property sales history and insights */}
+                <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                  {properties.map((prop, idx) => {
+                    const listing = listings[idx];
+                    const events = listing?.priceHistory?.slice(0, 8) ?? [];
+                    const insights = report.priceHistoryInsights?.[idx] ?? [];
+                    const ph = paidData?.priceHistory?.[idx];
+                    const lastSalePrice = listing?.lastSalePrice ?? ph?.lastSalePrice ?? null;
+                    const lastSaleDate = listing?.lastSaleDate ?? ph?.lastSaleDate ?? null;
 
-                      {/* Sales History Table */}
-                      {events.length > 0 ? (
-                        <div className="mb-4">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Sales History</p>
-                          <div className="overflow-x-auto">
-                            <table className="w-full text-xs">
-                              <thead>
-                                <tr className="border-b border-gray-200 dark:border-gray-700">
-                                  <th className="px-2 py-1.5 text-left font-semibold text-slate-600 dark:text-gray-400">Date</th>
-                                  <th className="px-2 py-1.5 text-left font-semibold text-slate-600 dark:text-gray-400">Event</th>
-                                  <th className="px-2 py-1.5 text-right font-semibold text-slate-600 dark:text-gray-400">Price</th>
-                                  <th className="px-2 py-1.5 text-right font-semibold text-slate-600 dark:text-gray-400">Change</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {events.map((ev, evi) => {
-                                  const rowBg = ev.event === "Sold" ? ''
-                                    : ev.event === "Listed" || ev.event === "Relisted" ? 'bg-blue-50 dark:bg-blue-900/10'
-                                    : ev.event === "Price Reduced" ? 'bg-red-50 dark:bg-red-900/10'
-                                    : ev.event === "Price Increased" ? 'bg-orange-50 dark:bg-orange-900/10'
-                                    : '';
-                                  return (
-                                    <tr key={evi} className={`border-b border-gray-100 dark:border-gray-800 ${rowBg}`}>
-                                      <td className="px-2 py-1.5 text-slate-700 dark:text-gray-300">{ev.date || '\u2014'}</td>
-                                      <td className="px-2 py-1.5 text-slate-700 dark:text-gray-300 font-medium">{ev.event}</td>
-                                      <td className="px-2 py-1.5 text-right text-slate-700 dark:text-gray-300">
-                                        {ev.price != null ? `$${ev.price.toLocaleString()}` : '\u2014'}
-                                      </td>
-                                      <td className={`px-2 py-1.5 text-right ${ev.event === 'Price Reduced' ? 'text-red-600' : 'text-slate-700 dark:text-gray-300'}`}>
-                                        {ev.priceChange != null ? `${ev.priceChange >= 0 ? '+' : ''}$${ev.priceChange.toLocaleString()}` : '\u2014'}
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                          </div>
+                    return (
+                      <div key={idx} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 flex flex-col transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[idx] }} />
+                          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
                         </div>
-                      ) : lastSalePrice != null ? (
-                        <div className="mb-4">
-                          <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Last Sold</p>
-                            <p className="text-xs text-slate-700 dark:text-gray-300">
-                              {lastSaleDate ? (() => { try { return new Date(lastSaleDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }); } catch { return lastSaleDate; } })() : 'Date unknown'} for ${lastSalePrice.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-xs text-slate-500 italic mb-4">Price history could not be retrieved for this property. The property may not have recent sale records in public databases, or this may be a new construction. We recommend requesting the seller&apos;s disclosure for ownership history.</p>
-                      )}
 
-                      {/* Appreciation from paidData if available */}
-                      {ph && ph.appreciationAmount !== null && ph.appreciationPercent !== null && (
-                        <div className="rounded-lg bg-gray-50 dark:bg-[#15152A] p-3 mb-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-1">Appreciation</p>
-                          <p className="text-xs text-slate-700 dark:text-gray-300">
-                            <span className={ph.appreciationAmount >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                              {ph.appreciationAmount >= 0 ? '+' : ''}${Math.abs(ph.appreciationAmount).toLocaleString()} ({ph.appreciationAmount >= 0 ? '+' : ''}{ph.appreciationPercent}%)
-                            </span> since purchase
-                          </p>
+                        {/* Sales History Feed */}
+                        <div className="space-y-4 mb-8">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1 italic">Event Audit Log</p>
+                          {events.length > 0 ? (
+                            <div className="space-y-2">
+                              {events.map((ev, evi) => (
+                                <div key={evi} className="flex items-center justify-between bg-white dark:bg-zinc-950 p-4 rounded-2xl border border-zinc-100 dark:border-white/5 shadow-sm">
+                                  <div>
+                                    <p className="text-[9px] font-black text-zinc-900 uppercase leading-none mb-1">{ev.event}</p>
+                                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">{ev.date || 'Historic'}</p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-[11px] font-black text-zinc-800 dark:text-zinc-100 tabular-nums tracking-tighter italic">${ev.price?.toLocaleString() ?? '\u2014'}</p>
+                                    {ev.priceChange != null && (
+                                      <p className={`text-[9px] font-black tabular-nums ${ev.priceChange < 0 ? 'text-red-500' : 'text-green-500'}`}>
+                                        {ev.priceChange >= 0 ? '+' : ''}${Math.abs(ev.priceChange).toLocaleString()}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-8 rounded-2xl bg-zinc-100/50 dark:bg-zinc-900/50 border border-dashed border-zinc-200 dark:border-zinc-800 text-center">
+                              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic leading-relaxed">No Recent Public Audit Trails Found. Last recorded event: {lastSaleDate ? new Date(lastSaleDate).getFullYear() : 'N/A'} Purchase @ ${lastSalePrice?.toLocaleString() ?? 'Non-disclosed'}.</p>
+                            </div>
+                          )}
                         </div>
-                      )}
 
-                      {/* Key Insights */}
-                      {insights.length > 0 && (
-                        <div>
-                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-500 mb-2">Key Insights</p>
-                          <ul className="space-y-1.5">
+                        {/* Analysis Insights */}
+                        {insights.length > 0 && (
+                          <div className="space-y-3">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1 italic">Forensic Findings</p>
                             {insights.map((insight, ii) => (
-                              <li key={ii} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                                <div className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
-                                {insight}
-                              </li>
+                              <div key={ii} className="flex gap-3 bg-zinc-900/5 p-4 rounded-2xl border border-zinc-900/10">
+                                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-zinc-900 shrink-0" />
+                                <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-tighter italic leading-relaxed leading-snug">{insight}</span>
+                              </div>
                             ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </section>
             );
@@ -2638,132 +2865,184 @@ const params = useParams();
 
           {/* ─── MAINTENANCE AND AGE ANALYSIS (paid) ─── */}
           {report.maintenanceAnalysis && report.maintenanceAnalysis.length > 0 && (
-            <section id="maintenance-analysis" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <Wrench className="h-5 w-5 text-white" />
-                Maintenance and Age Analysis
-              </h2>
-              <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Based on year built, which systems may need attention?</p>
-              <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                {report.maintenanceAnalysis.map((propItems, pi) => {
-                  const totalRisk = propItems.filter(item => item.riskLevel === "red" || item.riskLevel === "yellow").length;
-                  return (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                        <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
-                      </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-xs">
-                          <thead>
-                            <tr className="bg-[#6C5CE7]">
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">System</th>
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Lifespan</th>
-                              <th className="px-4 py-3 text-center font-bold text-white uppercase tracking-wider">Risk</th>
-                              <th className="px-4 py-3 text-right font-bold text-white uppercase tracking-wider">Est. Cost</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {propItems.map((item, ii) => (
-                              <tr key={ii} className={`border-b border-gray-300 dark:border-gray-600 ${ii % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50 dark:bg-[#15152A]"}`}>
-                                <td className="px-4 py-3 font-semibold text-slate-800 dark:text-gray-200 bg-gray-50 dark:bg-[#15152A]">{item.system}</td>
-                                <td className="px-4 py-3 text-slate-600 dark:text-gray-400">{item.typicalLifespan}</td>
-                                <td className="px-4 py-3 text-center">
-                                  <span className={`inline-block h-2.5 w-2.5 rounded-full ${item.riskLevel === "green" ? "bg-emerald-500" : item.riskLevel === "yellow" ? "bg-amber-500" : "bg-red-500"}`} />
-                                </td>
-                                <td className="px-4 py-3 text-right text-slate-600 dark:text-gray-400">{item.estimatedCost}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <p className="text-[10px] text-slate-500">
-                          {totalRisk === 0
-                            ? "No major maintenance concerns identified for the next 5 years."
-                            : `${totalRisk} system${totalRisk > 1 ? "s" : ""} may need attention in the next 5 years.`}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+            <section id="maintenance-analysis" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                <div className="relative z-10 flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 shadow-inner">
+                    <Wrench className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Maintenance Analysis</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Structural Integrity & CapEx Forecasting</p>
+                  </div>
+                </div>
               </div>
-              <p className="mt-2 text-[9px] text-slate-400 italic">Cost estimates are industry standard ranges, not property-specific quotes. Always get professional inspections before purchasing.</p>
+
+              <div className="p-10">
+                <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                  {report.maintenanceAnalysis.map((propItems, pi) => {
+                    const criticalRisk = propItems.filter(item => item.riskLevel === "red").length;
+                    return (
+                      <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 flex flex-col transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                          <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[pi]?.address ?? `Prop ${pi+1}`)}</h3>
+                        </div>
+
+                        <div className="space-y-4 flex-1">
+                          {propItems.map((item, ii) => {
+                            const riskConfig = {
+                              red: "bg-red-500",
+                              yellow: "bg-amber-500",
+                              green: "bg-green-500"
+                            }[item.riskLevel] || "bg-zinc-500";
+                            return (
+                              <div key={ii} className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-100 dark:border-white/5 shadow-sm transition-all hover:tranzinc-x-1">
+                                <div className="flex justify-between items-start mb-3">
+                                  <h4 className="text-[11px] font-black uppercase tracking-tighter text-zinc-800 dark:text-zinc-200 leading-none">{item.system}</h4>
+                                  <div className={`h-2 w-2 rounded-full ${riskConfig} shadow-[0_0_8px] shadow-current`} />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 mt-4 pt-3 border-t border-zinc-50 dark:border-white/5">
+                                  <div>
+                                    <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400 mb-0.5">Typical Lifespan</p>
+                                    <p className="text-[10px] font-bold text-zinc-600 dark:text-zinc-300 uppercase italic leading-none">{item.typicalLifespan}</p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400 mb-0.5">Est. Budget</p>
+                                    <p className="text-[11px] font-black text-zinc-900 leading-none tracking-tighter tabular-nums">{item.estimatedCost}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        
+                        <div className="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-700/50">
+                           <div className={`p-4 rounded-xl flex items-center gap-3 ${criticalRisk > 0 ? 'bg-red-500/5 border border-red-500/10' : 'bg-green-500/5 border border-green-500/10'}`}>
+                              <AlertTriangle className={`h-4 w-4 ${criticalRisk > 0 ? 'text-red-500' : 'text-green-500'}`} />
+                              <p className={`text-[10px] font-black uppercase tracking-tighter italic leading-relaxed ${criticalRisk > 0 ? 'text-red-700' : 'text-green-700'}`}>
+                                {criticalRisk > 0 ? `${criticalRisk} Critical Obsolescence Risks identified.` : 'Zero structural obsolescence alerts.'}
+                              </p>
+                           </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="px-10 py-6 border-t border-border bg-zinc-50/50 dark:bg-zinc-900/50 text-center">
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic max-w-4xl mx-auto leading-relaxed">Depreciation analysis based on industry-standard asset lifecycles. Individual parcel audit is mandatory.</p>
+              </div>
             </section>
           )}
 
           {/* ─── INVESTMENT OUTLOOK (paid) ─── */}
           {(report.investmentOutlook || report.investmentPerspective || report.investmentOutlookStructured) && (
-            <section id="investment-outlook" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                <TrendingUp className="h-5 w-5 text-white" />
-                Investment Outlook
-              </h2>
-              {report.investmentOutlookStructured && report.investmentOutlookStructured.length > 0 ? (
-                <>
-                  <div className={`mt-4 grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-                    {report.investmentOutlookStructured.map((data, pi) => (
-                      <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                          <h3 className="text-sm font-semibold" style={{ color: PROPERTY_COLORS[pi] }}>{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
-                        </div>
-                        <ul className="space-y-2">
-                          {data.bullets.map((bullet, bi) => (
-                            <li key={bi} className="flex items-start gap-2 text-xs text-slate-700 dark:text-gray-300">
-                              <span className="mt-1 h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                              {bullet}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+            <section id="investment-outlook" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                <div className="relative z-10 flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                    <TrendingUp className="h-7 w-7" />
                   </div>
-                  {report.investmentOutlookStructured[0]?.verdict && (
-                    <div className="mt-3 rounded-xl border border-[#6C5CE7]/20 bg-[#6C5CE7]/5 px-4 py-3">
-                      <p className="text-xs font-semibold text-[#6C5CE7]">Comparison Verdict</p>
-                      <p className="text-sm text-slate-700 dark:text-gray-300 mt-1">{report.investmentOutlookStructured[0].verdict}</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="mt-4 bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-sm leading-relaxed text-slate-700 dark:text-gray-300">{report.investmentOutlook || report.investmentPerspective}</p>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Investment Outlook</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Capital Allocation & Market Performance Scaling</p>
+                  </div>
                 </div>
-              )}
+              </div>
+
+              <div className="p-10">
+                {report.investmentOutlookStructured && report.investmentOutlookStructured.length > 0 ? (
+                  <div className="space-y-10">
+                    <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+                      {report.investmentOutlookStructured.map((data, pi) => (
+                        <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                          <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                            <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[pi]?.address ?? `Prop ${pi+1}`)}</h3>
+                          </div>
+                          <ul className="space-y-4">
+                            {data.bullets.map((bullet, bi) => (
+                              <li key={bi} className="flex items-start gap-4 text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tight leading-relaxed italic">
+                                <span className="mt-1 h-2 w-2 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                                &quot;{bullet}&quot;
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                    {report.investmentOutlookStructured[0]?.verdict && (
+                      <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/20 flex items-start gap-4 shadow-sm">
+                        <div className="mt-1 h-2.5 w-2.5 rounded-full bg-zinc-900 animate-pulse" />
+                        <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-900 mb-1">Strat-Alloc Verdict</p>
+                          <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-tighter leading-relaxed italic">{report.investmentOutlookStructured[0].verdict}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-dashed border-zinc-300 dark:border-zinc-700 p-12 text-center max-w-4xl mx-auto">
+                    <p className="text-sm font-bold text-zinc-500 uppercase tracking-widest leading-relaxed italic">
+                      &quot;{report.investmentOutlook || report.investmentPerspective}&quot;
+                    </p>
+                  </div>
+                )}
+              </div>
             </section>
           )}
 
           {/* ─── DETAILED SIDE-BY-SIDE COMPARISON (paid) ─── */}
           {report.detailedComparison && report.detailedComparison.length > 0 && (
-            <section id="side-by-side" data-toc-section className="mt-8 scroll-mt-20">
-              <h2 className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">Detailed Side-by-Side Comparison</h2>
-              <div className="mt-4 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] shadow-sm">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-[#6C5CE7]">
-                      <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Category</th>
-                      {properties.map((p, i) => (
-                        <th key={i} className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
-                            {shortAddr(p.address)}
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {report.detailedComparison.map((row, ri) => (
-                      <tr key={ri} className={`border-b border-gray-100 dark:border-gray-700 ${ri % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50/50 dark:bg-[#15152A]"}`}>
-                        <td className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-gray-400">{row.label}</td>
-                        {row.values.map((val, vi) => (
-                          <td key={vi} className="px-4 py-2.5 text-center text-xs font-medium text-slate-700 dark:text-gray-300">{val}</td>
+            <section id="side-by-side" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+              <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                <div className="relative z-10 flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                    <LayoutGrid className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Detailed Data Matrix</h2>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Institutional-Grade Multi-Property Comparison</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-10">
+                <div className="overflow-x-auto rounded-3xl border border-zinc-200 dark:border-white/5 bg-white dark:bg-zinc-900/40 shadow-xl overflow-hidden">
+                  <table className="w-full text-[11px] font-bold uppercase tracking-tighter">
+                    <thead>
+                      <tr className="bg-zinc-900 text-white">
+                        <th className="px-6 py-5 text-left text-[9px] font-black uppercase tracking-[0.2em] text-white/40">Comparison Category</th>
+                        {properties.map((p, i) => (
+                          <th key={i} className="px-6 py-5 text-left border-l border-white/5">
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-6 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[i] }} />
+                              <span className="truncate max-w-[160px]">{shortAddr(p.address)}</span>
+                            </div>
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
+                      {report.detailedComparison.map((row, ri) => (
+                        <tr key={ri} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/20 transition-colors">
+                          <td className="px-6 py-4 text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 uppercase tracking-widest font-black text-[9px]">
+                            {row.label}
+                          </td>
+                          {row.values.map((val, vi) => (
+                            <td key={vi} className="px-6 py-4 text-zinc-900 dark:text-zinc-100 tabular-nums italic font-black text-[11px] border-l border-zinc-50 dark:border-white/5">
+                              {val}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
           )}
@@ -2787,43 +3066,56 @@ const params = useParams();
             const isDefault = !hasAIChecklist;
 
             return (
-              <section id="buyer-checklist" data-toc-section className="mt-8 scroll-mt-20">
-                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                  <Shield className="h-5 w-5 text-white" />
-                  Buyer Protection Checklist
-                </h2>
-                <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">{isDefault ? "Essential items to verify before making an offer on any property." : "Things to verify before making an offer, personalized to these properties."}</p>
-                <div className={`mt-4 ${isDefault ? "" : `grid gap-4 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}`}>
-                  {checklistData.map((items, pi) => (
-                    <div key={pi} className="bg-white dark:bg-[#1A1A2E] rounded-2xl shadow-sm border border-gray-300 dark:border-gray-600 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      {!isDefault && (
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
-                          <h3 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 truncate">{properties[pi]?.address ?? `Property ${pi + 1}`}</h3>
-                        </div>
-                      )}
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-xs">
-                          <thead>
-                            <tr className="bg-[#6C5CE7]">
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Item to Verify</th>
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">Why It Matters</th>
-                              <th className="px-4 py-3 text-left font-bold text-white uppercase tracking-wider">How to Find Out</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {items.map((item, ii) => (
-                              <tr key={ii} className={`border-b border-gray-300 dark:border-gray-600 ${ii % 2 === 0 ? "bg-white dark:bg-[#1A1A2E]" : "bg-gray-50 dark:bg-[#15152A]"}`}>
-                                <td className="px-4 py-3 font-semibold text-slate-800 dark:text-gray-200 bg-gray-50 dark:bg-[#15152A]">{item.item}</td>
-                                <td className="px-4 py-3 text-slate-600 dark:text-gray-400">{item.why}</td>
-                                <td className="px-4 py-3 text-slate-600 dark:text-gray-400">{item.howToFind}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+              <section id="buyer-checklist" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+                <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                  <div className="relative z-10 flex items-center gap-5">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                      <Shield className="h-7 w-7" />
                     </div>
-                  ))}
+                    <div>
+                      <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Buyer Protection Protocol</h2>
+                      <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Risk Mitigation & Pre-Offer Verification Framework</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-10">
+                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-900 mb-8 italic px-1">
+                    {isDefault ? "Mandatory verification standards for offer submission." : "Proprietary verification items customized for selected assets."}
+                  </p>
+
+                  <div className={`${isDefault ? "" : `grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}`}>
+                    {checklistData.map((items, pi) => (
+                      <div key={pi} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 flex flex-col transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                        {!isDefault && (
+                          <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                            <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[pi] }} />
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(properties[pi]?.address ?? `Prop ${pi+1}`)}</h3>
+                          </div>
+                        )}
+                        <div className="space-y-4">
+                          {items.map((item, ii) => (
+                            <div key={ii} className="bg-white dark:bg-zinc-950 p-6 rounded-2xl border border-zinc-100 dark:border-white/5 shadow-sm hover:tranzinc-x-1 transition-transform">
+                              <h4 className="text-[11px] font-black uppercase tracking-tighter text-zinc-900 mb-3 leading-none italic">{item.item}</h4>
+                              <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                  <div className="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 mt-1 shrink-0" />
+                                  <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tight leading-relaxed italic">{item.why}</p>
+                                </div>
+                                <div className="flex items-start gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-white/5">
+                                  <div className="h-4 w-4 rounded bg-zinc-500/10 flex items-center justify-center shrink-0">
+                                    <div className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
+                                  </div>
+                                  <p className="text-[10px] font-black text-zinc-800 dark:text-zinc-200 uppercase tracking-tighter italic leading-relaxed">{item.howToFind}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </section>
             );
@@ -2832,13 +3124,13 @@ const params = useParams();
           {/* ─── QUESTIONS TO ASK YOUR AGENT (paid) ─── */}
           {(() => {
             const categoryColors: Record<string, string> = {
-              'Financial': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+              'Financial': 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300',
               'Condition': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-              'HOA': 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+              'HOA': 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300',
               'Legal': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-              'Neighborhood': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+              'Neighborhood': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
               'Disclosure': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
-              'Negotiation': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+              'Negotiation': 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900/30 dark:text-zinc-300',
             };
 
             type QuestionItem = { property: string; category: string; question: string; whyItMatters: string };
@@ -2953,115 +3245,165 @@ const params = useParams();
             }
 
             return (
-              <section id="questions-to-ask" data-toc-section className="mt-8 scroll-mt-20">
-                <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-                  <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                  Smart Questions to Ask Your Agent
-                </h2>
-                <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">Based on the data we gathered for these properties, here are the most important questions a buyer should ask before making an offer.</p>
-                <div className="mt-4 space-y-4">
-                  {Object.entries(grouped).map(([propName, qs]) => (
-                    <div key={propName}>
-                      <h4 className="text-sm font-semibold text-indigo-950 dark:text-gray-100 mb-2">{propName}</h4>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {qs.map((q, qi) => (
-                          <div key={qi} className="rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1A1A2E] p-4 shadow-sm">
-                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold mb-2 ${categoryColors[q.category] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}>{q.category}</span>
-                            <p className="text-xs font-semibold text-slate-700 dark:text-gray-300">{q.question}</p>
-                            <p className="mt-1.5 text-[10px] text-slate-400">Why it matters: {q.whyItMatters}</p>
-                          </div>
-                        ))}
-                      </div>
+              <section id="questions-to-ask" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+                <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+                  <div className="relative z-10 flex items-center gap-5">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                      <HelpCircle className="h-7 w-7" />
                     </div>
-                  ))}
+                    <div>
+                      <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Smart Questions Matrix</h2>
+                      <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Strategic Intelligence for Professional Negotiation</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-10">
+                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-900 mb-8 italic px-1">
+                    Custom-engineered questions based on proprietary listing analytics.
+                  </p>
+
+                  <div className="space-y-12">
+                    {Object.entries(grouped).map(([propName, qs], groupIdx) => (
+                      <div key={groupIdx} className="space-y-6">
+                        <div className="flex items-center gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+                           <div className="h-1.5 w-12 rounded-full bg-zinc-900 dark:bg-zinc-100" />
+                           <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 italic">{propName}</h3>
+                        </div>
+                        
+                        <div className="grid gap-6 md:grid-cols-2">
+                          {qs.map((q, qi) => (
+                            <div key={qi} className="bg-white dark:bg-zinc-950 p-6 rounded-3xl border border-zinc-100 dark:border-white/5 shadow-sm hover:shadow-xl transition-all hover:-tranzinc-y-1 flex flex-col">
+                              <div className="flex justify-between items-start mb-4">
+                                <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest leading-none ${categoryColors[q.category] || 'bg-zinc-100 text-zinc-600'}`}>
+                                  {q.category}
+                                </span>
+                              </div>
+                              <p className="text-[11px] font-black text-zinc-900 dark:text-zinc-100 uppercase tracking-tighter leading-relaxed italic mb-4 flex-1">
+                                &quot;{q.question}&quot;
+                              </p>
+                              <div className="p-4 rounded-2xl bg-zinc-900/5 border border-zinc-900/10">
+                                <p className="text-[8px] font-black uppercase tracking-widest text-zinc-900 mb-1 italic">Strategic Rationale</p>
+                                <p className="text-[10px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tight leading-relaxed italic">
+                                  {q.whyItMatters}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </section>
             );
           })()}
 
           {/* ─── OUR RECOMMENDATION (combined Our Pick + Final Verdict) ─── */}
-          <section id="our-pick" data-toc-section className="mt-8 scroll-mt-20">
-            {report.ourPick ? (
-              <div className="bg-gradient-to-br from-[#6C5CE7] to-[#4834D4] rounded-2xl p-8 text-white shadow-xl">
-                <div className="flex flex-col items-center text-center">
-                  <Trophy className="h-12 w-12 text-amber-300" />
-                  <p className="mt-3 text-sm font-bold uppercase tracking-widest text-purple-200">Our Pick</p>
-                  <p className="mt-2 text-2xl font-black text-white">
-                      {report.ourPick.address || properties[report.ourPick.winner - 1]?.address || `Property ${report.ourPick.winner}`}
-                    </p>
+          {report.ourPick && (
+            <section id="our-pick" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+            <div className="bg-gradient-to-r from-zinc-900 to-zinc-950 px-8 py-10 text-white relative group">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-[100px] -mr-48 -mt-48 animate-pulse" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div className="flex items-center gap-6">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-800/50 backdrop-blur-lg border border-white/20 shadow-xl">
+                    <Award className="h-8 w-8" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">Rivvl Analyst Verdict</h2>
+                    <p className="text-xs font-bold text-white/70 tracking-widest mt-2 italic font-bold text-white/70">Institutional Acquisition Strategy & Risk Summary</p>
+                  </div>
                 </div>
-                <div className="mt-6 border-t border-white/20 pt-6 text-left">
-                  <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Why We Chose This</p>
-                  {report.ourPick.bullets && report.ourPick.bullets.length > 0 ? (
-                    <ul className="space-y-1.5">
-                      {report.ourPick.bullets.map((b, bi) => (
-                        <li key={bi} className="flex items-start gap-2 text-sm text-white/90">
-                          <Check className="mt-0.5 h-4 w-4 text-emerald-300 shrink-0" />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-                <div className="mt-6">
-                  <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Our Analysis</p>
-                  <p className="text-sm leading-relaxed text-purple-100">
-                    {report.ourPick.narrative || report.ourPick.reasoning}
+                <div className="bg-zinc-800/50 backdrop-blur-md border border-white/10 rounded-2xl px-6 py-4">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-white/60 mb-1">Primary Selection</p>
+                  <p className="text-lg font-black uppercase tracking-tight">
+                    {report.ourPick.address || properties[report.ourPick.winner - 1]?.address || `Property ${report.ourPick.winner}`}
                   </p>
                 </div>
-                {report.ourPick.caveat && (
-                  <div className="mt-4 rounded-xl bg-white/10 p-4">
-                    <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-1">One Thing to Watch</p>
-                    <p className="text-sm text-white/90">{report.ourPick.caveat}</p>
+              </div>
+            </div>
+
+            <div className="p-10 flex flex-col gap-10">
+              <div className={`bg-zinc-50 dark:bg-zinc-900/50 rounded-[40px] border border-zinc-100 dark:border-white/5 p-10 relative overflow-hidden border-l-[6px] ${
+                (report.ourPick.winner === 1 ? report.property1OverallScore : report.property2OverallScore) || 0 >= 8 ? "border-l-green-500" :
+                (report.ourPick.winner === 1 ? report.property1OverallScore : report.property2OverallScore) || 0 >= 5 ? "border-l-yellow-500" :
+                "border-l-red-500"
+              }`}>
+                <Quote className="absolute -bottom-10 -right-10 h-64 w-64 text-zinc-200/50 dark:text-zinc-800/10 pointer-events-none" />
+                <div className="relative z-10">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-zinc-500 mb-6 italic">Strategic Synthesis</p>
+                  <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-200 leading-tight tracking-tighter italic">
+                    &quot;{report.ourPick.narrative || report.ourPick.reasoning}&quot;
+                  </p>
+                </div>
+              </div>
+
+              {report.ourPick.bullets && report.ourPick.bullets.length > 0 && (
+                <div className="grid gap-8 lg:grid-cols-3">
+                  {report.ourPick.bullets.slice(0, 3).map((b, bi) => (
+                    <div key={bi} className="bg-white dark:bg-zinc-950 p-8 rounded-3xl border border-zinc-100 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center mb-6 shadow-lg shadow-zinc-900/20">
+                        <Check className="h-5 w-5 text-white" />
+                      </div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-2 italic">Alpha Factor 0{bi+1}</p>
+                      <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 leading-relaxed italic">{b}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {report.finalVerdict && (
+                <div className="p-8 rounded-2xl bg-zinc-900 text-white flex items-start gap-4 shadow-2xl">
+                  <div className={`mt-1 h-3 w-3 rounded-full ${
+                    (report.ourPick.winner === 1 ? report.property1OverallScore : report.property2OverallScore) || 0 >= 8 ? "bg-green-500 shadow-[0_0_10px_#10b981]" :
+                    (report.ourPick.winner === 1 ? report.property1OverallScore : report.property2OverallScore) || 0 >= 5 ? "bg-yellow-500 shadow-[0_0_10px_#f59e0b]" :
+                    "bg-red-500 shadow-[0_0_10px_#ef4444]"
+                  }`} />
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Final Risk Verdict</p>
+                    <p className="text-sm font-bold tracking-tight italic leading-relaxed">{report.finalVerdict}</p>
                   </div>
-                )}
-                {report.finalVerdict && (
-                  <div className="mt-6 border-t border-white/20 pt-6">
-                    <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Final Verdict</p>
-                    <p className="text-sm leading-relaxed text-purple-100">
-                      {report.finalVerdict}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="bg-gradient-to-br from-[#6C5CE7]/80 to-[#4834D4]/80 rounded-2xl p-8 text-white shadow-xl text-center">
-                <Trophy className="mx-auto h-12 w-12 text-amber-300/50" />
-                <p className="mt-3 text-sm font-bold uppercase tracking-widest text-purple-200">Our Pick</p>
-                <p className="mt-4 text-sm text-purple-100">Analysis is being generated. Please refresh in a moment.</p>
-              </div>
-            )}
-            {!report.ourPick && report.finalVerdict && (
-              <div className="mt-4 bg-gradient-to-br from-[#6C5CE7] to-[#4834D4] rounded-2xl p-6 text-white shadow-xl">
-                <p className="text-xs font-bold uppercase tracking-widest text-purple-200 mb-3">Final Verdict</p>
-                <p className="text-sm leading-relaxed text-purple-100">
-                  {report.finalVerdict}
-                </p>
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </section>
+        )}
+        {!report.ourPick && report.finalVerdict && (
+          <section id="our-pick" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+            <div className="p-10 flex flex-col gap-10">
+              <div className="p-8 rounded-2xl bg-zinc-900 text-white flex items-start gap-4 shadow-2xl">
+                <div className="mt-1 h-3 w-3 rounded-full bg-green-500 shadow-[0_0_10px_#10b981]" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Final Risk Verdict</p>
+                  <p className="text-sm font-bold uppercase tracking-tight italic leading-relaxed">{report.finalVerdict}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
         </>
       ) : (
         /* ─── BLURRED OUR PICK + UPGRADE CTA for free users ─── */
         <>
         <section id="our-pick" data-toc-section className="mt-8 scroll-mt-20 relative">
-          <div className="bg-gradient-to-br from-[#6C5CE7] to-[#4834D4] rounded-2xl p-8 text-white shadow-xl blur-sm select-none pointer-events-none" aria-hidden="true">
+          <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl p-8 text-white shadow-xl blur-sm select-none pointer-events-none" aria-hidden="true">
             <div className="flex flex-col items-center text-center">
               <Trophy className="h-12 w-12 text-amber-300" />
-              <p className="mt-3 text-sm font-bold uppercase tracking-widest text-purple-200">Our Pick</p>
+              <p className="mt-3 text-sm font-bold uppercase tracking-widest text-zinc-200">Our Pick</p>
               <p className="mt-2 text-2xl font-black text-white">Upgrade to see our recommendation</p>
             </div>
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <Lock className="h-8 w-8 text-[#6C5CE7]" />
-            <p className="mt-2 text-sm font-semibold text-indigo-950 dark:text-gray-100">Upgrade to unlock Our Pick</p>
+            <Lock className="h-8 w-8 text-zinc-900" />
+            <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-gray-100">Upgrade to unlock Our Pick</p>
           </div>
         </section>
         <section className="mt-8">
-          <div className="rounded-2xl border-l-4 border-l-[#6C5CE7] bg-gray-50 dark:bg-[#15152A] p-8 shadow-sm text-center">
-            <Lock className="mx-auto h-10 w-10 text-[#6C5CE7]" />
-            <h3 className="mt-4 text-xl font-bold text-indigo-950 dark:text-gray-100">Upgrade to Full Report: {upgradePrice}</h3>
-            <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">Unlock everything you need to make a confident decision:</p>
+          <div className="rounded-2xl border-l-4 border-l-zinc-900 bg-gray-50 dark:bg-zinc-800/50 p-8 shadow-sm text-center">
+            <Lock className="mx-auto h-10 w-10 text-zinc-900" />
+            <h3 className="mt-4 text-xl font-bold text-zinc-950 dark:text-gray-100">Upgrade to Full Report: {upgradePrice}</h3>
+            <p className="mt-2 text-sm text-zinc-500 dark:text-gray-400">Unlock everything you need to make a confident decision:</p>
             <div className="mt-4 mx-auto max-w-md text-left space-y-2">
               {[
                 "Red flag analysis for each property",
@@ -3075,8 +3417,8 @@ const params = useParams();
                 "All 8 property risk factors",
                 "Our Pick recommendation with full reasoning",
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-slate-700 dark:text-gray-300">
-                  <Check className="h-4 w-4 shrink-0 text-emerald-500" />
+                <div key={i} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                  <Check className="h-4 w-4 shrink-0 text-green-500" />
                   {item}
                 </div>
               ))}
@@ -3084,7 +3426,7 @@ const params = useParams();
             <button
               onClick={handleUpgradeCheckout}
               disabled={upgradeLoading}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#6C5CE7] to-[#00D2FF] px-8 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-500 px-8 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
             >
               {upgradeLoading ? (
                 <><Loader2 className="h-4 w-4 animate-spin" /> Redirecting...</>
@@ -3100,73 +3442,120 @@ const params = useParams();
 
       {/* ─── LISTING INFORMATION (paid, always show for all properties) ─── */}
       {isPaid && (
-        <section id="listing-agent" data-toc-section className="mt-8 scroll-mt-20">
-          <h2 className="flex items-center gap-2 text-xl font-bold text-white tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8B7CF6] px-6 py-4 rounded-t-2xl">
-            <Building2 className="h-5 w-5 text-white" />
-            Listing Information
-          </h2>
-          <div className={`mt-3 grid gap-3 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
-            {properties.map((prop, bii) => {
-              const bi = paidData?.brokerageInfo?.[bii];
-              const hasData = bi && (bi.agentName || bi.brokerageName);
-              return (
-                <div key={bii} className="rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#15152A] p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="h-2 w-2 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[bii] }} />
-                    <span className="text-[10px] font-medium text-slate-500 dark:text-gray-400 truncate">{prop.address}</span>
-                  </div>
-                  {hasData ? (
-                    <>
-                      {bi.agentName && <p className="text-xs text-slate-700 dark:text-gray-300">Listed by: {getBrokerageName(bi.agentName)}</p>}
-                      {bi.brokerageName && <p className="text-xs text-slate-700 dark:text-gray-300 mt-1">Brokerage: {getBrokerageName(bi.brokerageName)}</p>}
-                  {bi && bi.googleRating && (
-                    <div className="mt-2 flex items-center gap-1">
-                      <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                      <span className="text-xs font-semibold text-slate-700 dark:text-gray-300">{bi.googleRating}</span>
-                      <span className="text-[10px] text-slate-400">({bi.googleReviewCount} brokerage reviews)</span>
-                    </div>
-                  )}
-                      <p className="mt-2 text-[10px] text-slate-400 dark:text-gray-500">
-                        Verify this agent&apos;s license at your state&apos;s real estate commission (e.g.,{" "}
-                        <a href="https://www.dpor.virginia.gov/LicenseLookup/" target="_blank" rel="noopener noreferrer" className="text-[#00D2FF] hover:underline">VA DPOR</a>).
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-xs text-slate-500 dark:text-gray-400 italic">Listing agent information not available from this listing. Verify agent details on the listing platform or your state&apos;s real estate commission website.</p>
-                  )}
-                </div>
-              );
-            })}
+        <section id="listing-agent" data-toc-section className="mt-12 scroll-mt-24 report-card overflow-hidden">
+          <div className="bg-gradient-to-r from-zinc-800 to-zinc-950 px-8 py-8 text-white relative group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+            <div className="relative z-10 flex items-center gap-5">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-inner">
+                <Building2 className="h-7 w-7" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Brokerage Intelligence</h2>
+                <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1.5 italic">Institutional Representation Audit</p>
+              </div>
+            </div>
           </div>
-          <p className="mt-2 text-[9px] text-slate-400 italic">Brokerage ratings from Google Reviews. Individual agent reviews and license verification are available through your state&apos;s real estate commission.</p>
+
+          <div className="p-10">
+            <div className={`grid gap-8 ${properties.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"}`}>
+              {properties.map((prop, bii) => {
+                const bi = paidData?.brokerageInfo?.[bii];
+                const hasData = bi && (bi.agentName || bi.brokerageName);
+                return (
+                  <div key={bii} className="bg-zinc-50 dark:bg-zinc-800/20 rounded-3xl border border-zinc-100 dark:border-zinc-800 p-8 flex flex-col transition-all hover:bg-white dark:hover:bg-zinc-800/40 hover:shadow-xl group/card">
+                    <div className="flex items-center gap-3 mb-8 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                      <div className="h-1.5 w-10 rounded-full" style={{ backgroundColor: PROPERTY_COLORS[bii] }} />
+                      <h3 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">{shortAddr(prop.address)}</h3>
+                    </div>
+                    
+                    {hasData ? (
+                      <div className="space-y-6">
+                        {bi.agentName && (
+                          <div className="p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-white/5 shadow-sm">
+                            <p className="text-[8px] font-black uppercase tracking-widest text-zinc-900 mb-1">Lead Listing Agent</p>
+                            <p className="text-[11px] font-black uppercase tracking-tighter text-zinc-900 dark:text-zinc-100 italic">{getBrokerageName(bi.agentName)}</p>
+                          </div>
+                        )}
+                        {bi.brokerageName && (
+                          <div className="p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-white/5 shadow-sm">
+                            <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400 mb-1">Representing Brokerage</p>
+                            <p className="text-[11px] font-black uppercase tracking-tighter text-zinc-900 dark:text-zinc-100 italic">{getBrokerageName(bi.brokerageName)}</p>
+                          </div>
+                        )}
+                        {bi && bi.googleRating && (
+                          <div className="flex items-center justify-between p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10">
+                            <div className="flex items-center gap-2">
+                               <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
+                               <span className="text-[11px] font-black text-amber-900 dark:text-amber-400 tabular-nums italic">{bi.googleRating}</span>
+                            </div>
+                            <span className="text-[8px] font-black text-zinc-400 uppercase tracking-widest italic">{bi.googleReviewCount} Audits</span>
+                          </div>
+                        )}
+                        <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest italic leading-relaxed text-center px-4">
+                          Verify license at state registry. (e.g., <a href="https://www.dpor.virginia.gov/LicenseLookup/" target="_blank" rel="noopener noreferrer" className="text-zinc-900 hover:underline">VA DPOR</a>)
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-center p-8 rounded-3xl bg-zinc-100/50 dark:bg-zinc-900/50 border border-dashed border-zinc-200 dark:border-zinc-800 text-center">
+                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic leading-relaxed">Listing agent metadata restricted or non-disclosed.</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </section>
       )}
 
       {/* ─── LEGAL DISCLAIMER ─── */}
-      <section className="mt-10 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#15152A] p-6 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">
-            <AlertTriangle className="h-5 w-5" />
+      <section className="mt-16 report-card overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+        <div className="p-10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-zinc-400">
+              <AlertTriangle className="h-5 w-5" />
+            </div>
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-white">Institutional Disclaimer</h2>
           </div>
-          <h2 className="text-base font-bold text-slate-600 dark:text-gray-400">Important Disclaimer</h2>
+          <div className="grid gap-12 md:grid-cols-2">
+            <div className="space-y-4 text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic leading-relaxed">
+              <p>This report is generated by Rivvl Intelligence for informational and educational purposes only. It does not constitute real estate advice, financial advice, legal advice, or a professional property appraisal.</p>
+              <p>Rivvl is a technology platform that aggregates and analyzes publicly available data. We are not licensed real estate agents, brokers, appraisers, attorneys, or financial advisors.</p>
+            </div>
+            <div className="space-y-4 text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic leading-relaxed">
+               <p>Property scores and risk ratings reflect interprets of available data as of the generation date. Information depends on third-party sources (FEMA, EPA, USGS) which may contain updates not yet reflected here.</p>
+               <p>Professional inspections, legal review, and independent due diligence are mandatory prior to executing real estate transactions. Rivvl assumes no liability for decisions made based on this analysis.</p>
+            </div>
+          </div>
         </div>
-        <div className="space-y-3 text-xs leading-relaxed text-slate-500 dark:text-gray-400">
-          <p>This report is generated by rivvl.ai for informational and educational purposes only. It does not constitute real estate advice, financial advice, legal advice, or a professional property appraisal.</p>
-          <p>rivvl.ai is a technology platform that aggregates and analyzes publicly available data. We are not licensed real estate agents, brokers, appraisers, attorneys, or financial advisors. Nothing in this report should be interpreted as a recommendation to buy, sell, or avoid any specific property.</p>
-          <p>Property scores and ratings are generated by automated analysis and reflect our interpretation of available data. They may not account for all factors relevant to your specific situation. Data accuracy depends on third-party sources including public records, government databases, and listing platforms, which may contain errors or outdated information.</p>
-          <p>Risk data (flood zones, earthquake history, environmental hazards, wildfire risk) is sourced from federal government databases and is provided for informational purposes only. This data may not reflect the most recent changes and should not replace a professional environmental assessment, property inspection, or certified flood determination.</p>
-          <p>Always conduct independent due diligence. Hire a licensed property inspector, consult a licensed real estate attorney, and work with a qualified real estate professional before making any purchasing decision. rivvl.ai assumes no liability for decisions made based on information in this report.</p>
-          <p>By downloading or using this report, you acknowledge that you have read and understood this disclaimer.</p>
-        </div>
-        <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-          <p className="text-[10px] text-slate-400 dark:text-gray-500">
-            Data sourced from: FEMA, EPA, USGS, US Forest Service, OpenStreetMap, Rentcast
-          </p>
-          <p className="mt-2 text-[10px] font-medium text-slate-400 dark:text-gray-600">
-            rivvl.ai. Before you choose, Rivvl.
-          </p>
+        <div className="px-10 py-6 border-t border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-6">
+           <div className="flex gap-10">
+              <div>
+                 <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400 mb-0.5 whitespace-nowrap">Proprietary Engine</p>
+                 <p className="text-[10px] font-black text-zinc-900 dark:text-zinc-100 uppercase italic">Rivvl Analytical Core v3.4.2</p>
+              </div>
+              <div>
+                 <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400 mb-0.5 whitespace-nowrap">Report Timestamp</p>
+                 <p className="text-[10px] font-black text-zinc-900 dark:text-zinc-100 uppercase italic">{new Date().toLocaleDateString()} • {new Date().toLocaleTimeString()}</p>
+              </div>
+           </div>
+           <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-zinc-900 dark:border-zinc-100">
+              <span className="text-xs font-black italic">R</span>
+           </div>
         </div>
       </section>
+
+      {/* ─── FOOTER ─── */}
+      <footer className="mt-20 pb-24 text-center">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-900 italic">Before you choose. Rivvl.</p>
+          <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">
+            <span>© {new Date().getFullYear()} Rivvl Intelligence Suite</span>
+            <span className="text-zinc-300">{'//'}</span>
+            <span>All Rights Reserved</span>
+          </div>
+        </div>
+      </footer>
       </div>{/* end flex-1 main content */}
     </div>
     </div>
@@ -3261,7 +3650,7 @@ export default function HomeReportPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[#00D2FF]" />
+          <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
         </div>
       }
     >

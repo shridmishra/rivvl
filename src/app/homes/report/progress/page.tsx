@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 import {
   Loader2,
   CheckCircle2,
@@ -185,7 +185,7 @@ export default function HomesProgressPage() {
             )}
           </h1>
           {propertyLabel && (
-            <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest">{propertyLabel}</p>
+            <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold tracking-wide">{propertyLabel}</p>
           )}
         </div>
 
@@ -214,7 +214,7 @@ export default function HomesProgressPage() {
             />
           </div>
 
-          <p className="mt-6 text-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
+          <p className="mt-6 text-center text-[10px] font-black tracking-wide text-zinc-400">
             {isComplete ? "Redirecting..." : getTimingMessage(elapsed)}
           </p>
         </div>
